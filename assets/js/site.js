@@ -156,6 +156,7 @@
 
   /* ---------- contact form ---------- */
 
+  var EMAIL = "gregdallasmusic@gmail.com";
   var form = document.getElementById("contact-form");
 
   if (form) {
@@ -167,8 +168,18 @@
       status.textContent = msg;
     };
 
+    var endpoint = form.dataset.endpoint;
+
+    // Until the Worker is deployed there's nowhere to post to. Say so plainly
+    // rather than firing a request that's guaranteed to fail.
+    if (!endpoint) {
+      submit.disabled = true;
+      say("err", "The form isn't connected yet — please email " + EMAIL + " directly.");
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (!endpoint) return;
 
       // Honeypot: real people leave this hidden field alone.
       if (form.querySelector("[name=company]").value) return;
@@ -176,7 +187,7 @@
       submit.disabled = true;
       say("busy", "Sending…");
 
-      fetch(form.action, {
+      fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(Object.fromEntries(new FormData(form)))
@@ -187,7 +198,7 @@
           say("ok", "Thanks — your message is on its way. I'll get back to you soon.");
         })
         .catch(function () {
-          say("err", "Something went wrong sending that. Please email greg directly at gregdallasmusic@gmail.com.");
+          say("err", "Something went wrong sending that. Please email " + EMAIL + " directly.");
         })
         .finally(function () { submit.disabled = false; });
     });
