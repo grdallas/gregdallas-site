@@ -133,7 +133,7 @@
       var empty = el("div", "empty-state");
       empty.append(el("p", null, "No dates on the calendar right now. New shows are announced here first."));
       var a = el("a", "btn", "Get in touch about booking");
-      a.href = "/contact.html";
+      a.href = "contact.html";
       empty.append(a);
       list.replaceChildren(empty);
     } else {
