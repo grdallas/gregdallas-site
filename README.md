@@ -71,7 +71,7 @@ In the Pages project under **Settings → Environment variables**, add:
 | Variable | Value |
 |---|---|
 | `RESEND_API_KEY` | API key from resend.com — mark it **encrypted** |
-| `CONTACT_TO` | the address that should receive form submissions |
+| `CONTACT_TO` | `gregdallasmusic@gmail.com` |
 | `CONTACT_FROM` | optional, defaults to `site@gregdallas.com` |
 
 The `CONTACT_FROM` domain has to be verified in Resend, which means adding the

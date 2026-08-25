@@ -187,7 +187,7 @@
           say("ok", "Thanks — your message is on its way. I'll get back to you soon.");
         })
         .catch(function () {
-          say("err", "Something went wrong sending that. Please email greg directly at hello@gregdallas.com.");
+          say("err", "Something went wrong sending that. Please email greg directly at gregdallasmusic@gmail.com.");
         })
         .finally(function () { submit.disabled = false; });
     });
