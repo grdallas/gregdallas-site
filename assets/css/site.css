@@ -214,6 +214,11 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.02e
 .video figcaption {
   font-family: var(--serif); font-size: 1.15rem; margin-top: .9rem; line-height: 1.35;
 }
+.video-credit {
+  display: block; margin-top: .3rem;
+  font-family: var(--sans); font-size: .74rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--paper-faint);
+}
 
 .video-frame {
   position: relative; aspect-ratio: 16/9;
