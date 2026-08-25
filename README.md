@@ -19,7 +19,6 @@ assets/js/site.js       nav, video facades, events, form
 assets/js/events.js     >>> the file to edit when adding a show <<<
 assets/img/             photography
 worker/contact-worker.js   Cloudflare Worker that emails the contact form
-CNAME                   custom domain for GitHub Pages
 ```
 
 ## Adding a performance
@@ -57,8 +56,8 @@ python3 -m http.server 4321 --directory .
 GitHub Pages, from `main` / root — same as chord-drone, metronome-embedded and
 the rest. Repo must be public for Pages on a free plan.
 
-The `CNAME` file points it at gregdallas.com. To finish the domain move, add
-these records wherever gregdallas.com's DNS lives (currently Squarespace):
+To move the domain over, add these records wherever gregdallas.com's DNS lives
+(currently Squarespace):
 
 | Type | Name | Value |
 |---|---|---|
@@ -68,8 +67,12 @@ these records wherever gregdallas.com's DNS lives (currently Squarespace):
 | A | @ | 185.199.111.153 |
 | CNAME | www | grdallas.github.io |
 
-Then tick **Enforce HTTPS** in the repo's Pages settings once the certificate
-issues. Exactly how thepracticelab.app is set up.
+Then set the custom domain in the repo's Pages settings (which writes the
+`CNAME` file back) and tick **Enforce HTTPS** once the certificate issues.
+Exactly how thepracticelab.app is set up.
+
+The `CNAME` file is deliberately absent until then — with it present, GitHub
+redirects the github.io preview URL to a domain that doesn't resolve yet.
 
 **Don't cancel Squarespace until gregdallas.com resolves here.**
 
