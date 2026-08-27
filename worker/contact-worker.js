@@ -67,9 +67,18 @@ async function handlePost(request, env, origin) {
     return json(400, { error: "That email address doesn't look right." }, origin);
   }
 
-  if (!env.RESEND_API_KEY || !env.CONTACT_TO) {
-    console.error("Contact form not configured: missing RESEND_API_KEY or CONTACT_TO.");
-    return json(500, { error: "The form isn't configured yet." }, origin);
+  // Reports which variable is absent, and what bindings the Worker can
+  // actually see, so a misnamed or undeployed variable is obvious. Names
+  // only — never values.
+  const missing = ["RESEND_API_KEY", "CONTACT_TO"].filter((k) => !env[k]);
+  if (missing.length) {
+    const seen = Object.keys(env).sort();
+    console.error("Contact form not configured. Missing:", missing.join(", "), "| Bindings seen:", seen.join(", ") || "(none)");
+    return json(500, {
+      error: "The form isn't configured yet.",
+      missing,
+      seen
+    }, origin);
   }
 
   const body = [
