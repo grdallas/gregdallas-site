@@ -13,13 +13,19 @@
 --------------------------------------------------------------------------- */
 
 window.EVENTS = [
-  // {
-  //   date:  "2026-09-12",
-  //   time:  "8:00 PM",
-  //   title: "Greg Dallas Trio",
-  //   venue: "The Dark Room",
-  //   city:  "St. Louis, MO",
-  //   link:  "https://example.com/tickets",
-  //   note:  ""
-  // },
+  {
+    date:  "2026-08-29",
+    title: "The Dhoruba Collective",
+    venue: "Hi Hat Lounge",
+    city:  "St. Louis, MO"
+  },
+  {
+    date:  "2026-09-04",
+    title: "Conspiracy Deliracy",
+    venue: "Scout Hall",
+    city:  "Cape Girardeau, MO"
+  }
+
+  // Copy a block above to add a show. Only `date` is required.
+  //   date: "YYYY-MM-DD"   time: "8:00 PM"   link: ticket URL   note: anything extra
 ];
