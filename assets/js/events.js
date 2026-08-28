@@ -15,15 +15,18 @@
 window.EVENTS = [
   {
     date:  "2026-08-29",
+    time:  "9:00 PM – 1:00 AM",
     title: "The Dhoruba Collective",
     venue: "Hi Hat Lounge",
     city:  "St. Louis, MO"
   },
   {
     date:  "2026-09-04",
+    time:  "7:30 PM",
     title: "Conspiracy Deliracy",
     venue: "Scout Hall",
-    city:  "Cape Girardeau, MO"
+    city:  "Cape Girardeau, MO",
+    note:  "Doors at 7:00"
   }
 
   // Copy a block above to add a show. Only `date` is required.
