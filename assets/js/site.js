@@ -45,10 +45,14 @@
     btn.addEventListener("click", function () {
       var id = btn.getAttribute("data-video");
       if (!id) return;
+      // data-start / data-end are in seconds. Together they let one long
+      // video be shown as several excerpts without touching a video file.
+      var params = "?autoplay=1&rel=0";
+      if (btn.dataset.start) params += "&start=" + btn.dataset.start;
+      if (btn.dataset.end) params += "&end=" + btn.dataset.end;
+
       var frame = document.createElement("iframe");
-      frame.src =
-        "https://www.youtube-nocookie.com/embed/" + id +
-        "?autoplay=1&rel=0" + (btn.dataset.start ? "&start=" + btn.dataset.start : "");
+      frame.src = "https://www.youtube-nocookie.com/embed/" + id + params;
       frame.title = btn.getAttribute("aria-label") || "Video player";
       frame.allow =
         "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
