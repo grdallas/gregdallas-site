@@ -391,6 +391,21 @@ button[type="submit"]:disabled { opacity: .55; cursor: progress; }
 .about-photo figcaption { font-size: .8rem; color: var(--paper-faint); margin-top: .8rem; font-style: italic; }
 @media (min-width: 861px) { .about-photo { position: sticky; top: calc(var(--header-h) + 2rem); } }
 
+/* ---------- practice lab tool list ---------- */
+
+.tool-list { list-style: none; margin: 0; padding: 0; }
+.tool-list li {
+  display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: .35rem 1.75rem;
+  padding: 1.25rem 0; border-bottom: 1px solid var(--ink-line);
+}
+.tool-list li:first-child { border-top: 1px solid var(--ink-line); }
+/* the section divider below already draws a line — don't stack two */
+.tool-list li:last-child { border-bottom: 0; }
+@media (max-width: 620px) { .tool-list li { grid-template-columns: 1fr; } }
+
+.tool-name { font-family: var(--serif); font-size: 1.2rem; line-height: 1.3; }
+.tool-desc { color: var(--paper-dim); font-size: .97rem; }
+
 /* ---------- footer ---------- */
 
 .site-footer {
