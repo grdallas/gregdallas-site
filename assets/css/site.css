@@ -243,6 +243,58 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.02e
 .play svg { width: 22px; height: 22px; margin-left: 3px; fill: var(--paper); }
 .video-frame:hover .play svg { fill: var(--ink); }
 
+/* ---------- recital excerpts ----------
+   Every excerpt comes from one video, so YouTube gives them all the same
+   thumbnail. Showing three identical images would read as a bug — these are
+   a list instead, where the timestamp and tune title carry the meaning. */
+
+.recital { border-top: 1px solid var(--ink-line); margin-top: clamp(3.5rem, 8vw, 6rem); padding-top: clamp(2.5rem, 6vw, 4rem); }
+.recital > h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); }
+.section-note { color: var(--paper-dim); margin: .9rem 0 0; max-width: 52ch; }
+
+.clip-list { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
+
+.clip {
+  display: grid; grid-template-columns: 76px 1fr 44px; gap: 1.25rem; align-items: center;
+  width: 100%; text-align: left; font: inherit; color: inherit;
+  background: none; border: 0; border-top: 1px solid var(--ink-line);
+  padding: 1.3rem 0; cursor: pointer;
+  transition: background .18s ease;
+}
+.clip:last-of-type { border-bottom: 1px solid var(--ink-line); }
+.clip:hover { background: color-mix(in srgb, var(--paper) 4%, transparent); }
+
+.clip-time { font-family: var(--serif); font-size: 1.05rem; color: var(--accent); }
+.clip-body { display: flex; flex-direction: column; gap: .2rem; }
+.clip-title { font-family: var(--serif); font-size: 1.3rem; line-height: 1.25; }
+.clip-composer { font-size: .85rem; color: var(--paper-dim); }
+
+.clip-play {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--paper) 32%, transparent);
+  display: grid; place-items: center;
+  transition: background .18s ease, border-color .18s ease;
+}
+.clip-play svg { width: 16px; height: 16px; margin-left: 2px; fill: var(--paper); }
+.clip:hover .clip-play { background: var(--accent); border-color: var(--accent); }
+.clip:hover .clip-play svg { fill: var(--ink); }
+
+@media (max-width: 560px) {
+  .clip { grid-template-columns: 1fr 44px; gap: .75rem 1rem; }
+  .clip-time { grid-column: 1 / -1; font-size: .95rem; }
+}
+
+/* the expanded player that replaces a clip row once it's clicked */
+.clip-open { margin: 0; padding: 1.3rem 0; border-top: 1px solid var(--ink-line); }
+.clip-frame {
+  position: relative; aspect-ratio: 16/9; overflow: hidden;
+  border: 1px solid var(--ink-line); border-radius: 3px; background: var(--ink-soft);
+}
+.clip-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.clip-open figcaption { font-family: var(--serif); font-size: 1.15rem; margin-top: .9rem; }
+
+.video-full { margin-top: clamp(2.5rem, 6vw, 3.5rem); max-width: 560px; }
+
 /* ---------- events ---------- */
 
 .event-group + .event-group { margin-top: clamp(3rem, 7vw, 5rem); }

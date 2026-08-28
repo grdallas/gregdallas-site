@@ -62,6 +62,47 @@
     }, { once: true });
   });
 
+  /* ---------- recital excerpts ----------
+     A clip row swaps itself for a player cued to its timestamp. */
+
+  document.querySelectorAll(".clip").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var id = btn.getAttribute("data-video");
+      if (!id) return;
+
+      var params = "?autoplay=1&rel=0";
+      if (btn.dataset.start) params += "&start=" + btn.dataset.start;
+      if (btn.dataset.end) params += "&end=" + btn.dataset.end;
+
+      var frame = document.createElement("iframe");
+      frame.src = "https://www.youtube-nocookie.com/embed/" + id + params;
+      frame.title = btn.getAttribute("aria-label") || "Video player";
+      frame.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      frame.allowFullscreen = true;
+
+      var shell = document.createElement("div");
+      shell.className = "clip-frame";
+      shell.append(frame);
+
+      var title = btn.querySelector(".clip-title");
+      var composer = btn.querySelector(".clip-composer");
+      var cap = document.createElement("figcaption");
+      cap.textContent = title ? title.textContent : "";
+      if (composer) {
+        var credit = document.createElement("span");
+        credit.className = "video-credit";
+        credit.textContent = composer.textContent;
+        cap.append(credit);
+      }
+
+      var open = document.createElement("figure");
+      open.className = "clip-open";
+      open.append(shell, cap);
+      btn.replaceWith(open);
+    }, { once: true });
+  });
+
   /* ---------- performances ---------- */
 
   var list = document.getElementById("events");
