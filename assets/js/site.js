@@ -41,49 +41,60 @@
     else img.addEventListener("load", downgrade, { once: true });
   });
 
+  /* ---------- one player at a time ----------
+     Opening any video closes whichever was already playing, so the page never
+     ends up with several embeds running at once. Each close restores the
+     original thumbnail or row, so anything can be reopened. */
+
+  var closeActive = null;
+
+  function embed(btn) {
+    // data-start / data-end are in seconds. Together they let one long video
+    // be shown as several excerpts without touching a video file.
+    var params = "?autoplay=1&rel=0";
+    if (btn.dataset.start) params += "&start=" + btn.dataset.start;
+    if (btn.dataset.end) params += "&end=" + btn.dataset.end;
+
+    var frame = document.createElement("iframe");
+    frame.src = "https://www.youtube-nocookie.com/embed/" + btn.getAttribute("data-video") + params;
+    frame.title = btn.getAttribute("aria-label") || "Video player";
+    frame.allow =
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    frame.allowFullscreen = true;
+    return frame;
+  }
+
   document.querySelectorAll(".video-frame").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      var id = btn.getAttribute("data-video");
-      if (!id) return;
-      // data-start / data-end are in seconds. Together they let one long
-      // video be shown as several excerpts without touching a video file.
-      var params = "?autoplay=1&rel=0";
-      if (btn.dataset.start) params += "&start=" + btn.dataset.start;
-      if (btn.dataset.end) params += "&end=" + btn.dataset.end;
+      if (!btn.getAttribute("data-video")) return;
+      if (closeActive) closeActive();
 
-      var frame = document.createElement("iframe");
-      frame.src = "https://www.youtube-nocookie.com/embed/" + id + params;
-      frame.title = btn.getAttribute("aria-label") || "Video player";
-      frame.allow =
-        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-      frame.allowFullscreen = true;
-      btn.replaceChildren(frame);
-      btn.style.cursor = "default";
-    }, { once: true });
+      // Swap the button for a plain div rather than nesting an iframe inside a
+      // <button>, which is invalid and can swallow the player's own controls.
+      var holder = document.createElement("div");
+      holder.className = "video-frame is-playing";
+      holder.append(embed(btn));
+      btn.replaceWith(holder);
+
+      closeActive = function () {
+        holder.replaceWith(btn);
+        closeActive = null;
+      };
+    });
   });
 
   /* ---------- recital excerpts ----------
-     A clip row swaps itself for a player cued to its timestamp. */
+     A clip row gives way to a player cued to its timestamp, and comes back
+     when something else is opened. */
 
   document.querySelectorAll(".clip").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      var id = btn.getAttribute("data-video");
-      if (!id) return;
-
-      var params = "?autoplay=1&rel=0";
-      if (btn.dataset.start) params += "&start=" + btn.dataset.start;
-      if (btn.dataset.end) params += "&end=" + btn.dataset.end;
-
-      var frame = document.createElement("iframe");
-      frame.src = "https://www.youtube-nocookie.com/embed/" + id + params;
-      frame.title = btn.getAttribute("aria-label") || "Video player";
-      frame.allow =
-        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-      frame.allowFullscreen = true;
+      if (!btn.getAttribute("data-video")) return;
+      if (closeActive) closeActive();
 
       var shell = document.createElement("div");
       shell.className = "clip-frame";
-      shell.append(frame);
+      shell.append(embed(btn));
 
       var title = btn.querySelector(".clip-title");
       var composer = btn.querySelector(".clip-composer");
@@ -99,8 +110,16 @@
       var open = document.createElement("figure");
       open.className = "clip-open";
       open.append(shell, cap);
-      btn.replaceWith(open);
-    }, { once: true });
+
+      btn.hidden = true;
+      btn.after(open);
+
+      closeActive = function () {
+        open.remove();
+        btn.hidden = false;
+        closeActive = null;
+      };
+    });
   });
 
   /* ---------- performances ---------- */

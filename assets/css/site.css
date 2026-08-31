@@ -177,6 +177,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.02em
 }
 .video-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease, opacity .3s ease; }
 .video-frame:hover img { transform: scale(1.03); opacity: .82; }
+.video-frame.is-playing { cursor: default; }
 .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 .play {
@@ -301,45 +302,6 @@ button[type="submit"]:disabled { opacity: .5; cursor: progress; }
 .about-photo img { border-radius: 2px; }
 .about-photo figcaption { font-family: var(--sans); font-size: .78rem; color: var(--faint); margin-top: .8rem; font-style: italic; }
 @media (min-width: 861px) { .about-photo { position: sticky; top: calc(var(--header-h) + 2rem); } }
-
-/* ---------- art gallery ---------- */
-
-/* Columns rather than a grid: the paintings vary a lot in proportion and
-   cropping them to a uniform tile would misrepresent the work. */
-.gallery { columns: 3 300px; column-gap: 1.75rem; }
-@media (max-width: 700px) { .gallery { column-gap: 1.25rem; } }
-
-.work { margin: 0 0 1.75rem; break-inside: avoid; display: inline-block; width: 100%; }
-.work-open {
-  display: block; width: 100%; padding: 0; border: 1px solid var(--rule);
-  background: var(--panel); cursor: zoom-in; border-radius: 2px; overflow: hidden;
-}
-.work-open img { width: 100%; height: auto; display: block; transition: opacity .2s ease; }
-.work-open:hover img { opacity: .84; }
-.work figcaption { font-family: var(--serif); font-size: 1rem; margin-top: .6rem; color: var(--dim); }
-
-/* ---------- lightbox ---------- */
-
-.lightbox {
-  position: fixed; inset: 0; z-index: 200;
-  background: color-mix(in srgb, var(--ink) 94%, transparent);
-  display: grid; place-items: center; padding: clamp(1rem, 4vw, 3rem);
-}
-.lightbox[hidden] { display: none; }
-.lb-stage { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .9rem; max-width: 100%; max-height: 100%; }
-.lb-stage img { max-width: 100%; max-height: 82vh; width: auto; height: auto; object-fit: contain; border-radius: 2px; }
-.lb-stage figcaption { font-family: var(--serif); font-size: 1.05rem; color: var(--bg); text-align: center; }
-
-.lightbox button {
-  position: absolute; background: none; border: 0; cursor: pointer;
-  color: var(--bg); font-family: var(--sans); line-height: 1;
-  opacity: .7; transition: opacity .18s ease; padding: .6rem;
-}
-.lightbox button:hover { opacity: 1; }
-.lb-close { top: clamp(.5rem,2vw,1.5rem); right: clamp(.5rem,2vw,1.5rem); font-size: 2.4rem; }
-.lb-prev, .lb-next { top: 50%; transform: translateY(-50%); font-size: 3rem; }
-.lb-prev { left: clamp(.25rem,1.5vw,1.5rem); }
-.lb-next { right: clamp(.25rem,1.5vw,1.5rem); }
 
 /* ---------- footer ---------- */
 
