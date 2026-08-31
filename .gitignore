@@ -2,3 +2,7 @@
 node_modules/
 .wrangler/
 .dev.vars
+
+# local-only style exploration. Contains copies and crops of Greg's paintings,
+# including commissions — this repo is public, so none of it ships.
+previews/
