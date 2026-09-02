@@ -226,21 +226,20 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.02em
 
 /* ---------- releases ---------- */
 
-.release-list { margin-top: clamp(1.5rem, 4vw, 2rem); }
-.release {
-  display: grid; grid-template-columns: 90px 1fr auto; gap: 1.5rem; align-items: baseline;
-  padding: 1.3rem 0; border-top: 1px solid var(--rule);
+.release-grid {
+  display: grid; gap: clamp(1.5rem, 3.5vw, 2.25rem);
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  margin-top: clamp(1.5rem, 4vw, 2rem);
 }
-.release:last-child { border-bottom: 1px solid var(--rule); }
-.release-year { font-family: var(--serif); font-size: 1.05rem; color: var(--accent); }
-.release h3 { font-size: 1.3rem; margin: 0 0 .2rem; }
-.release-meta { font-family: var(--sans); font-size: .84rem; color: var(--dim); margin: 0; }
-.release-link {
-  font-family: var(--sans); font-size: .72rem; font-weight: 500; letter-spacing: .11em;
-  text-transform: uppercase; white-space: nowrap; color: var(--accent); text-decoration: none;
+.release { margin: 0; }
+.release-cover {
+  display: block; aspect-ratio: 1; overflow: hidden;
+  border: 1px solid var(--rule); border-radius: 2px; background: var(--panel);
 }
-.release-link:hover { color: var(--ink); }
-@media (max-width: 620px) { .release { grid-template-columns: 1fr; gap: .35rem; } }
+.release-cover img { width: 100%; height: 100%; object-fit: cover; transition: opacity .2s ease, transform .5s ease; }
+.release-cover:hover img { opacity: .86; transform: scale(1.02); }
+.release h3 { font-size: 1.15rem; margin: .8rem 0 .15rem; line-height: 1.3; }
+.release-meta { font-family: var(--sans); font-size: .78rem; color: var(--dim); margin: 0; }
 
 /* ---------- practice lab tool list ---------- */
 
