@@ -27,6 +27,14 @@ window.EVENTS = [
     venue: "Scout Hall",
     city:  "Cape Girardeau, MO",
     note:  "Doors at 7:00"
+  },
+  {
+    date:  "2026-10-25",
+    time:  "11:30 AM – 2:30 PM",
+    title: "Greg Dallas Trio",
+    venue: "St. John UCC",
+    city:  "St. Charles, MO",
+    note:  "Fall Festival"
   }
 
   // Copy a block above to add a show. Only `date` is required.
