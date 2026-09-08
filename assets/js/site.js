@@ -27,7 +27,7 @@
      Thumbnails stand in for the players so the page doesn't load five
      YouTube iframes up front. Clicking one swaps in the real embed. */
 
-  /* YouTube serves a 120px grey placeholder (with a 200, not a 404) when a
+  /* YouTube serves a 120px gray placeholder (with a 200, not a 404) when a
      video has no maxresdefault, so size is the only reliable tell. */
   document.querySelectorAll(".video-frame img").forEach(function (img) {
     var downgrade = function () {
