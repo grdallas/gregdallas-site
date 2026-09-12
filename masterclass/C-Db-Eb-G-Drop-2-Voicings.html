@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C-Db-Eb-G — Drop 2 Voicings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+  :root {
+    --bg:          #F6F2EA;
+    --panel:       #EFEADF;
+    --ink:         #241F1A;
+    --dim:         #6B6157;
+    --faint:       #948A7C;
+    --rule:        #DCD4C6;
+    --accent:      #8A4B2A;
+    --accent-soft: #B98A64;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  }
+
+  .sheet { width: 100%; max-width: 780px; margin: 0 auto; }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .head-row {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 1.5rem; flex-wrap: wrap; margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  }
+  .clock-wrap { text-align: center; flex-shrink: 0; }
+  .clock-cap { margin-top: 0.4rem; font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.05em; color: var(--faint); }
+  .sheet-head { margin-bottom: 0; }
+  .eyebrow {
+    font-family: var(--sans); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;
+  }
+  .sheet-head h1 {
+    font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em;
+    line-height: 1.12; font-size: clamp(2rem, 5.5vw, 2.9rem);
+  }
+
+  /* ── Column headers (string sets) ────────────────────────────────── */
+  .col-heads {
+    display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.5rem;
+    padding-bottom: 0.9rem; border-bottom: 1px solid var(--rule);
+  }
+  .col-heads span {
+    text-align: center; font-family: var(--sans); font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint);
+  }
+
+  /* ── Diagram grid ────────────────────────────────────────────────── */
+  .chart-row { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.5rem; padding: 1.4rem 0; }
+  .chart-row + .chart-row { border-top: 1px solid var(--rule); }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; }
+  .cell svg.fretboard { display: block; }
+
+  /* ── Legend + footer ─────────────────────────────────────────────── */
+  .legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 2rem;
+    margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+    font-family: var(--sans); font-size: 0.8rem; color: var(--dim);
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.55rem; }
+  .legend-item svg { display: block; }
+  .foot { margin-top: 0.9rem; font-size: 0.95rem; font-style: italic; color: var(--faint); }
+
+  /* ── Print ───────────────────────────────────────────────────────── */
+  @page { size: letter portrait; margin: 0.55in; }
+  @media print {
+    body { padding: 0; }
+    .sheet { max-width: none; }
+    .chart-row, .legend { break-inside: avoid; }
+  }
+
+  /* Added for the website — hidden when printed, so the sheet stays a sheet. */
+  .site-return { display:inline-block; font-family:var(--sans); font-size:.72rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+    text-decoration:none; margin-bottom:1.4rem; }
+  .site-return:hover { color:var(--accent); }
+  @media print { .site-return { display:none; } }
+</style>
+</head>
+<body>
+<a class="site-return" href="../teaching.html">&larr; Teaching</a>
+<div class="sheet">
+
+  <div class="head-row">
+    <header class="sheet-head">
+      <p class="eyebrow">Drop 2 Voicing Reference</p>
+      <h1>C-Db-Eb-G — Drop 2 Voicings</h1>
+    </header>
+    <div class="clock-wrap">
+      <svg width="92" height="92" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="46" fill="none" stroke="#DCD4C6" stroke-width="1"/>
+        <polygon points="60,14 83,20.6 106,60 37,99.4" fill="none" stroke="#8A4B2A" stroke-width="1.6"/>
+        <g fill="#948A7C">
+          <circle cx="60" cy="14" r="2.2"/>
+          <circle cx="83" cy="20.6" r="2.2"/>
+          <circle cx="98.8" cy="37.5" r="2.2"/>
+          <circle cx="106" cy="60" r="2.2"/>
+          <circle cx="98.8" cy="82.5" r="2.2"/>
+          <circle cx="83" cy="99.4" r="2.2"/>
+          <circle cx="60" cy="106" r="2.2"/>
+          <circle cx="37" cy="99.4" r="2.2"/>
+          <circle cx="21.2" cy="82.5" r="2.2"/>
+          <circle cx="14" cy="60" r="2.2"/>
+          <circle cx="21.2" cy="37.5" r="2.2"/>
+          <circle cx="37" cy="20.6" r="2.2"/>
+        </g>
+        <g fill="#8A4B2A">
+          <circle cx="60" cy="14" r="4"/>
+          <circle cx="83" cy="20.6" r="4"/>
+          <circle cx="106" cy="60" r="4"/>
+          <circle cx="37" cy="99.4" r="4"/>
+        </g>
+      </svg>
+      <div class="clock-cap">C · Db · Eb · G</div>
+    </div>
+  </div>
+
+  <div class="col-heads">
+    <span>E &middot; A &middot; D &middot; G</span>
+    <span>A &middot; D &middot; G &middot; B</span>
+    <span>D &middot; G &middot; B &middot; e</span>
+  </div>
+
+  <div id="chart"></div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8" stroke="#8A4B2A" stroke-width="2" fill="none"/>
+        <circle cx="12" cy="12" r="4" fill="#8A4B2A"/>
+      </svg>
+      Root
+    </div>
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4.4" fill="#241F1A"/>
+      </svg>
+      Other chord tones
+    </div>
+  </div>
+
+  <p class="foot">Low E string on the left, high e on the right. Each column climbs the neck, position by position; the open-position voicing is fixed to this key. Some voicings are extremely difficult or impossible — attempt at your own risk.</p>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+//  DIAGRAM DATA — generated by _scripts/generate_sheet.py, do not hand-edit
+//
+//  Each dot: { str, fret, type }
+//    str  — string number: 0 = low E, 1 = A, 2 = D, 3 = G, 4 = B, 5 = high e
+//    fret — fret box: 1 = first fret box, 2 = second, etc. (0 = open string)
+//    type — 'root' | 'tone'
+//
+//  startFret — the real fret number named by the line below the first box.
+//  Rows are NOT inversions in a fixed order — each column is simply sorted
+//  by ascending fret, so moving down a column always moves up the neck.
+// ═══════════════════════════════════════════════════════════════════
+
+const rows = [
+
+  [
+    { startFret: 1, numBoxes: 5, dots: [
+      { str: 0, fret: 3, type: "tone" },  // G
+      { str: 1, fret: 4, type: "tone" },  // Db
+      { str: 2, fret: 1, type: "tone" },  // Eb
+      { str: 3, fret: 5, type: "root" },  // C
+    ]},
+    { startFret: 1, numBoxes: 4, dots: [
+      { str: 1, fret: 3, type: "root" },  // C
+      { str: 2, fret: 1, type: "tone" },  // Eb
+      { str: 3, fret: 0, type: "tone" },  // G
+      { str: 4, fret: 2, type: "tone" },  // Db
+    ]},
+    { startFret: 1, numBoxes: 5, dots: [
+      { str: 2, fret: 1, type: "tone" },  // Eb
+      { str: 3, fret: 5, type: "root" },  // C
+      { str: 4, fret: 2, type: "tone" },  // Db
+      { str: 5, fret: 3, type: "tone" },  // G
+    ]},
+  ],
+
+  [
+    { startFret: 5, numBoxes: 4, dots: [
+      { str: 0, fret: 4, type: "root" },  // C
+      { str: 1, fret: 2, type: "tone" },  // Eb
+      { str: 2, fret: 1, type: "tone" },  // G
+      { str: 3, fret: 2, type: "tone" },  // Db
+    ]},
+    { startFret: 4, numBoxes: 4, dots: [
+      { str: 1, fret: 1, type: "tone" },  // Db
+      { str: 2, fret: 2, type: "tone" },  // G
+      { str: 3, fret: 2, type: "root" },  // C
+      { str: 4, fret: 1, type: "tone" },  // Eb
+    ]},
+    { startFret: 4, numBoxes: 5, dots: [
+      { str: 2, fret: 2, type: "tone" },  // G
+      { str: 3, fret: 3, type: "tone" },  // Db
+      { str: 4, fret: 1, type: "tone" },  // Eb
+      { str: 5, fret: 5, type: "root" },  // C
+    ]},
+  ],
+
+  [
+    { startFret: 8, numBoxes: 4, dots: [
+      { str: 0, fret: 2, type: "tone" },  // Db
+      { str: 1, fret: 3, type: "tone" },  // G
+      { str: 2, fret: 3, type: "root" },  // C
+      { str: 3, fret: 1, type: "tone" },  // Eb
+    ]},
+    { startFret: 6, numBoxes: 5, dots: [
+      { str: 1, fret: 1, type: "tone" },  // Eb
+      { str: 2, fret: 5, type: "root" },  // C
+      { str: 3, fret: 1, type: "tone" },  // Db
+      { str: 4, fret: 3, type: "tone" },  // G
+    ]},
+    { startFret: 8, numBoxes: 4, dots: [
+      { str: 2, fret: 3, type: "root" },  // C
+      { str: 3, fret: 1, type: "tone" },  // Eb
+      { str: 4, fret: 1, type: "tone" },  // G
+      { str: 5, fret: 2, type: "tone" },  // Db
+    ]},
+  ],
+
+  [
+    { startFret: 11, numBoxes: 5, dots: [
+      { str: 0, fret: 1, type: "tone" },  // Eb
+      { str: 1, fret: 5, type: "root" },  // C
+      { str: 2, fret: 1, type: "tone" },  // Db
+      { str: 3, fret: 2, type: "tone" },  // G
+    ]},
+    { startFret: 8, numBoxes: 6, dots: [
+      { str: 1, fret: 3, type: "tone" },  // G
+      { str: 2, fret: 4, type: "tone" },  // Db
+      { str: 3, fret: 1, type: "tone" },  // Eb
+      { str: 4, fret: 6, type: "root" },  // C
+    ]},
+    { startFret: 11, numBoxes: 4, dots: [
+      { str: 2, fret: 1, type: "tone" },  // Db
+      { str: 3, fret: 2, type: "tone" },  // G
+      { str: 4, fret: 3, type: "root" },  // C
+      { str: 5, fret: 1, type: "tone" },  // Eb
+    ]},
+  ]
+];
+
+// ═══════════════════════════════════════════════════════════════════
+//  RENDERING  (edit below to change layout / sizing / colors)
+// ═══════════════════════════════════════════════════════════════════
+
+const STRING_GAP = 15;
+const FRET_GAP   = 21;
+const NUM_STR    = 6;
+const PAD_X      = 20;
+const PAD_Y      = 16;
+const SVG_W      = PAD_X * 2 + (NUM_STR - 1) * STRING_GAP;
+
+const R_INNER = 4.2;
+const R_OUTER = 8;
+const INK    = "#241F1A";
+const ACCENT = "#8A4B2A";
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  kids.forEach(k => e.appendChild(k));
+  return e;
+}
+
+function drawDiagram(diagram) {
+  const numFrets = diagram.numBoxes || 4;
+  const svgH = PAD_Y * 2 + numFrets * FRET_GAP;
+  const svg = el("svg", {
+    width: SVG_W, height: svgH, class: "fretboard",
+    viewBox: `0 0 ${SVG_W} ${svgH}`,
+  });
+
+  const gridW = (NUM_STR - 1) * STRING_GAP;
+  const gridH = numFrets * FRET_GAP;
+
+  for (let f = 0; f <= numFrets; f++) {
+    const y = PAD_Y + f * FRET_GAP;
+    svg.appendChild(el("line", {
+      x1: PAD_X, y1: y, x2: PAD_X + gridW, y2: y,
+      stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square",
+    }));
+  }
+  for (let s = 0; s < NUM_STR; s++) {
+    const x = PAD_X + s * STRING_GAP;
+    svg.appendChild(el("line", {
+      x1: x, y1: PAD_Y, x2: x, y2: PAD_Y + gridH,
+      stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square",
+    }));
+  }
+
+  if (diagram.startFret) {
+    const y = PAD_Y + FRET_GAP;
+    const label = el("text", {
+      x: PAD_X - 5, y: y + 3, "text-anchor": "end",
+      "font-family": "Inter, sans-serif", "font-size": "9", fill: "#6B6157",
+    });
+    label.textContent = diagram.startFret;
+    svg.appendChild(label);
+  }
+
+  for (const dot of diagram.dots) {
+    const cx = PAD_X + dot.str * STRING_GAP;
+    const cy = dot.fret === 0
+      ? PAD_Y - 7
+      : PAD_Y + (dot.fret - 0.5) * FRET_GAP;
+
+    if (dot.type === "root") {
+      svg.appendChild(el("circle", { cx, cy, r: R_OUTER, stroke: ACCENT, "stroke-width": "2", fill: "none" }));
+      svg.appendChild(el("circle", { cx, cy, r: R_INNER, fill: ACCENT }));
+    } else {
+      svg.appendChild(el("circle", { cx, cy, r: R_INNER, fill: INK }));
+    }
+  }
+
+  return svg;
+}
+
+const chart = document.getElementById("chart");
+rows.forEach(row => {
+  const rowDiv = document.createElement("div");
+  rowDiv.className = "chart-row";
+  row.forEach(diagram => {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.appendChild(drawDiagram(diagram));
+    rowDiv.appendChild(cell);
+  });
+  chart.appendChild(rowDiv);
+});
+</script>
+</body>
+</html>
