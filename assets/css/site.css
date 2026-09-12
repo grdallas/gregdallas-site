@@ -133,6 +133,12 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -.02em
 .hero-media img { width: 100%; height: min(56vh, 460px); object-fit: cover; object-position: center 26%; }
 .hero-media::after { content: none; }
 
+/* Credit sits with the photograph it belongs to, not in a global footer. */
+.photo-credit {
+  font-family: var(--sans); font-size: .74rem; font-style: italic;
+  color: var(--faint); margin: .7rem 0 0;
+}
+
 .hero-body { padding: clamp(1.75rem, 4vw, 2.5rem) 0 0; }
 .hero-body h1 { font-size: clamp(3rem, 8vw, 5.5rem); line-height: 1; }
 .hero-tag {
