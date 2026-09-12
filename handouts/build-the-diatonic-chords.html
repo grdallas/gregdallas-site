@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diatonic Chords — Worksheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+  :root {
+    --bg:          #F6F2EA;
+    --panel:       #EFEADF;
+    --ink:         #241F1A;
+    --dim:         #6B6157;
+    --faint:       #948A7C;
+    --rule:        #DCD4C6;
+    --accent:      #8A4B2A;
+    --accent-soft: #B98A64;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  }
+
+  .sheet { width: 100%; max-width: 780px; margin: 0 auto; }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .sheet-head { margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  .sheet-head h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+  }
+  .sheet-head .sub {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: var(--dim);
+    max-width: 60ch;
+  }
+  .sheet-head .sub em { color: var(--ink); font-style: italic; }
+
+  /* ── Quality-pattern reminder strip ──────────────────────────────── */
+  .pattern {
+    display: flex;
+    gap: 0.5rem;
+    margin: clamp(1.25rem, 3vw, 1.75rem) 0 0;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .pattern .step { flex: 1; text-align: center; }
+  .pattern .step .n { font-family: var(--serif); font-size: 0.95rem; color: var(--accent); }
+  .pattern .step .qq {
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin-top: 0.35rem;
+  }
+  .pattern-cap { margin-top: 0.8rem; font-size: 0.95rem; font-style: italic; color: var(--faint); }
+
+  /* ── Key blocks ──────────────────────────────────────────────────── */
+  .keys {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    display: grid;
+    gap: clamp(1.3rem, 3.5vw, 1.9rem);
+  }
+  .key-block { break-inside: avoid; }
+  .key-name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 0.6rem;
+  }
+  .key-name .tag {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-left: 0.6rem;
+    vertical-align: 0.15em;
+  }
+
+  .kgrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem 0.6rem;
+    align-items: end;
+  }
+  .kgrid .hd {
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 0.98rem;
+    color: var(--accent);
+  }
+  .kgrid .cell {
+    border-bottom: 1px solid var(--rule);
+    min-height: 2rem;
+  }
+
+  /* worked example — cells carry text, softened rule */
+  .key-block.example .cell {
+    border-bottom-color: transparent;
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    color: var(--dim);
+    min-height: 0;
+  }
+  .key-block.example .key-name { color: var(--dim); }
+
+  /* ── Footer ──────────────────────────────────────────────────────── */
+  .foot {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--faint);
+    max-width: 66ch;
+  }
+
+  /* ── Print ───────────────────────────────────────────────────────── */
+  @page { size: letter portrait; margin: 0.55in; }
+  @media print {
+    body { padding: 0; }
+    .sheet { max-width: none; }
+    .pattern, .key-block, .foot { break-inside: avoid; }
+  }
+
+      /* Added for the website — hidden when printed, so the sheet stays a sheet. */
+      .site-return { display:inline-block; font-family:var(--sans); font-size:.72rem;
+        letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+        text-decoration:none; margin-bottom:1.4rem; }
+      .site-return:hover { color:var(--accent); }
+      @media print { .site-return { display:none; } }
+</style>
+</head>
+<body>
+<a class="site-return" href="../handouts.html">&larr; All handouts</a>
+<div class="sheet">
+
+  <header class="sheet-head">
+    <p class="eyebrow">Worksheet</p>
+    <h1>Build the Diatonic Chords in Every Key</h1>
+    <p class="sub">The reference sheet gives you C and G. Fill in the other ten &mdash; a triad on each scale degree, using <em>only</em> notes from that key. The pattern of qualities never changes:</p>
+  </header>
+
+  <div class="pattern">
+    <div class="step"><div class="n">I</div><div class="qq">Major</div></div>
+    <div class="step"><div class="n">ii</div><div class="qq">minor</div></div>
+    <div class="step"><div class="n">iii</div><div class="qq">minor</div></div>
+    <div class="step"><div class="n">IV</div><div class="qq">Major</div></div>
+    <div class="step"><div class="n">V</div><div class="qq">Major</div></div>
+    <div class="step"><div class="n">vi</div><div class="qq">minor</div></div>
+    <div class="step"><div class="n">vii&deg;</div><div class="qq">dim</div></div>
+  </div>
+  <p class="pattern-cap">Same order, every major key.</p>
+
+  <div class="keys">
+
+    <div class="key-block example">
+      <h2 class="key-name">C Major <span class="tag">Worked example</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell">C</span><span class="cell">Dm</span><span class="cell">Em</span><span class="cell">F</span><span class="cell">G</span><span class="cell">Am</span><span class="cell">B&deg;</span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">D Major <span class="tag">2 sharps</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">A Major <span class="tag">3 sharps</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">E Major <span class="tag">4 sharps</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">B Major <span class="tag">5 sharps</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">F&#9839; Major <span class="tag">6 sharps</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">F Major <span class="tag">1 flat</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">B&#9837; Major <span class="tag">2 flats</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">E&#9837; Major <span class="tag">3 flats</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">A&#9837; Major <span class="tag">4 flats</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+    <div class="key-block">
+      <h2 class="key-name">D&#9837; Major <span class="tag">5 flats</span></h2>
+      <div class="kgrid">
+        <span class="hd">I</span><span class="hd">ii</span><span class="hd">iii</span><span class="hd">IV</span><span class="hd">V</span><span class="hd">vi</span><span class="hd">vii&deg;</span>
+        <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="foot">Check yourself: every I, IV and V should come out major; every ii, iii and vi minor; vii&deg; diminished. If one doesn&rsquo;t, the scale spelling is off &mdash; look for a missing sharp or flat.</p>
+
+</div>
+</body>
+</html>

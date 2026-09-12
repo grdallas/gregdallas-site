@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diatonic Chords of a Major Key</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+  :root {
+    --bg:          #F6F2EA;
+    --panel:       #EFEADF;
+    --ink:         #241F1A;
+    --dim:         #6B6157;
+    --faint:       #948A7C;
+    --rule:        #DCD4C6;
+    --accent:      #8A4B2A;
+    --accent-soft: #B98A64;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  }
+
+  .sheet { width: 100%; max-width: 780px; margin: 0 auto; }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .sheet-head { margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  .sheet-head h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+  }
+  .sheet-head .sub {
+    margin-top: 1rem;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--dim);
+    max-width: 56ch;
+  }
+
+  /* ── "How it's built" strip ──────────────────────────────────────── */
+  .build { margin-top: clamp(1.25rem, 3vw, 1.75rem); }
+  .build svg { display: block; width: 100%; max-width: 560px; height: auto; margin: 0.5rem 0 0; }
+  .build .cap {
+    margin-top: 1.1rem;
+    font-size: 0.98rem;
+    color: var(--dim);
+    max-width: 62ch;
+  }
+
+  /* ── Main table ──────────────────────────────────────────────────── */
+  table.harm { width: 100%; border-collapse: collapse; margin-top: clamp(1.75rem, 4vw, 2.5rem); }
+  table.harm th {
+    font-family: var(--sans);
+    font-size: 0.63rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--faint);
+    text-align: left;
+    padding: 0 1rem 0.7rem 0;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  table.harm td {
+    padding: 0.8rem 1rem 0.8rem 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: baseline;
+  }
+  table.harm th:last-child, table.harm td:last-child { padding-right: 0; }
+  .rn { font-family: var(--serif); font-size: 1.2rem; color: var(--accent); white-space: nowrap; }
+  .chord { font-family: var(--serif); font-size: 1.05rem; white-space: nowrap; }
+  .muted { font-family: var(--sans); font-size: 0.9rem; color: var(--dim); }
+
+  /* ── Pattern strip ───────────────────────────────────────────────── */
+  .pattern {
+    display: flex;
+    gap: 0.5rem;
+    margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
+    padding: 1.3rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .pattern .step { flex: 1; text-align: center; }
+  .pattern .step .n { font-family: var(--serif); font-size: 0.95rem; color: var(--accent); }
+  .pattern .step .qq {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin-top: 0.4rem;
+  }
+  .pattern-cap { margin-top: 0.9rem; font-size: 0.98rem; font-style: italic; color: var(--faint); }
+
+  /* ── Sevenths ────────────────────────────────────────────────────── */
+  .sevenths { margin-top: clamp(2rem, 5vw, 2.75rem); }
+  .sevenths h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    letter-spacing: -0.015em;
+  }
+  .sevenths p { margin-top: 0.55rem; color: var(--dim); font-size: 1rem; max-width: 60ch; }
+  .seventh-row { display: flex; flex-wrap: wrap; gap: 0.9rem 1.4rem; margin-top: 1.15rem; }
+  .seventh-row .s { }
+  .seventh-row .lbl {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 0.15rem;
+  }
+  .seventh-row .val { font-family: var(--serif); font-size: 1.08rem; white-space: nowrap; }
+
+  /* ── Footer ──────────────────────────────────────────────────────── */
+  .foot {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--faint);
+    max-width: 64ch;
+  }
+
+  /* ── Print ───────────────────────────────────────────────────────── */
+  @page { size: letter portrait; margin: 0.55in; }
+  @media print {
+    body { padding: 0; }
+    .sheet { max-width: none; }
+    table.harm, .pattern, .sevenths, .build svg { break-inside: avoid; }
+  }
+
+      /* Added for the website — hidden when printed, so the sheet stays a sheet. */
+      .site-return { display:inline-block; font-family:var(--sans); font-size:.72rem;
+        letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+        text-decoration:none; margin-bottom:1.4rem; }
+      .site-return:hover { color:var(--accent); }
+      @media print { .site-return { display:none; } }
+</style>
+</head>
+<body>
+<a class="site-return" href="../handouts.html">&larr; All handouts</a>
+<div class="sheet">
+
+  <header class="sheet-head">
+    <p class="eyebrow">Harmony</p>
+    <h1>Diatonic Chords of a Major Key</h1>
+    <p class="sub">The seven chords you get by building a triad on each note of a major scale &mdash; and the pattern of qualities that never changes.</p>
+  </header>
+
+  <div class="build">
+    <svg viewBox="0 0 560 118" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="The C major scale with the first, third and fifth notes stacked to form a C major triad.">
+      <!-- scale track -->
+      <line x1="26" y1="74" x2="534" y2="74" stroke="#DCD4C6" stroke-width="1.4"/>
+      <!-- bracket over 1-3-5 -->
+      <path d="M26 52 L26 45 L282 45 L282 52" fill="none" stroke="#8A4B2A" stroke-width="1.5"/>
+      <line x1="26"  y1="45" x2="26"  y2="67" stroke="#8A4B2A" stroke-width="1.5"/>
+      <line x1="154" y1="45" x2="154" y2="67" stroke="#8A4B2A" stroke-width="1.5"/>
+      <line x1="282" y1="45" x2="282" y2="67" stroke="#8A4B2A" stroke-width="1.5"/>
+      <text x="154" y="34" text-anchor="middle" font-family="Newsreader, Georgia, serif"
+            font-size="15" fill="#8A4B2A">C &#8211; E &#8211; G</text>
+      <!-- scale-degree dots: x = 26,90,154,218,282,346,410,474,538 -->
+      <circle cx="26"  cy="74" r="6.5" fill="#8A4B2A"/>
+      <circle cx="90"  cy="74" r="6.5" fill="none" stroke="#241F1A" stroke-width="1.4"/>
+      <circle cx="154" cy="74" r="6.5" fill="#8A4B2A"/>
+      <circle cx="218" cy="74" r="6.5" fill="none" stroke="#241F1A" stroke-width="1.4"/>
+      <circle cx="282" cy="74" r="6.5" fill="#8A4B2A"/>
+      <circle cx="346" cy="74" r="6.5" fill="none" stroke="#241F1A" stroke-width="1.4"/>
+      <circle cx="410" cy="74" r="6.5" fill="none" stroke="#241F1A" stroke-width="1.4"/>
+      <circle cx="474" cy="74" r="6.5" fill="none" stroke="#241F1A" stroke-width="1.4"/>
+      <circle cx="538" cy="74" r="6.5" fill="none" stroke="#B98A64" stroke-width="1.4"/>
+      <!-- note names -->
+      <g font-family="Inter, Helvetica, Arial, sans-serif" font-size="13" text-anchor="middle">
+        <text x="26"  y="99" fill="#6B6157">C</text>
+        <text x="90"  y="99" fill="#6B6157">D</text>
+        <text x="154" y="99" fill="#6B6157">E</text>
+        <text x="218" y="99" fill="#6B6157">F</text>
+        <text x="282" y="99" fill="#6B6157">G</text>
+        <text x="346" y="99" fill="#6B6157">A</text>
+        <text x="410" y="99" fill="#6B6157">B</text>
+        <text x="474" y="99" fill="#6B6157">C</text>
+        <text x="538" y="99" fill="#948A7C">D</text>
+      </g>
+      <!-- degree numbers -->
+      <g font-family="Inter, Helvetica, Arial, sans-serif" font-size="10" text-anchor="middle" fill="#948A7C">
+        <text x="26"  y="115">1</text>
+        <text x="90"  y="115">2</text>
+        <text x="154" y="115">3</text>
+        <text x="218" y="115">4</text>
+        <text x="282" y="115">5</text>
+        <text x="346" y="115">6</text>
+        <text x="410" y="115">7</text>
+        <text x="474" y="115">8</text>
+      </g>
+    </svg>
+    <p class="cap">Build a triad on each scale degree by stacking every other note. Degree&nbsp;1 gives C&ndash;E&ndash;G, a C major chord. Degree&nbsp;2 gives D&ndash;F&ndash;A, a D minor chord. Keep going up the scale and you get seven chords &mdash; three major, three minor, one diminished.</p>
+  </div>
+
+  <table class="harm">
+    <thead>
+      <tr>
+        <th>Numeral</th>
+        <th>Quality</th>
+        <th>Key of C</th>
+        <th>Key of G</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="rn">I</td>   <td class="muted">major</td>      <td class="chord">C</td>   <td class="chord">G</td></tr>
+      <tr><td class="rn">ii</td>  <td class="muted">minor</td>      <td class="chord">Dm</td>  <td class="chord">Am</td></tr>
+      <tr><td class="rn">iii</td> <td class="muted">minor</td>      <td class="chord">Em</td>  <td class="chord">Bm</td></tr>
+      <tr><td class="rn">IV</td>  <td class="muted">major</td>      <td class="chord">F</td>   <td class="chord">C</td></tr>
+      <tr><td class="rn">V</td>   <td class="muted">major</td>      <td class="chord">G</td>   <td class="chord">D</td></tr>
+      <tr><td class="rn">vi</td>  <td class="muted">minor</td>      <td class="chord">Am</td>  <td class="chord">Em</td></tr>
+      <tr><td class="rn">vii&deg;</td><td class="muted">diminished</td><td class="chord">B&deg;</td><td class="chord">F&#9839;&deg;</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pattern">
+    <div class="step"><div class="n">I</div><div class="qq">Major</div></div>
+    <div class="step"><div class="n">ii</div><div class="qq">minor</div></div>
+    <div class="step"><div class="n">iii</div><div class="qq">minor</div></div>
+    <div class="step"><div class="n">IV</div><div class="qq">Major</div></div>
+    <div class="step"><div class="n">V</div><div class="qq">Major</div></div>
+    <div class="step"><div class="n">vi</div><div class="qq">minor</div></div>
+    <div class="step"><div class="n">vii&deg;</div><div class="qq">dim</div></div>
+  </div>
+  <p class="pattern-cap">The order never changes. Learn it once and it works in every major key.</p>
+
+  <div class="sevenths">
+    <h2>Add the 7th</h2>
+    <p>Stack one more third on top of each triad and you get its seventh chord. Four qualities come out of the scale: <strong>major 7th</strong> on I and IV, <strong>minor 7th</strong> on ii, iii and vi, a <strong>dominant 7th</strong> on V, and a <strong>half-diminished 7th</strong> (m7&#9837;5) on vii&deg;.</p>
+    <div class="seventh-row">
+      <span class="s"><span class="lbl">I&#8202;maj7</span><span class="val">Cmaj7</span></span>
+      <span class="s"><span class="lbl">ii7</span><span class="val">Dm7</span></span>
+      <span class="s"><span class="lbl">iii7</span><span class="val">Em7</span></span>
+      <span class="s"><span class="lbl">IV&#8202;maj7</span><span class="val">Fmaj7</span></span>
+      <span class="s"><span class="lbl">V7</span><span class="val">G7</span></span>
+      <span class="s"><span class="lbl">vi7</span><span class="val">Am7</span></span>
+      <span class="s"><span class="lbl">vii&oslash;7</span><span class="val">Bm7&#9837;5</span></span>
+    </div>
+  </div>
+
+  <p class="foot">The numerals are movable. Spell any major scale, stack the thirds, and you have that key&rsquo;s seven chords &mdash; same qualities, same order, every time.</p>
+
+</div>
+</body>
+</html>
