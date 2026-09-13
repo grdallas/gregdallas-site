@@ -56,6 +56,13 @@
     line-height: 1.12; font-size: clamp(2rem, 5.5vw, 2.9rem);
   }
 
+  /* ── Play hint ───────────────────────────────────────────────────── */
+  .play-hint {
+    font-family: var(--sans); font-size: 0.78rem; color: var(--faint);
+    margin-bottom: 1.1rem; letter-spacing: 0.02em;
+  }
+  @media print { .play-hint { display: none; } }
+
   /* ── Column headers (string sets) ────────────────────────────────── */
   .col-heads {
     display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.5rem;
@@ -169,6 +176,8 @@
       <div class="clock-cap">C · D · E · G</div>
     </div>
   </div>
+
+  <p class="play-hint">&#9654; Click any diagram to hear it played.</p>
 
   <div class="col-heads">
     <span>E &middot; A &middot; D &middot; G</span>
@@ -410,6 +419,10 @@ function drawDiagram(diagram) {
 }
 
 // ── Click a diagram to hear it ─────────────────────────────────────
+// Plays real sampled nylon-string guitar notes (FluidR3 GM soundfont via
+// gleitz/midi-js-soundfonts, MIT licensed) — one exact recorded sample per
+// pitch, no pitch-shifting. Falls back to a plain synth tone only if a
+// sample fails to load (e.g. offline).
 let audioCtx = null;
 function ensureAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -417,7 +430,26 @@ function ensureAudio() {
   return audioCtx;
 }
 function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
-function playNote(ctx, master, midi, startTime, dur) {
+
+const PC_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
+function midiToSampleName(m) {
+  const pc = ((m % 12) + 12) % 12;
+  const octave = Math.floor(m / 12) - 1;
+  return PC_NAMES[pc] + octave;
+}
+
+const bufferCache = {};
+async function getBuffer(midi) {
+  if (bufferCache[midi]) return bufferCache[midi];
+  const url = `audio-samples/nylon/${midiToSampleName(midi)}.mp3`;
+  const resp = await fetch(url);
+  const arrayBuf = await resp.arrayBuffer();
+  const audioBuf = await ensureAudio().decodeAudioData(arrayBuf);
+  bufferCache[midi] = audioBuf;
+  return audioBuf;
+}
+
+function playSynthNote(ctx, master, midi, startTime, dur) {
   const osc = ctx.createOscillator();
   osc.type = "triangle";
   osc.frequency.value = midiToFreq(midi);
@@ -430,20 +462,47 @@ function playNote(ctx, master, midi, startTime, dur) {
   osc.start(startTime);
   osc.stop(startTime + dur + 0.05);
 }
-function playChord(midiNotes) {
+
+function playSampledNote(ctx, master, buffer, startTime, dur) {
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(1, startTime);
+  const fadeStart = startTime + Math.max(dur - 0.4, 0.05);
+  g.gain.setValueAtTime(1, fadeStart);
+  g.gain.linearRampToValueAtTime(0, startTime + dur);
+  src.connect(g);
+  g.connect(master);
+  src.start(startTime);
+  src.stop(startTime + dur + 0.05);
+}
+
+async function playChord(midiNotes) {
   const ctx = ensureAudio();
-  const now = ctx.currentTime;
   const master = ctx.createGain();
-  master.gain.value = 0.16;
+  master.gain.value = 0.8;
   master.connect(ctx.destination);
 
-  // low to high, one at a time, then all together as a block chord
   const ascending = [...midiNotes].sort((a, b) => a - b);
   const step = 0.28;
-  ascending.forEach((m, i) => playNote(ctx, master, m, now + i * step, 0.5));
 
+  let buffers;
+  try {
+    buffers = await Promise.all(ascending.map(m => getBuffer(m)));
+  } catch (e) {
+    // sample fetch/decode failed (e.g. offline) — fall back to the synth
+    master.gain.value = 0.16;
+    const now = ctx.currentTime;
+    ascending.forEach((m, i) => playSynthNote(ctx, master, m, now + i * step, 0.5));
+    const chordStart = now + ascending.length * step + 0.15;
+    ascending.forEach(m => playSynthNote(ctx, master, m, chordStart, 1.8));
+    return;
+  }
+
+  const now = ctx.currentTime;
+  ascending.forEach((m, i) => playSampledNote(ctx, master, buffers[i], now + i * step, 2.2));
   const chordStart = now + ascending.length * step + 0.15;
-  midiNotes.forEach(m => playNote(ctx, master, m, chordStart, 1.8));
+  ascending.forEach((m, i) => playSampledNote(ctx, master, buffers[i], chordStart, 2.6));
 }
 
 const chart = document.getElementById("chart");
