@@ -83,6 +83,39 @@
   .legend-item svg { display: block; }
   .foot { margin-top: 0.9rem; font-size: 0.95rem; font-style: italic; color: var(--faint); }
 
+  /* ── Tensions over every bass note ──────────────────────────────── */
+  .tensions { margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+  .tensions h2 {
+    font-family: var(--serif); font-weight: 400; font-size: 1.5rem;
+    letter-spacing: -0.01em; margin-bottom: 0.5rem;
+  }
+  .tensions .tensions-intro {
+    font-family: var(--sans); font-size: 0.92rem; color: var(--dim);
+    max-width: 56ch; margin-bottom: 1.4rem;
+  }
+  .tensions table {
+    width: 100%; border-collapse: collapse; font-family: var(--sans);
+    font-size: 0.86rem; font-variant-numeric: tabular-nums;
+  }
+  .tensions thead th {
+    text-align: left; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--faint); padding: 0 0.75rem 0.6rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .tensions td {
+    padding: 0.55rem 0.75rem 0.55rem 0; border-bottom: 1px solid var(--rule);
+    color: var(--ink); vertical-align: top;
+  }
+  .tensions td:first-child { font-weight: 600; white-space: nowrap; width: 3.5em; }
+  .tensions td:last-child { color: var(--accent); font-weight: 500; white-space: nowrap; }
+  .tensions tr.is-root td { background: var(--panel); }
+  .tensions tr.is-root td:first-child { color: var(--accent); }
+  @media (max-width: 560px) {
+    .tensions table { font-size: 0.78rem; }
+    .tensions td:last-child { white-space: normal; }
+  }
+  @media print { .tensions { break-inside: avoid; } }
+
   /* ── Print ───────────────────────────────────────────────────────── */
   @page { size: letter portrait; margin: 0.55in; }
   @media print {
@@ -162,6 +195,28 @@
   </div>
 
   <p class="foot">Low E string on the left, high e on the right. Each column climbs the neck, position by position; the open-position voicing is fixed to this key. Some voicings are extremely difficult or impossible — attempt at your own risk.</p>
+
+  <div class="tensions">
+    <h2>Tensions Over Every Bass Note</h2>
+    <p class="tensions-intro">What each note in C-Db-Eb-A becomes when you slide the bass underneath it, chromatically through all twelve — plus the normal chord symbol, wherever the resulting stack has one.</p>
+    <table>
+      <thead><tr><th>Bass</th><th>Tensions</th><th>Also known as</th></tr></thead>
+      <tbody>
+      <tr class="is-root"><td>C</td><td>b9&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;13 (or 6)</td><td>&mdash;</td></tr>
+      <tr><td>Db</td><td>7&nbsp;&nbsp;9&nbsp;&nbsp;#5 (or b13)</td><td>&mdash;</td></tr>
+      <tr><td>D</td><td>b7&nbsp;&nbsp;7&nbsp;&nbsp;b9&nbsp;&nbsp;5</td><td>&mdash;</td></tr>
+      <tr><td>Eb</td><td>13 (or 6)&nbsp;&nbsp;b7&nbsp;&nbsp;#11 (or b5)</td><td>&mdash;</td></tr>
+      <tr><td>E</td><td>#5 (or b13)&nbsp;&nbsp;13 (or 6)&nbsp;&nbsp;7&nbsp;&nbsp;11 (or 4)</td><td>&mdash;</td></tr>
+      <tr><td>F</td><td>5&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;b7&nbsp;&nbsp;3</td><td>F7 (add #5)</td></tr>
+      <tr><td>Gb</td><td>#11 (or b5)&nbsp;&nbsp;5&nbsp;&nbsp;13 (or 6)&nbsp;&nbsp;b3 (or #9)</td><td>Gbdim7 (add 5)</td></tr>
+      <tr><td>G</td><td>11 (or 4)&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;9</td><td>&mdash;</td></tr>
+      <tr><td>Ab</td><td>3&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;5&nbsp;&nbsp;b9</td><td>&mdash;</td></tr>
+      <tr><td>A</td><td>b3 (or #9)&nbsp;&nbsp;3&nbsp;&nbsp;#11 (or b5)</td><td>Adim (add 3)</td></tr>
+      <tr><td>Bb</td><td>9&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;7</td><td>&mdash;</td></tr>
+      <tr><td>B</td><td>b9&nbsp;&nbsp;9&nbsp;&nbsp;3&nbsp;&nbsp;b7</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+  </div>
 
 </div>
 
