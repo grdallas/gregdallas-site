@@ -69,7 +69,8 @@
   /* ── Diagram grid ────────────────────────────────────────────────── */
   .chart-row { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 1.5rem; padding: 1.4rem 0; }
   .chart-row + .chart-row { border-top: 1px solid var(--rule); }
-  .cell { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; cursor: pointer; }
+  .cell:hover svg.fretboard { opacity: 0.75; }
   .cell svg.fretboard { display: block; }
 
   /* ── Legend + footer ─────────────────────────────────────────────── */
@@ -181,86 +182,86 @@
 const rows = [
 
   [
-    { startFret: 1, numBoxes: 8, dots: [
-      { str: 0, fret: 8, type: "root" },  // C
-      { str: 1, fret: 5, type: "tone" },  // D
-      { str: 2, fret: 1, type: "tone" },  // Eb
-      { str: 3, fret: 6, type: "tone" },  // Db
+    { startFret: 1, numBoxes: 8, minStr: 0, maxStr: 3, dots: [
+      { str: 0, fret: 8, type: "root", midi: 48 },  // C
+      { str: 1, fret: 5, type: "tone", midi: 50 },  // D
+      { str: 2, fret: 1, type: "tone", midi: 51 },  // Eb
+      { str: 3, fret: 6, type: "tone", midi: 61 },  // Db
     ]},
-    { startFret: 1, numBoxes: 5, dots: [
-      { str: 1, fret: 4, type: "tone" },  // Db
-      { str: 2, fret: 1, type: "tone" },  // Eb
-      { str: 3, fret: 5, type: "root" },  // C
-      { str: 4, fret: 3, type: "tone" },  // D
+    { startFret: 1, numBoxes: 5, minStr: 1, maxStr: 4, dots: [
+      { str: 1, fret: 4, type: "tone", midi: 49 },  // Db
+      { str: 2, fret: 1, type: "tone", midi: 51 },  // Eb
+      { str: 3, fret: 5, type: "root", midi: 60 },  // C
+      { str: 4, fret: 3, type: "tone", midi: 62 },  // D
     ]},
-    { startFret: 1, numBoxes: 8, dots: [
-      { str: 2, fret: 1, type: "tone" },  // Eb
-      { str: 3, fret: 6, type: "tone" },  // Db
-      { str: 4, fret: 3, type: "tone" },  // D
-      { str: 5, fret: 8, type: "root" },  // C
-    ]},
-  ],
-
-  [
-    { startFret: 6, numBoxes: 5, dots: [
-      { str: 0, fret: 4, type: "tone" },  // Db
-      { str: 1, fret: 1, type: "tone" },  // Eb
-      { str: 2, fret: 5, type: "root" },  // C
-      { str: 3, fret: 2, type: "tone" },  // D
-    ]},
-    { startFret: 4, numBoxes: 7, dots: [
-      { str: 1, fret: 2, type: "tone" },  // D
-      { str: 2, fret: 7, type: "root" },  // C
-      { str: 3, fret: 3, type: "tone" },  // Db
-      { str: 4, fret: 1, type: "tone" },  // Eb
-    ]},
-    { startFret: 4, numBoxes: 7, dots: [
-      { str: 2, fret: 7, type: "root" },  // C
-      { str: 3, fret: 4, type: "tone" },  // D
-      { str: 4, fret: 1, type: "tone" },  // Eb
-      { str: 5, fret: 6, type: "tone" },  // Db
+    { startFret: 1, numBoxes: 8, minStr: 2, maxStr: 5, dots: [
+      { str: 2, fret: 1, type: "tone", midi: 51 },  // Eb
+      { str: 3, fret: 6, type: "tone", midi: 61 },  // Db
+      { str: 4, fret: 3, type: "tone", midi: 62 },  // D
+      { str: 5, fret: 8, type: "root", midi: 72 },  // C
     ]},
   ],
 
   [
-    { startFret: 8, numBoxes: 8, dots: [
-      { str: 0, fret: 3, type: "tone" },  // D
-      { str: 1, fret: 8, type: "root" },  // C
-      { str: 2, fret: 4, type: "tone" },  // Db
-      { str: 3, fret: 1, type: "tone" },  // Eb
+    { startFret: 6, numBoxes: 5, minStr: 0, maxStr: 3, dots: [
+      { str: 0, fret: 4, type: "tone", midi: 49 },  // Db
+      { str: 1, fret: 1, type: "tone", midi: 51 },  // Eb
+      { str: 2, fret: 5, type: "root", midi: 60 },  // C
+      { str: 3, fret: 2, type: "tone", midi: 62 },  // D
     ]},
-    { startFret: 6, numBoxes: 8, dots: [
-      { str: 1, fret: 1, type: "tone" },  // Eb
-      { str: 2, fret: 6, type: "tone" },  // Db
-      { str: 3, fret: 2, type: "tone" },  // D
-      { str: 4, fret: 8, type: "root" },  // C
+    { startFret: 4, numBoxes: 7, minStr: 1, maxStr: 4, dots: [
+      { str: 1, fret: 2, type: "tone", midi: 50 },  // D
+      { str: 2, fret: 7, type: "root", midi: 60 },  // C
+      { str: 3, fret: 3, type: "tone", midi: 61 },  // Db
+      { str: 4, fret: 1, type: "tone", midi: 63 },  // Eb
     ]},
-    { startFret: 8, numBoxes: 6, dots: [
-      { str: 2, fret: 4, type: "tone" },  // Db
-      { str: 3, fret: 1, type: "tone" },  // Eb
-      { str: 4, fret: 6, type: "root" },  // C
-      { str: 5, fret: 3, type: "tone" },  // D
+    { startFret: 4, numBoxes: 7, minStr: 2, maxStr: 5, dots: [
+      { str: 2, fret: 7, type: "root", midi: 60 },  // C
+      { str: 3, fret: 4, type: "tone", midi: 62 },  // D
+      { str: 4, fret: 1, type: "tone", midi: 63 },  // Eb
+      { str: 5, fret: 6, type: "tone", midi: 73 },  // Db
     ]},
   ],
 
   [
-    { startFret: 11, numBoxes: 7, dots: [
-      { str: 0, fret: 1, type: "tone" },  // Eb
-      { str: 1, fret: 6, type: "tone" },  // Db
-      { str: 2, fret: 2, type: "tone" },  // D
-      { str: 3, fret: 7, type: "root" },  // C
+    { startFret: 8, numBoxes: 8, minStr: 0, maxStr: 3, dots: [
+      { str: 0, fret: 3, type: "tone", midi: 50 },  // D
+      { str: 1, fret: 8, type: "root", midi: 60 },  // C
+      { str: 2, fret: 4, type: "tone", midi: 61 },  // Db
+      { str: 3, fret: 1, type: "tone", midi: 63 },  // Eb
     ]},
-    { startFret: 8, numBoxes: 8, dots: [
-      { str: 1, fret: 8, type: "root" },  // C
-      { str: 2, fret: 5, type: "tone" },  // D
-      { str: 3, fret: 1, type: "tone" },  // Eb
-      { str: 4, fret: 7, type: "tone" },  // Db
+    { startFret: 6, numBoxes: 8, minStr: 1, maxStr: 4, dots: [
+      { str: 1, fret: 1, type: "tone", midi: 51 },  // Eb
+      { str: 2, fret: 6, type: "tone", midi: 61 },  // Db
+      { str: 3, fret: 2, type: "tone", midi: 62 },  // D
+      { str: 4, fret: 8, type: "root", midi: 72 },  // C
     ]},
-    { startFret: 11, numBoxes: 7, dots: [
-      { str: 2, fret: 2, type: "tone" },  // D
-      { str: 3, fret: 7, type: "root" },  // C
-      { str: 4, fret: 4, type: "tone" },  // Db
-      { str: 5, fret: 1, type: "tone" },  // Eb
+    { startFret: 8, numBoxes: 6, minStr: 2, maxStr: 5, dots: [
+      { str: 2, fret: 4, type: "tone", midi: 61 },  // Db
+      { str: 3, fret: 1, type: "tone", midi: 63 },  // Eb
+      { str: 4, fret: 6, type: "root", midi: 72 },  // C
+      { str: 5, fret: 3, type: "tone", midi: 74 },  // D
+    ]},
+  ],
+
+  [
+    { startFret: 11, numBoxes: 7, minStr: 0, maxStr: 3, dots: [
+      { str: 0, fret: 1, type: "tone", midi: 51 },  // Eb
+      { str: 1, fret: 6, type: "tone", midi: 61 },  // Db
+      { str: 2, fret: 2, type: "tone", midi: 62 },  // D
+      { str: 3, fret: 7, type: "root", midi: 72 },  // C
+    ]},
+    { startFret: 8, numBoxes: 8, minStr: 1, maxStr: 4, dots: [
+      { str: 1, fret: 8, type: "root", midi: 60 },  // C
+      { str: 2, fret: 5, type: "tone", midi: 62 },  // D
+      { str: 3, fret: 1, type: "tone", midi: 63 },  // Eb
+      { str: 4, fret: 7, type: "tone", midi: 73 },  // Db
+    ]},
+    { startFret: 11, numBoxes: 7, minStr: 2, maxStr: 5, dots: [
+      { str: 2, fret: 2, type: "tone", midi: 62 },  // D
+      { str: 3, fret: 7, type: "root", midi: 72 },  // C
+      { str: 4, fret: 4, type: "tone", midi: 73 },  // Db
+      { str: 5, fret: 1, type: "tone", midi: 75 },  // Eb
     ]},
   ]
 ];
@@ -314,6 +315,18 @@ function drawDiagram(diagram) {
     }));
   }
 
+  // A string this diagram's set skips entirely (e.g. drop 3's skipped
+  // string) gets a small X above the nut, same convention as a muted string.
+  const usedStrings = new Set(diagram.dots.map(d => d.str));
+  for (let s = diagram.minStr; s <= diagram.maxStr; s++) {
+    if (usedStrings.has(s)) continue;
+    const x = PAD_X + s * STRING_GAP;
+    svg.appendChild(el("path", {
+      d: `M${x-3},9 L${x+3},15 M${x+3},9 L${x-3},15`,
+      stroke: "#948A7C", "stroke-width": "1.2",
+    }));
+  }
+
   if (diagram.startFret) {
     const y = PAD_Y + FRET_GAP;
     const label = el("text", {
@@ -341,6 +354,43 @@ function drawDiagram(diagram) {
   return svg;
 }
 
+// ── Click a diagram to hear it ─────────────────────────────────────
+let audioCtx = null;
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  return audioCtx;
+}
+function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+function playNote(ctx, master, midi, startTime, dur) {
+  const osc = ctx.createOscillator();
+  osc.type = "triangle";
+  osc.frequency.value = midiToFreq(midi);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, startTime);
+  g.gain.linearRampToValueAtTime(1, startTime + 0.015);
+  g.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+  osc.connect(g);
+  g.connect(master);
+  osc.start(startTime);
+  osc.stop(startTime + dur + 0.05);
+}
+function playChord(midiNotes) {
+  const ctx = ensureAudio();
+  const now = ctx.currentTime;
+  const master = ctx.createGain();
+  master.gain.value = 0.16;
+  master.connect(ctx.destination);
+
+  // low to high, one at a time, then all together as a block chord
+  const ascending = [...midiNotes].sort((a, b) => a - b);
+  const step = 0.28;
+  ascending.forEach((m, i) => playNote(ctx, master, m, now + i * step, 0.5));
+
+  const chordStart = now + ascending.length * step + 0.15;
+  midiNotes.forEach(m => playNote(ctx, master, m, chordStart, 1.8));
+}
+
 const chart = document.getElementById("chart");
 rows.forEach(row => {
   const rowDiv = document.createElement("div");
@@ -349,6 +399,8 @@ rows.forEach(row => {
     const cell = document.createElement("div");
     cell.className = "cell";
     cell.appendChild(drawDiagram(diagram));
+    cell.title = "Click to hear this voicing";
+    cell.addEventListener("click", () => playChord(diagram.dots.map(d => d.midi)));
     rowDiv.appendChild(cell);
   });
   chart.appendChild(rowDiv);
