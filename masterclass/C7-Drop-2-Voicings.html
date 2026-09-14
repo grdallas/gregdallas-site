@@ -140,11 +140,24 @@
     cursor: pointer; border-bottom: 1px dotted var(--accent-soft); padding-bottom: 1px;
   }
   .tensions .chord-play:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .tensions .scale-links {
+    display: block; white-space: normal; margin-top: 0.3rem;
+    font-family: var(--sans); font-size: 0.68rem; font-weight: 400;
+    color: var(--faint); letter-spacing: 0.01em;
+  }
+  .tensions .scale-links a {
+    color: var(--dim); text-decoration: underline; text-decoration-color: var(--rule);
+    text-underline-offset: 2px;
+  }
+  .tensions .scale-links a:hover { color: var(--accent); text-decoration-color: var(--accent); }
   @media (max-width: 560px) {
     .tensions table { font-size: 0.78rem; }
     .tensions td:last-child { white-space: normal; }
   }
-  @media print { .tensions .chord-play { border-bottom: none; } }
+  @media print {
+    .tensions .chord-play { border-bottom: none; }
+    .tensions .scale-links { display: none; }
+  }
   @media print { .tensions { break-inside: avoid; } }
 
   /* ── Print ───────────────────────────────────────────────────────── */
@@ -233,18 +246,18 @@
     <table>
       <thead><tr><th>Bass</th><th>Tensions</th><th>Also known as</th></tr></thead>
       <tbody>
-      <tr class="is-root"><td>C</td><td>3&nbsp;&nbsp;5&nbsp;&nbsp;b7</td><td><span class="chord-play" data-midis="36,60,64,67,70" title="Click to hear C7">&#9654; C7</span></td></tr>
-      <tr><td>Db</td><td>7&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;13 (or 6)</td><td><span class="chord-play" data-midis="37,60,64,67,70" title="Click to hear Dbdim7 (add 7)">&#9654; Dbdim7 (add 7)</span></td></tr>
-      <tr><td>D</td><td>b7&nbsp;&nbsp;9&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#5 (or b13)</td><td><span class="chord-play" data-midis="38,60,64,67,70" title="Click to hear D(9, 11, #5, b7)">&#9654; D(9, 11, #5, b7)</span></td></tr>
-      <tr><td>Eb</td><td>13 (or 6)&nbsp;&nbsp;b9&nbsp;&nbsp;3&nbsp;&nbsp;5</td><td><span class="chord-play" data-midis="39,60,64,67,70" title="Click to hear Eb6 (add b9)">&#9654; Eb6 (add b9)</span></td></tr>
-      <tr><td>E</td><td>#5 (or b13)&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;#11 (or b5)</td><td><span class="chord-play" data-midis="40,60,64,67,70" title="Click to hear Edim (add #5)">&#9654; Edim (add #5)</span></td></tr>
-      <tr><td>F</td><td>5&nbsp;&nbsp;7&nbsp;&nbsp;9&nbsp;&nbsp;11 (or 4)</td><td><span class="chord-play" data-midis="41,60,64,67,70" title="Click to hear Fsus2(maj7) (add 11)">&#9654; Fsus2(maj7) (add 11)</span></td></tr>
-      <tr><td>Gb</td><td>#11 (or b5)&nbsp;&nbsp;b7&nbsp;&nbsp;b9&nbsp;&nbsp;3</td><td><span class="chord-play" data-midis="42,60,64,67,70" title="Click to hear Gb7b5 (add b9)">&#9654; Gb7b5 (add b9)</span></td></tr>
-      <tr><td>G</td><td>11 (or 4)&nbsp;&nbsp;13 (or 6)&nbsp;&nbsp;b3 (or #9)</td><td><span class="chord-play" data-midis="43,60,64,67,70" title="Click to hear G(b3, 11, 13)">&#9654; G(b3, 11, 13)</span></td></tr>
-      <tr><td>Ab</td><td>3&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;7&nbsp;&nbsp;9</td><td><span class="chord-play" data-midis="44,60,64,67,70" title="Click to hear Abmaj7#5 (add 9)">&#9654; Abmaj7#5 (add 9)</span></td></tr>
-      <tr><td>A</td><td>b3 (or #9)&nbsp;&nbsp;5&nbsp;&nbsp;b7&nbsp;&nbsp;b9</td><td><span class="chord-play" data-midis="45,60,64,67,70" title="Click to hear Am7 (add b9)">&#9654; Am7 (add b9)</span></td></tr>
-      <tr><td>Bb</td><td>9&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;13 (or 6)</td><td><span class="chord-play" data-midis="46,60,64,67,70" title="Click to hear Bb(9, #11, 13)">&#9654; Bb(9, #11, 13)</span></td></tr>
-      <tr><td>B</td><td>b9&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;7</td><td><span class="chord-play" data-midis="47,60,64,67,70" title="Click to hear B(b9, 11, #5, 7)">&#9654; B(b9, 11, #5, 7)</span></td></tr>
+      <tr class="is-root"><td>C</td><td>3&nbsp;&nbsp;5&nbsp;&nbsp;b7</td><td><span class="chord-play" data-midis="36,60,64,67,70" title="Click to hear C7">&#9654; C7</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=C&amp;scale=mixolydian" target="_blank" rel="noopener">Mixolydian</a> &middot; <a href="../scale-explorer.html?root=C&amp;scale=lydianDominant" target="_blank" rel="noopener">Lydian Dominant</a> &middot; <a href="../scale-explorer.html?root=C&amp;scale=mixolydianB6" target="_blank" rel="noopener">Mixolydian ♭6</a></span></td></tr>
+      <tr><td>Db</td><td>7&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;13 (or 6)</td><td><span class="chord-play" data-midis="37,60,64,67,70" title="Click to hear Dbdim7 (add 7)">&#9654; Dbdim7 (add 7)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Db&amp;scale=lydianSharp2" target="_blank" rel="noopener">Lydian ♯2</a> &middot; <a href="../scale-explorer.html?root=Db&amp;scale=dimWholeHalf" target="_blank" rel="noopener">Diminished (Whole-Half)</a></span></td></tr>
+      <tr><td>D</td><td>b7&nbsp;&nbsp;9&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#5 (or b13)</td><td><span class="chord-play" data-midis="38,60,64,67,70" title="Click to hear D(9, 11, #5, b7)">&#9654; D(9, 11, #5, b7)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=D&amp;scale=naturalMinor" target="_blank" rel="noopener">Natural Minor</a> &middot; <a href="../scale-explorer.html?root=D&amp;scale=mixolydianB6" target="_blank" rel="noopener">Mixolydian ♭6</a> &middot; <a href="../scale-explorer.html?root=D&amp;scale=locrianNat6" target="_blank" rel="noopener">Locrian ♮2</a></span></td></tr>
+      <tr><td>Eb</td><td>13 (or 6)&nbsp;&nbsp;b9&nbsp;&nbsp;3&nbsp;&nbsp;5</td><td><span class="chord-play" data-midis="39,60,64,67,70" title="Click to hear Eb6 (add b9)">&#9654; Eb6 (add b9)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Eb&amp;scale=dimHalfWhole" target="_blank" rel="noopener">Diminished (Half-Whole)</a></span></td></tr>
+      <tr><td>E</td><td>#5 (or b13)&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;#11 (or b5)</td><td><span class="chord-play" data-midis="40,60,64,67,70" title="Click to hear Edim (add #5)">&#9654; Edim (add #5)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=E&amp;scale=locrian" target="_blank" rel="noopener">Locrian</a> &middot; <a href="../scale-explorer.html?root=E&amp;scale=locrianNat6" target="_blank" rel="noopener">Locrian ♮2</a> &middot; <a href="../scale-explorer.html?root=E&amp;scale=altered" target="_blank" rel="noopener">Altered</a></span></td></tr>
+      <tr><td>F</td><td>5&nbsp;&nbsp;7&nbsp;&nbsp;9&nbsp;&nbsp;11 (or 4)</td><td><span class="chord-play" data-midis="41,60,64,67,70" title="Click to hear Fsus2(maj7) (add 11)">&#9654; Fsus2(maj7) (add 11)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=F&amp;scale=major" target="_blank" rel="noopener">Major</a> &middot; <a href="../scale-explorer.html?root=F&amp;scale=melodicMinor" target="_blank" rel="noopener">Melodic Minor</a> &middot; <a href="../scale-explorer.html?root=F&amp;scale=harmonicMinor" target="_blank" rel="noopener">Harmonic Minor</a></span></td></tr>
+      <tr><td>Gb</td><td>#11 (or b5)&nbsp;&nbsp;b7&nbsp;&nbsp;b9&nbsp;&nbsp;3</td><td><span class="chord-play" data-midis="42,60,64,67,70" title="Click to hear Gb7b5 (add b9)">&#9654; Gb7b5 (add b9)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Gb&amp;scale=altered" target="_blank" rel="noopener">Altered</a> &middot; <a href="../scale-explorer.html?root=Gb&amp;scale=enigmatic" target="_blank" rel="noopener">Enigmatic</a> &middot; <a href="../scale-explorer.html?root=Gb&amp;scale=dimHalfWhole" target="_blank" rel="noopener">Diminished (Half-Whole)</a></span></td></tr>
+      <tr><td>G</td><td>11 (or 4)&nbsp;&nbsp;13 (or 6)&nbsp;&nbsp;b3 (or #9)</td><td><span class="chord-play" data-midis="43,60,64,67,70" title="Click to hear G(b3, 11, 13)">&#9654; G(b3, 11, 13)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=G&amp;scale=dorian" target="_blank" rel="noopener">Dorian</a> &middot; <a href="../scale-explorer.html?root=G&amp;scale=melodicMinor" target="_blank" rel="noopener">Melodic Minor</a> &middot; <a href="../scale-explorer.html?root=G&amp;scale=dorianB2" target="_blank" rel="noopener">Dorian ♭2</a></span></td></tr>
+      <tr><td>Ab</td><td>3&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;7&nbsp;&nbsp;9</td><td><span class="chord-play" data-midis="44,60,64,67,70" title="Click to hear Abmaj7#5 (add 9)">&#9654; Abmaj7#5 (add 9)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Ab&amp;scale=lydianAugmented" target="_blank" rel="noopener">Lydian Augmented</a> &middot; <a href="../scale-explorer.html?root=Ab&amp;scale=ionianSharp5" target="_blank" rel="noopener">Ionian ♯5</a> &middot; <a href="../scale-explorer.html?root=Ab&amp;scale=harmonicMajor" target="_blank" rel="noopener">Harmonic Major</a></span></td></tr>
+      <tr><td>A</td><td>b3 (or #9)&nbsp;&nbsp;5&nbsp;&nbsp;b7&nbsp;&nbsp;b9</td><td><span class="chord-play" data-midis="45,60,64,67,70" title="Click to hear Am7 (add b9)">&#9654; Am7 (add b9)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=A&amp;scale=phrygian" target="_blank" rel="noopener">Phrygian</a> &middot; <a href="../scale-explorer.html?root=A&amp;scale=dorianB2" target="_blank" rel="noopener">Dorian ♭2</a> &middot; <a href="../scale-explorer.html?root=A&amp;scale=dimHalfWhole" target="_blank" rel="noopener">Diminished (Half-Whole)</a></span></td></tr>
+      <tr><td>Bb</td><td>9&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;13 (or 6)</td><td><span class="chord-play" data-midis="46,60,64,67,70" title="Click to hear Bb(9, #11, 13)">&#9654; Bb(9, #11, 13)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Bb&amp;scale=lydian" target="_blank" rel="noopener">Lydian</a> &middot; <a href="../scale-explorer.html?root=Bb&amp;scale=lydianAugmented" target="_blank" rel="noopener">Lydian Augmented</a> &middot; <a href="../scale-explorer.html?root=Bb&amp;scale=lydianDominant" target="_blank" rel="noopener">Lydian Dominant</a></span></td></tr>
+      <tr><td>B</td><td>b9&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;7</td><td><span class="chord-play" data-midis="47,60,64,67,70" title="Click to hear B(b9, 11, #5, 7)">&#9654; B(b9, 11, #5, 7)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=B&amp;scale=doubleHarmonic" target="_blank" rel="noopener">Double Harmonic</a> &middot; <a href="../scale-explorer.html?root=B&amp;scale=neapolitanMinor" target="_blank" rel="noopener">Neapolitan Minor</a> &middot; <a href="../scale-explorer.html?root=B&amp;scale=persian" target="_blank" rel="noopener">Persian</a></span></td></tr>
       </tbody>
     </table>
   </div>
