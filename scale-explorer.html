@@ -219,6 +219,15 @@
         color: var(--ink);
         margin-bottom: 0.6rem;
     }
+    .scale-parent {
+        font-family: var(--sans);
+        font-size: 0.76rem;
+        color: var(--dim);
+        letter-spacing: 0.02em;
+        margin-top: -0.35rem;
+        margin-bottom: 0.7rem;
+        font-style: italic;
+    }
     .scale-notes {
         font-family: var(--sans);
         font-size: 0.82rem;
@@ -376,6 +385,7 @@
 
     <div class="scale-display narrow">
         <div class="scale-title" id="scaleTitle">C Major</div>
+        <div class="scale-parent" id="scaleParent" hidden></div>
         <div class="scale-notes" id="scaleNotesList"></div>
         <button type="button" class="drone-btn" id="droneBtn">&#9654; Play Drone</button>
     </div>
@@ -462,6 +472,30 @@
         bebopMinor:     { label: 'Bebop Minor (Dorian)',      intervals: [0,2,3,4,5,7,9,10], degrees: ['1','2','b3','3','4','5','6','b7'] },
     };
 
+    // ── Parent scales ────────────────────────────────────────────────────
+    // The three 7-note families where every mode is a straight rotation of
+    // the same interval pattern — so each mode's "parent" (the scale it's
+    // secretly a mode of) is derivable rather than looked up. The harmonic
+    // major / world-scale group below it is NOT such a family (its members
+    // aren't rotations of one another), so those scales get no parent line.
+    const SCALE_FAMILIES = [
+        ['major', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'naturalMinor', 'locrian'],
+        ['melodicMinor', 'dorianB2', 'lydianAugmented', 'lydianDominant', 'mixolydianB6', 'locrianNat6', 'altered'],
+        ['harmonicMinor', 'locrianSharp6', 'ionianSharp5', 'dorianSharp4', 'phrygianDominant', 'lydianSharp2', 'ultraLocrian'],
+    ];
+    const ORDINAL = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
+
+    function parentScaleInfo(scaleKey, root) {
+        for (const family of SCALE_FAMILIES) {
+            const i = family.indexOf(scaleKey);
+            if (i <= 0) continue; // not in this family, or *is* the parent itself
+            const parentScale = SCALES[family[0]];
+            const parentRoot = ((root - parentScale.intervals[i]) % 12 + 12) % 12;
+            return { ordinal: ORDINAL[i], label: parentScale.label, root: parentRoot };
+        }
+        return null;
+    }
+
     const SCALE_ALIASES = {
         'major':'major', 'maj':'major', 'ionian':'major',
         'minor':'naturalMinor', 'min':'naturalMinor', 'natural minor':'naturalMinor', 'aeolian':'naturalMinor',
@@ -546,6 +580,7 @@
     const useFlatsEl = document.getElementById('useFlats');
     const svgEl = document.getElementById('fretboard');
     const scaleTitleEl = document.getElementById('scaleTitle');
+    const scaleParentEl = document.getElementById('scaleParent');
     const scaleNotesListEl = document.getElementById('scaleNotesList');
     const droneBtnEl = document.getElementById('droneBtn');
 
@@ -711,6 +746,13 @@
     function updateScaleDisplay(scale) {
         const names = state.useFlats ? NOTE_FLAT : NOTE_SHARP;
         scaleTitleEl.textContent = `${names[state.root]} ${scale.label}`;
+        const parent = parentScaleInfo(state.scaleKey, state.root);
+        if (parent) {
+            scaleParentEl.textContent = `${parent.ordinal} mode of ${names[parent.root]} ${parent.label}`;
+            scaleParentEl.hidden = false;
+        } else {
+            scaleParentEl.hidden = true;
+        }
         scaleNotesListEl.innerHTML = scale.intervals
             .map(iv => {
                 const pc = (state.root + iv) % 12;
