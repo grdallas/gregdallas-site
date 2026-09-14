@@ -48,13 +48,18 @@
 
     #app {
         padding: clamp(2rem, 6vw, 4rem) 1.25rem 3rem;
-        max-width: 780px;
+        max-width: 1180px;
         margin: 0 auto;
         min-height: 100vh;
     }
     html.is-embed #app { padding: 1rem; max-width: none; }
     html.is-embed .tool-header { margin-bottom: 1rem; }
     html.is-embed .tool-header p { display: none; }
+
+    /* Controls, the scale name, and the legend read better at a normal
+       reading width — only the fretboard itself benefits from the extra
+       room a wide desktop window has to offer. */
+    .narrow { max-width: 780px; margin-left: auto; margin-right: auto; }
 
     .site-return {
         display: inline-block; font-family: var(--sans); font-size: .72rem;
@@ -241,6 +246,14 @@
     }
     #fretboard { display: block; }
     #fretboard text { font-family: var(--sans); }
+    /* On a wide screen, let the fretboard grow to fill the card instead of
+       sitting at its native pixel size with empty space on either side —
+       gated to a min-width so mobile never shrinks it below native size
+       (which is what keeps the note labels legible and lets narrow phones
+       scroll the board horizontally instead). */
+    @media (min-width: 900px) {
+        #fretboard { width: 100%; height: auto; }
+    }
 
     /* ── Legend ─────────────────────────────────────────────────────── */
     .legend {
@@ -266,13 +279,13 @@
 <div id="app">
     <a class="site-return" href="teaching.html">&larr; Teaching</a>
 
-    <div class="tool-header">
+    <div class="tool-header narrow">
         <p class="eyebrow">Fretboard Reference</p>
         <h1>Scale Explorer</h1>
         <p>Choose or type a scale — see it laid out across the whole neck, in any key.</p>
     </div>
 
-    <div class="card">
+    <div class="card narrow">
         <div class="control-group">
             <label class="section-label">Root</label>
             <div class="note-grid" id="noteGrid"></div>
@@ -361,19 +374,19 @@
         </div>
     </div>
 
-    <div class="scale-display">
+    <div class="scale-display narrow">
         <div class="scale-title" id="scaleTitle">C Major</div>
         <div class="scale-notes" id="scaleNotesList"></div>
         <button type="button" class="drone-btn" id="droneBtn">&#9654; Play Drone</button>
     </div>
 
-    <div class="card">
+    <div class="card fretboard-card">
         <div class="fretboard-wrap">
             <svg id="fretboard" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
     </div>
 
-    <div class="legend">
+    <div class="legend narrow">
         <div class="legend-item"><span class="legend-dot root"></span> Root</div>
         <div class="legend-item"><span class="legend-dot tone"></span> Scale tone</div>
     </div>
