@@ -174,6 +174,52 @@
     text-decoration:none; margin-bottom:1.4rem; }
   .site-return:hover { color:var(--accent); }
   @media print { .site-return { display:none; } }
+
+  /* ── Inline Scale Explorer overlay ──────────────────────────────── */
+  /* A big centered modal on top of everything — a side panel doesn't
+     leave enough width for a real fretboard. Mobile portrait is the one
+     exception: it goes full-bleed, rotated to landscape (see below). */
+  .scale-overlay { display: none; }
+  .scale-overlay.open {
+    display: flex; position: fixed; inset: 0; z-index: 1000;
+    align-items: center; justify-content: center;
+    background: rgba(36,31,26,0.55); padding: 2rem;
+  }
+  .scale-panel {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 10px;
+    box-shadow: 0 12px 48px rgba(36,31,26,0.3);
+    width: min(94vw, 960px); height: min(88vh, 760px);
+    overflow: hidden;
+  }
+  .scale-panel iframe { display: block; width: 100%; height: 100%; border: 0; background: var(--bg); }
+  /* Fixed to the actual viewport, deliberately NOT a child of .scale-panel
+     — so it stays upright and stays put regardless of the rotate-landscape
+     transform below. */
+  .scale-panel-close {
+    display: none; position: fixed; top: 0.8rem; right: 0.8rem; z-index: 1001;
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1px solid var(--rule); background: var(--bg); color: var(--dim);
+    font-size: 1.2rem; line-height: 1; cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(36,31,26,0.15);
+  }
+  .scale-panel-close.visible { display: flex; }
+  .scale-panel-close:hover { color: var(--accent); border-color: var(--accent-soft); }
+
+  /* Forced-landscape full-bleed variant for a portrait phone/tablet —
+     width/height/transform set inline by JS (measured from
+     window.innerWidth/innerHeight) rather than vw/vh, since some mobile
+     viewports report those inconsistently with the actual rendered size,
+     which would silently break a CSS-only version of this. */
+  .scale-overlay.open.rotate-landscape {
+    display: block; padding: 0; background: var(--bg);
+    top: 0; left: 100%; transform-origin: 0 0; transform: rotate(90deg);
+  }
+  .scale-overlay.open.rotate-landscape .scale-panel {
+    width: 100%; height: 100%; border-radius: 0; border: 0; box-shadow: none;
+  }
+  body.panel-open { overflow: hidden; }
+  @media print { .scale-overlay { display: none !important; } }
 </style>
 </head>
 <body>
@@ -262,6 +308,13 @@
     </table>
   </div>
 
+</div>
+
+<button type="button" class="scale-panel-close" id="scalePanelClose" aria-label="Close scale explorer">&times;</button>
+<div class="scale-overlay" id="scaleOverlay">
+  <div class="scale-panel" id="scalePanel">
+    <iframe id="scalePanelFrame" title="Scale Explorer" loading="lazy"></iframe>
+  </div>
 </div>
 
 <script>
@@ -659,6 +712,71 @@ document.querySelectorAll(".tensions .chord-play").forEach(el => {
     playChord(midis);
   });
 });
+
+// ── Scale Explorer inline overlay ────────────────────────────────────
+// Opens the linked scale right on top of this page — a big centered
+// modal normally, full-screen and forced into landscape on a portrait
+// phone/tablet — instead of navigating away. Modifier-clicks still open
+// a real new tab, same as any normal link.
+(function () {
+  const overlay = document.getElementById("scaleOverlay");
+  const frame = document.getElementById("scalePanelFrame");
+  const closeBtn = document.getElementById("scalePanelClose");
+  const ROTATE_BREAKPOINT = 900; // below this + portrait, force landscape
+
+  // Sized from window.innerWidth/innerHeight rather than vw/vh — some
+  // mobile viewports (browser UI chrome, dynamic toolbars) report CSS
+  // viewport units inconsistently with the actual rendered size, which
+  // would silently break a CSS-only version of the rotation trick.
+  function layoutOverlay() {
+    if (!overlay.classList.contains("open")) return;
+    const w = window.innerWidth, h = window.innerHeight;
+    const rotate = Math.min(w, h) < ROTATE_BREAKPOINT && h > w;
+    overlay.classList.toggle("rotate-landscape", rotate);
+    if (rotate) {
+      overlay.style.width = h + "px";
+      overlay.style.height = w + "px";
+    } else {
+      overlay.style.width = "";
+      overlay.style.height = "";
+    }
+  }
+
+  function openPanel(href) {
+    const url = new URL(href, window.location.href);
+    url.searchParams.set("embed", "1");
+    frame.src = url.toString();
+    overlay.classList.add("open");
+    closeBtn.classList.add("visible");
+    document.body.classList.add("panel-open");
+    layoutOverlay();
+  }
+  function closePanel() {
+    overlay.classList.remove("open", "rotate-landscape");
+    closeBtn.classList.remove("visible");
+    overlay.style.width = "";
+    overlay.style.height = "";
+    document.body.classList.remove("panel-open");
+    frame.src = "about:blank";
+  }
+
+  document.querySelectorAll(".tensions .scale-links a").forEach(a => {
+    a.addEventListener("click", e => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+      e.preventDefault();
+      openPanel(a.getAttribute("href"));
+    });
+  });
+  closeBtn.addEventListener("click", closePanel);
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) closePanel(); // click on the dimmed backdrop
+  });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.classList.contains("open")) closePanel();
+  });
+  window.addEventListener("resize", layoutOverlay);
+  window.addEventListener("orientationchange", () => setTimeout(layoutOverlay, 100));
+})();
 </script>
 </body>
 </html>
