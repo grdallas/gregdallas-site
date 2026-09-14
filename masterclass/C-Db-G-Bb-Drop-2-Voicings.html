@@ -786,52 +786,58 @@ document.querySelectorAll(".tensions .chord-play").forEach(el => {
 })();
 
 // ── Bass-note drone: click a bass note to hold it while trying voicings ─
-// A separate, independent loop from playChord — re-triggers the same
-// sampled note every couple of seconds, indefinitely, rather than
-// playing once and stopping. Toggled by clicking that note again.
+// A genuine sustained tone — a single sine oscillator held open, not a
+// sampled note re-triggered on a timer — so there's no repeated attack,
+// just a constant pitch under whatever you play above it. Its own small
+// audio context, independent of the sampled playChord engine. Toggled by
+// clicking that note again, or switched by clicking a different one.
 (function () {
-  let loopMidi = null, loopTimer = null, loopEl = null;
-  const STEP_MS = 1900;
+  let droneCtx = null, droneNodes = null, droneMidi = null, droneEl = null;
 
-  function stopDroneLoop() {
-    if (loopTimer) clearTimeout(loopTimer);
-    loopTimer = null;
-    if (loopEl) loopEl.classList.remove("droning");
-    loopMidi = null;
-    loopEl = null;
+  function ensureDroneAudio() {
+    if (!droneCtx) droneCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (droneCtx.state === "suspended") droneCtx.resume();
+    return droneCtx;
   }
 
-  async function ringOnce(midi) {
-    const ctx = ensureAudio();
-    const master = ctx.createGain();
-    master.gain.value = 0.75;
-    master.connect(ctx.destination);
-    try {
-      const buf = await getBuffer(midi);
-      playSampledNote(ctx, master, buf, ctx.currentTime, 2.3);
-    } catch (e) {
-      master.gain.value = 0.16;
-      playSynthNote(ctx, master, midi, ctx.currentTime, 1.8);
-    }
+  function stopDroneLoop(fast) {
+    if (!droneNodes) return;
+    const now = droneCtx.currentTime;
+    const rel = fast ? 0.06 : 0.4;
+    droneNodes.gain.cancelScheduledValues(now);
+    droneNodes.gain.setValueAtTime(droneNodes.gain.value, now);
+    droneNodes.gain.linearRampToValueAtTime(0, now + rel);
+    droneNodes.osc.stop(now + rel + 0.05);
+    droneNodes = null;
+    if (droneEl) droneEl.classList.remove("droning");
+    droneMidi = null;
+    droneEl = null;
   }
 
   function startDroneLoop(midi, el) {
-    stopDroneLoop();
-    loopMidi = midi;
-    loopEl = el;
+    const ctx = ensureDroneAudio();
+    stopDroneLoop(true);
+    const freq = 440 * Math.pow(2, (midi - 69) / 12);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.28, ctx.currentTime + 0.5);
+    gain.connect(ctx.destination);
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    osc.start();
+    droneNodes = { osc, gain };
+    droneMidi = midi;
+    droneEl = el;
     el.classList.add("droning");
-    const tick = () => {
-      ringOnce(midi);
-      loopTimer = setTimeout(tick, STEP_MS);
-    };
-    tick();
   }
 
   document.querySelectorAll(".tensions td.drone-note").forEach(td => {
     td.addEventListener("click", () => {
       const midi = Number(td.dataset.midi);
-      if (loopMidi === midi) {
-        stopDroneLoop();
+      if (droneMidi === midi) {
+        stopDroneLoop(false);
       } else {
         startDroneLoop(midi, td);
       }
