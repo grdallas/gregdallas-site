@@ -527,7 +527,14 @@
     // ── Layout constants ─────────────────────────────────────────────────
     const LEFT_W = 22, OPEN_W = 34, FRET_W = 44, TOP_PAD = 16, GAP = 28, BOT_PAD = 36, R = 10;
 
-    const state = { root: 0, scaleKey: 'major', frets: 15, showDegrees: false, useFlats: false };
+    const state = {
+        root: 0, scaleKey: 'major', frets: 15, showDegrees: false, useFlats: false,
+        // Set only when arriving from a tetrad sheet's "Try it in" link — an
+        // exact list of MIDI notes to drone instead of the generic
+        // every-other-scale-degree chord. Cleared the moment the user picks
+        // a different root or scale themselves.
+        droneChordOverride: null,
+    };
 
     // ── DOM refs ─────────────────────────────────────────────────────────
     const noteGridEl = document.getElementById('noteGrid');
@@ -553,6 +560,7 @@
             btn.dataset.pc = pc;
             btn.addEventListener('click', () => {
                 state.root = pc;
+                state.droneChordOverride = null;
                 syncNoteGridActive();
                 render();
             });
@@ -588,6 +596,7 @@
         if (!parsed) return;
         state.root = parsed.root;
         state.scaleKey = parsed.scaleKey;
+        state.droneChordOverride = null;
         if (parsed.usedFlat) state.useFlats = true;
         useFlatsEl.checked = state.useFlats;
         buildNoteGrid();
@@ -597,6 +606,7 @@
 
     scaleSelectEl.addEventListener('change', () => {
         state.scaleKey = scaleSelectEl.value;
+        state.droneChordOverride = null;
         render();
     });
 
@@ -712,19 +722,27 @@
     }
 
     // ── Drone: a sustained pad chord to practice over ───────────────────
-    // Built by taking every other scale degree (1-3-5-7) — the standard
-    // way to read a "chord that goes with a mode" off the mode itself.
-    // Holds for every mode of the major and melodic minor scales, the
-    // harmonic minor/major family, and the symmetric/pentatonic/bebop
+    // Normally built by taking every other scale degree (1-3-5-7) — the
+    // standard way to read a "chord that goes with a mode" off the mode
+    // itself. Holds for every mode of the major and melodic minor scales,
+    // the harmonic minor/major family, and the symmetric/pentatonic/bebop
     // scales; a small number of scales that are really just an altered
     // tension palette (e.g. Altered) land on a defensible chord rather
-    // than the only possible reading.
+    // than the only possible reading. When state.droneChordOverride is
+    // set (arrived here via a tetrad sheet's "Try it in" link) that exact
+    // chord is used instead — see droneChordPitches().
     let droneCtx = null, droneNodes = null, droneChordKey = null;
 
     function droneChordPitches() {
+        // Arrived from a tetrad sheet's tensions table — drone the exact
+        // chord that was clicked there, not a generic derived one.
+        if (state.droneChordOverride) return state.droneChordOverride.slice();
         const scale = SCALES[state.scaleKey];
         const idxs = [0, 2, 4, 6].filter(i => i < scale.intervals.length);
-        return idxs.map(i => state.root + scale.intervals[i]);
+        return idxs.map(i => {
+            const pc = ((state.root + scale.intervals[i]) % 12 + 12) % 12;
+            return 48 + pc; // low-mid register
+        });
     }
     function ensureDroneAudio() {
         if (!droneCtx) droneCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -751,8 +769,7 @@
         master.connect(ctx.destination);
 
         const oscillators = [];
-        droneChordPitches().forEach(pc => {
-            const midi = 48 + ((pc % 12) + 12) % 12; // low-mid register
+        droneChordPitches().forEach(midi => {
             const freq = 440 * Math.pow(2, (midi - 69) / 12);
             [-4, 4].forEach(detune => {
                 const osc = ctx.createOscillator();
@@ -809,6 +826,11 @@
         }
         if (scaleParam && SCALES[scaleParam]) state.scaleKey = scaleParam;
         if (fretsParam && Number(fretsParam) >= 9 && Number(fretsParam) <= 22) state.frets = Number(fretsParam);
+        const chordParam = params.get('chord');
+        if (chordParam) {
+            const midis = chordParam.split(',').map(Number).filter(n => Number.isInteger(n));
+            if (midis.length) state.droneChordOverride = midis;
+        }
         if (params.get('embed')) {
             document.documentElement.classList.add('is-embed');
         }
