@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 12-Bar Blues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+  :root {
+    --bg:          #F6F2EA;
+    --panel:       #EFEADF;
+    --ink:         #241F1A;
+    --dim:         #6B6157;
+    --faint:       #948A7C;
+    --rule:        #DCD4C6;
+    --accent:      #8A4B2A;
+    --accent-soft: #B98A64;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  }
+
+  .sheet { width: 100%; max-width: 780px; margin: 0 auto; }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .sheet-head { margin-bottom: clamp(1.75rem, 4vw, 2.5rem); }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  .sheet-head h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+  }
+
+  /* ── The 12-bar grid ─────────────────────────────────────────────── */
+  .grid-wrap {
+    margin-top: clamp(1.5rem, 4vw, 2.25rem);
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+  }
+  .bars { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .bar {
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 1rem 0.5rem 0.85rem;
+    min-height: 6.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    position: relative;
+    text-align: center;
+  }
+  .bar-no {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.6rem;
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    color: var(--faint);
+  }
+  .bar-num {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .bar-chord {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    color: var(--dim);
+  }
+  .bar-tag {
+    font-family: var(--sans);
+    font-size: 0.56rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.1rem;
+  }
+  .bar.hl .bar-num { color: var(--accent); }
+
+  /* ── Notes row ───────────────────────────────────────────────────── */
+  .notes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+  }
+  .notes .note .lbl {
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.45rem;
+  }
+  .notes .note p {
+    font-size: 0.98rem;
+    color: var(--dim);
+  }
+
+  /* ── Footer ──────────────────────────────────────────────────────── */
+  .foot {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--faint);
+  }
+
+  /* ── Print ───────────────────────────────────────────────────────── */
+  @page { size: letter portrait; margin: 0.55in; }
+  @media print {
+    body { padding: 0; }
+    .sheet { max-width: none; }
+    .grid-wrap, .notes { break-inside: avoid; }
+  }
+
+  /* ── Small screens: stack to 2 bars per row ─────────────────────── */
+  @media (max-width: 480px) {
+    .bars { grid-template-columns: repeat(2, 1fr); }
+    .notes { grid-template-columns: 1fr; gap: 1.1rem; }
+  }
+
+      /* Added for the website — hidden when printed, so the sheet stays a sheet. */
+      .site-return { display:inline-block; font-family:var(--sans); font-size:.72rem;
+        letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+        text-decoration:none; margin-bottom:1.4rem; }
+      .site-return:hover { color:var(--accent); }
+      @media print { .site-return { display:none; } }
+</style>
+</head>
+<body>
+<a class="site-return" href="../teaching.html">&larr; Teaching</a>
+<div class="sheet">
+
+  <header class="sheet-head">
+    <p class="eyebrow">Form</p>
+    <h1>The 12-Bar Blues</h1>
+  </header>
+
+  <div class="grid-wrap">
+    <div class="bars">
+      <div class="bar">
+        <span class="bar-no">1</span>
+        <span class="bar-num">I</span>
+        <span class="bar-chord">A7</span>
+      </div>
+      <div class="bar hl">
+        <span class="bar-no">2</span>
+        <span class="bar-num">IV</span>
+        <span class="bar-chord">D7</span>
+        <span class="bar-tag">Quick change</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">3</span>
+        <span class="bar-num">I</span>
+        <span class="bar-chord">A7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">4</span>
+        <span class="bar-num">I</span>
+        <span class="bar-chord">A7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">5</span>
+        <span class="bar-num">IV</span>
+        <span class="bar-chord">D7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">6</span>
+        <span class="bar-num">IV</span>
+        <span class="bar-chord">D7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">7</span>
+        <span class="bar-num">I</span>
+        <span class="bar-chord">A7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">8</span>
+        <span class="bar-num">I</span>
+        <span class="bar-chord">A7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">9</span>
+        <span class="bar-num">V</span>
+        <span class="bar-chord">E7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">10</span>
+        <span class="bar-num">IV</span>
+        <span class="bar-chord">D7</span>
+      </div>
+      <div class="bar">
+        <span class="bar-no">11</span>
+        <span class="bar-num">I</span>
+        <span class="bar-chord">A7</span>
+      </div>
+      <div class="bar hl">
+        <span class="bar-no">12</span>
+        <span class="bar-num">V</span>
+        <span class="bar-chord">E7</span>
+        <span class="bar-tag">Turnaround</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <p class="lbl">Every chord is a 7th</p>
+      <p>I7, IV7, V7 &mdash; dominant sevenths, all three. Even the &ldquo;home&rdquo; chord carries a dominant's tension. That's the blues sound.</p>
+    </div>
+    <div class="note">
+      <p class="lbl">The quick change</p>
+      <p>Bar 2 swaps to IV a bar early. You'll hear this far more often than four straight bars of I.</p>
+    </div>
+    <div class="note">
+      <p class="lbl">The turnaround</p>
+      <p>Bar 12 lands on V instead of I, pointing back to the top so the form can repeat without a hard stop.</p>
+    </div>
+  </div>
+
+  <p class="foot">Shown in the key of A. It's still I&ndash;IV&ndash;V in any key &mdash; spell those three chords from wherever you start and the form is the same.</p>
+
+</div>
+</body>
+</html>
