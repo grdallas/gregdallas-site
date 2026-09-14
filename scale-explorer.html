@@ -52,6 +52,9 @@
         margin: 0 auto;
         min-height: 100vh;
     }
+    html.is-embed #app { padding: 1rem; max-width: none; }
+    html.is-embed .tool-header { margin-bottom: 1rem; }
+    html.is-embed .tool-header p { display: none; }
 
     .site-return {
         display: inline-block; font-family: var(--sans); font-size: .72rem;
@@ -59,6 +62,7 @@
         text-decoration: none; margin-bottom: 1.4rem;
     }
     .site-return:hover { color: var(--accent); }
+    html.is-embed .site-return { display: none; }
 
     .tool-header { margin-bottom: clamp(1.75rem, 4vw, 2.5rem); }
     .eyebrow {
@@ -218,6 +222,17 @@
     }
     .scale-notes .root-note { color: var(--accent); font-weight: 600; }
 
+    .drone-btn {
+        margin-top: 1.1rem;
+        font-family: var(--sans); font-size: 0.76rem; font-weight: 600;
+        letter-spacing: 0.06em; text-transform: uppercase;
+        padding: 0.55rem 1.2rem; border-radius: 999px;
+        border: 1px solid var(--accent-soft); background: transparent; color: var(--accent);
+        cursor: pointer; transition: background 0.15s, color 0.15s;
+    }
+    .drone-btn:hover { background: var(--accent-soft); color: #fff; }
+    .drone-btn.playing { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
     /* ── Fretboard ──────────────────────────────────────────────────── */
     .fretboard-wrap {
         overflow-x: auto;
@@ -349,6 +364,7 @@
     <div class="scale-display">
         <div class="scale-title" id="scaleTitle">C Major</div>
         <div class="scale-notes" id="scaleNotesList"></div>
+        <button type="button" class="drone-btn" id="droneBtn">&#9654; Play Drone</button>
     </div>
 
     <div class="card">
@@ -511,6 +527,7 @@
     const svgEl = document.getElementById('fretboard');
     const scaleTitleEl = document.getElementById('scaleTitle');
     const scaleNotesListEl = document.getElementById('scaleNotesList');
+    const droneBtnEl = document.getElementById('droneBtn');
 
     // ── Build root-note buttons ─────────────────────────────────────────
     function buildNoteGrid() {
@@ -678,7 +695,89 @@
                 return iv === 0 ? `<span class="root-note">${n}</span>` : n;
             })
             .join(' &middot; ');
+        updateDroneIfPlaying();
     }
+
+    // ── Drone: a sustained pad chord to practice over ───────────────────
+    // Built by taking every other scale degree (1-3-5-7) — the standard
+    // way to read a "chord that goes with a mode" off the mode itself.
+    // Holds for every mode of the major and melodic minor scales, the
+    // harmonic minor/major family, and the symmetric/pentatonic/bebop
+    // scales; a small number of scales that are really just an altered
+    // tension palette (e.g. Altered) land on a defensible chord rather
+    // than the only possible reading.
+    let droneCtx = null, droneNodes = null, droneChordKey = null;
+
+    function droneChordPitches() {
+        const scale = SCALES[state.scaleKey];
+        const idxs = [0, 2, 4, 6].filter(i => i < scale.intervals.length);
+        return idxs.map(i => state.root + scale.intervals[i]);
+    }
+    function ensureDroneAudio() {
+        if (!droneCtx) droneCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (droneCtx.state === 'suspended') droneCtx.resume();
+        return droneCtx;
+    }
+    function stopDroneNodes(fast) {
+        if (!droneNodes) return;
+        const ctx = droneCtx;
+        const now = ctx.currentTime;
+        const rel = fast ? 0.06 : 0.5;
+        droneNodes.master.gain.cancelScheduledValues(now);
+        droneNodes.master.gain.setValueAtTime(droneNodes.master.gain.value, now);
+        droneNodes.master.gain.linearRampToValueAtTime(0, now + rel);
+        droneNodes.oscillators.forEach(o => o.stop(now + rel + 0.05));
+        droneNodes = null;
+    }
+    function startDrone() {
+        const ctx = ensureDroneAudio();
+        stopDroneNodes(true);
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(0, ctx.currentTime);
+        master.gain.linearRampToValueAtTime(0.13, ctx.currentTime + 0.7);
+        master.connect(ctx.destination);
+
+        const oscillators = [];
+        droneChordPitches().forEach(pc => {
+            const midi = 48 + ((pc % 12) + 12) % 12; // low-mid register
+            const freq = 440 * Math.pow(2, (midi - 69) / 12);
+            [-4, 4].forEach(detune => {
+                const osc = ctx.createOscillator();
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                osc.detune.value = detune;
+                const g = ctx.createGain();
+                g.gain.value = 0.5;
+                osc.connect(g);
+                g.connect(master);
+                osc.start();
+                oscillators.push(osc);
+            });
+        });
+        droneNodes = { oscillators, master };
+        droneChordKey = state.root + ':' + state.scaleKey;
+    }
+    function stopDrone() {
+        stopDroneNodes(false);
+        droneChordKey = null;
+        droneBtnEl.classList.remove('playing');
+        droneBtnEl.innerHTML = '&#9654; Play Drone';
+    }
+    function updateDroneIfPlaying() {
+        if (!droneNodes) return;
+        const key = state.root + ':' + state.scaleKey;
+        if (key === droneChordKey) return;
+        startDrone();
+    }
+    droneBtnEl.addEventListener('click', () => {
+        if (droneNodes) {
+            stopDrone();
+        } else {
+            startDrone();
+            droneBtnEl.classList.add('playing');
+            droneBtnEl.innerHTML = '&#9632; Stop Drone';
+        }
+    });
 
     // ── URL param configuration (for linking from a generated session step) ─
     (function applyUrlParams() {
@@ -697,6 +796,9 @@
         }
         if (scaleParam && SCALES[scaleParam]) state.scaleKey = scaleParam;
         if (fretsParam && Number(fretsParam) >= 9 && Number(fretsParam) <= 22) state.frets = Number(fretsParam);
+        if (params.get('embed')) {
+            document.documentElement.classList.add('is-embed');
+        }
     })();
 
     // ── Init ─────────────────────────────────────────────────────────────
