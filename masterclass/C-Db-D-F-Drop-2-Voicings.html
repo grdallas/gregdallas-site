@@ -136,6 +136,13 @@
   .tensions td:last-child { color: var(--accent); font-weight: 500; white-space: nowrap; }
   .tensions tr.is-root td { background: var(--panel); }
   .tensions tr.is-root td:first-child { color: var(--accent); }
+  .tensions td.drone-note {
+    cursor: pointer; border-radius: 4px; transition: background 0.15s, color 0.15s;
+  }
+  .tensions td.drone-note:hover { background: var(--accent-soft); color: #fff; }
+  .tensions td.drone-note.droning {
+    background: var(--accent); color: var(--bg) !important;
+  }
   .tensions .chord-play {
     cursor: pointer; border-bottom: 1px dotted var(--accent-soft); padding-bottom: 1px;
   }
@@ -288,22 +295,22 @@
 
   <div class="tensions">
     <h2>Tensions Over Every Bass Note</h2>
-    <p class="tensions-intro">What each note in C-Db-D-F becomes when you slide the bass underneath it, chromatically through all twelve — plus the normal chord symbol, wherever the resulting stack has one. Click any chord symbol to hear it played over that bass note.</p>
+    <p class="tensions-intro">What each note in C-Db-D-F becomes when you slide the bass underneath it, chromatically through all twelve — plus the normal chord symbol, wherever the resulting stack has one. Click any chord symbol to hear it played over that bass note, or click a bass note itself to drone it while you try voicings above.</p>
     <table>
       <thead><tr><th>Bass</th><th>Tensions</th><th>Also known as</th></tr></thead>
       <tbody>
-      <tr class="is-root"><td>C</td><td>b9&nbsp;&nbsp;9&nbsp;&nbsp;11 (or 4)</td><td>&mdash;</td></tr>
-      <tr><td>Db</td><td>7&nbsp;&nbsp;b9&nbsp;&nbsp;3</td><td><span class="chord-play" data-midis="37,60,61,62,65" title="Click to hear Db(b9, 3, 7)">&#9654; Db(b9, 3, 7)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Db&amp;scale=doubleHarmonic&amp;chord=37,60,61,62,65" target="_blank" rel="noopener">Double Harmonic</a> &middot; <a href="../scale-explorer.html?root=Db&amp;scale=enigmatic&amp;chord=37,60,61,62,65" target="_blank" rel="noopener">Enigmatic</a> &middot; <a href="../scale-explorer.html?root=Db&amp;scale=persian&amp;chord=37,60,61,62,65" target="_blank" rel="noopener">Persian</a></span></td></tr>
-      <tr><td>D</td><td>b7&nbsp;&nbsp;7&nbsp;&nbsp;b3 (or #9)</td><td>&mdash;</td></tr>
-      <tr><td>Eb</td><td>13 (or 6)&nbsp;&nbsp;b7&nbsp;&nbsp;7&nbsp;&nbsp;9</td><td>&mdash;</td></tr>
-      <tr><td>E</td><td>#5 (or b13)&nbsp;&nbsp;13 (or 6)&nbsp;&nbsp;b7&nbsp;&nbsp;b9</td><td>&mdash;</td></tr>
-      <tr><td>F</td><td>5&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;13 (or 6)</td><td>&mdash;</td></tr>
-      <tr><td>Gb</td><td>#11 (or b5)&nbsp;&nbsp;5&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;7</td><td><span class="chord-play" data-midis="42,60,61,62,65" title="Click to hear Gb(#11, 5, #5, 7)">&#9654; Gb(#11, 5, #5, 7)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Gb&amp;scale=hungarianMinor&amp;chord=42,60,61,62,65" target="_blank" rel="noopener">Hungarian Minor</a></span></td></tr>
-      <tr><td>G</td><td>11 (or 4)&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;5&nbsp;&nbsp;b7</td><td><span class="chord-play" data-midis="43,60,61,62,65" title="Click to hear G7sus4 (add #11)">&#9654; G7sus4 (add #11)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=G&amp;scale=blues&amp;chord=43,60,61,62,65" target="_blank" rel="noopener">Blues</a></span></td></tr>
-      <tr><td>Ab</td><td>3&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;13 (or 6)</td><td>&mdash;</td></tr>
-      <tr><td>A</td><td>b3 (or #9)&nbsp;&nbsp;3&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#5 (or b13)</td><td><span class="chord-play" data-midis="45,60,61,62,65" title="Click to hear A(#9, 3, 11, #5)">&#9654; A(#9, 3, 11, #5)</span></td></tr>
-      <tr><td>Bb</td><td>9&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;3&nbsp;&nbsp;5</td><td><span class="chord-play" data-midis="46,60,61,62,65" title="Click to hear Bbm(add9) (add 3)">&#9654; Bbm(add9) (add 3)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Bb&amp;scale=majorBlues&amp;chord=46,60,61,62,65" target="_blank" rel="noopener">Major Blues</a> &middot; <a href="../scale-explorer.html?root=Bb&amp;scale=bebopMinor&amp;chord=46,60,61,62,65" target="_blank" rel="noopener">Bebop Minor</a></span></td></tr>
-      <tr><td>B</td><td>b9&nbsp;&nbsp;9&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;#11 (or b5)</td><td>&mdash;</td></tr>
+      <tr class="is-root"><td class="drone-note" data-midi="36" title="Click to drone this note">C</td><td>b9&nbsp;&nbsp;9&nbsp;&nbsp;11 (or 4)</td><td>&mdash;</td></tr>
+      <tr><td class="drone-note" data-midi="37" title="Click to drone this note">Db</td><td>7&nbsp;&nbsp;b9&nbsp;&nbsp;3</td><td><span class="chord-play" data-midis="37,60,61,62,65" title="Click to hear Db(b9, 3, 7)">&#9654; Db(b9, 3, 7)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Db&amp;scale=doubleHarmonic&amp;chord=37,60,61,62,65" target="_blank" rel="noopener">Double Harmonic</a> &middot; <a href="../scale-explorer.html?root=Db&amp;scale=enigmatic&amp;chord=37,60,61,62,65" target="_blank" rel="noopener">Enigmatic</a> &middot; <a href="../scale-explorer.html?root=Db&amp;scale=persian&amp;chord=37,60,61,62,65" target="_blank" rel="noopener">Persian</a></span></td></tr>
+      <tr><td class="drone-note" data-midi="38" title="Click to drone this note">D</td><td>b7&nbsp;&nbsp;7&nbsp;&nbsp;b3 (or #9)</td><td>&mdash;</td></tr>
+      <tr><td class="drone-note" data-midi="39" title="Click to drone this note">Eb</td><td>13 (or 6)&nbsp;&nbsp;b7&nbsp;&nbsp;7&nbsp;&nbsp;9</td><td>&mdash;</td></tr>
+      <tr><td class="drone-note" data-midi="40" title="Click to drone this note">E</td><td>#5 (or b13)&nbsp;&nbsp;13 (or 6)&nbsp;&nbsp;b7&nbsp;&nbsp;b9</td><td>&mdash;</td></tr>
+      <tr><td class="drone-note" data-midi="41" title="Click to drone this note">F</td><td>5&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;13 (or 6)</td><td>&mdash;</td></tr>
+      <tr><td class="drone-note" data-midi="42" title="Click to drone this note">Gb</td><td>#11 (or b5)&nbsp;&nbsp;5&nbsp;&nbsp;#5 (or b13)&nbsp;&nbsp;7</td><td><span class="chord-play" data-midis="42,60,61,62,65" title="Click to hear Gb(#11, 5, #5, 7)">&#9654; Gb(#11, 5, #5, 7)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Gb&amp;scale=hungarianMinor&amp;chord=42,60,61,62,65" target="_blank" rel="noopener">Hungarian Minor</a></span></td></tr>
+      <tr><td class="drone-note" data-midi="43" title="Click to drone this note">G</td><td>11 (or 4)&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;5&nbsp;&nbsp;b7</td><td><span class="chord-play" data-midis="43,60,61,62,65" title="Click to hear G7sus4 (add #11)">&#9654; G7sus4 (add #11)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=G&amp;scale=blues&amp;chord=43,60,61,62,65" target="_blank" rel="noopener">Blues</a></span></td></tr>
+      <tr><td class="drone-note" data-midi="44" title="Click to drone this note">Ab</td><td>3&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#11 (or b5)&nbsp;&nbsp;13 (or 6)</td><td>&mdash;</td></tr>
+      <tr><td class="drone-note" data-midi="45" title="Click to drone this note">A</td><td>b3 (or #9)&nbsp;&nbsp;3&nbsp;&nbsp;11 (or 4)&nbsp;&nbsp;#5 (or b13)</td><td><span class="chord-play" data-midis="45,60,61,62,65" title="Click to hear A(#9, 3, 11, #5)">&#9654; A(#9, 3, 11, #5)</span></td></tr>
+      <tr><td class="drone-note" data-midi="46" title="Click to drone this note">Bb</td><td>9&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;3&nbsp;&nbsp;5</td><td><span class="chord-play" data-midis="46,60,61,62,65" title="Click to hear Bbm(add9) (add 3)">&#9654; Bbm(add9) (add 3)</span><span class="scale-links">Try it in: <a href="../scale-explorer.html?root=Bb&amp;scale=majorBlues&amp;chord=46,60,61,62,65" target="_blank" rel="noopener">Major Blues</a> &middot; <a href="../scale-explorer.html?root=Bb&amp;scale=bebopMinor&amp;chord=46,60,61,62,65" target="_blank" rel="noopener">Bebop Minor</a></span></td></tr>
+      <tr><td class="drone-note" data-midi="47" title="Click to drone this note">B</td><td>b9&nbsp;&nbsp;9&nbsp;&nbsp;b3 (or #9)&nbsp;&nbsp;#11 (or b5)</td><td>&mdash;</td></tr>
       </tbody>
     </table>
   </div>
@@ -776,6 +783,60 @@ document.querySelectorAll(".tensions .chord-play").forEach(el => {
   });
   window.addEventListener("resize", layoutOverlay);
   window.addEventListener("orientationchange", () => setTimeout(layoutOverlay, 100));
+})();
+
+// ── Bass-note drone: click a bass note to hold it while trying voicings ─
+// A separate, independent loop from playChord — re-triggers the same
+// sampled note every couple of seconds, indefinitely, rather than
+// playing once and stopping. Toggled by clicking that note again.
+(function () {
+  let loopMidi = null, loopTimer = null, loopEl = null;
+  const STEP_MS = 1900;
+
+  function stopDroneLoop() {
+    if (loopTimer) clearTimeout(loopTimer);
+    loopTimer = null;
+    if (loopEl) loopEl.classList.remove("droning");
+    loopMidi = null;
+    loopEl = null;
+  }
+
+  async function ringOnce(midi) {
+    const ctx = ensureAudio();
+    const master = ctx.createGain();
+    master.gain.value = 0.75;
+    master.connect(ctx.destination);
+    try {
+      const buf = await getBuffer(midi);
+      playSampledNote(ctx, master, buf, ctx.currentTime, 2.3);
+    } catch (e) {
+      master.gain.value = 0.16;
+      playSynthNote(ctx, master, midi, ctx.currentTime, 1.8);
+    }
+  }
+
+  function startDroneLoop(midi, el) {
+    stopDroneLoop();
+    loopMidi = midi;
+    loopEl = el;
+    el.classList.add("droning");
+    const tick = () => {
+      ringOnce(midi);
+      loopTimer = setTimeout(tick, STEP_MS);
+    };
+    tick();
+  }
+
+  document.querySelectorAll(".tensions td.drone-note").forEach(td => {
+    td.addEventListener("click", () => {
+      const midi = Number(td.dataset.midi);
+      if (loopMidi === midi) {
+        stopDroneLoop();
+      } else {
+        startDroneLoop(midi, td);
+      }
+    });
+  });
 })();
 </script>
 </body>
