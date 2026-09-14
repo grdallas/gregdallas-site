@@ -91,9 +91,13 @@
   /* ── Diagram grid ────────────────────────────────────────────────── */
   .chart-row { display: grid; grid-template-columns: repeat(var(--num-cols), 1fr); column-gap: 1.5rem; padding: 1.4rem 0; }
   .chart-row + .chart-row { border-top: 1px solid var(--rule); }
-  .cell { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; cursor: pointer; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; }
   .cell:hover svg.fretboard { opacity: 0.75; }
   .cell svg.fretboard { display: block; }
+  .cell .strings-label {
+    font-family: var(--sans); font-size: 0.62rem; letter-spacing: 0.06em;
+    color: var(--faint); text-align: center;
+  }
 
   /* ── Legend + footer ─────────────────────────────────────────────── */
   .legend {
@@ -256,19 +260,19 @@
 const DATASETS = {
   2: { numCols: 3, colHeads: ["E \u00b7 A \u00b7 D \u00b7 G", "A \u00b7 D \u00b7 G \u00b7 B", "D \u00b7 G \u00b7 B \u00b7 e"], rows: [
   [
-    { startFret: 2, numBoxes: 4, minStr: 0, maxStr: 3, dots: [
+    { startFret: 2, numBoxes: 4, minStr: 0, maxStr: 3, stringsLabel: "E · A · D · G", dots: [
       { str: 0, fret: 2, type: "tone", midi: 43 },  // G
       { str: 1, fret: 2, type: "root", midi: 48 },  // C
       { str: 2, fret: 1, type: "tone", midi: 52 },  // E
       { str: 3, fret: 3, type: "tone", midi: 59 },  // B
     ]},
-    { startFret: 1, numBoxes: 4, minStr: 1, maxStr: 4, dots: [
+    { startFret: 1, numBoxes: 4, minStr: 1, maxStr: 4, stringsLabel: "A · D · G · B", dots: [
       { str: 1, fret: 2, type: "tone", midi: 47 },  // B
       { str: 2, fret: 2, type: "tone", midi: 52 },  // E
       { str: 3, fret: 0, type: "tone", midi: 55 },  // G
       { str: 4, fret: 1, type: "root", midi: 60 },  // C
     ]},
-    { startFret: 1, numBoxes: 4, minStr: 2, maxStr: 5, dots: [
+    { startFret: 1, numBoxes: 4, minStr: 2, maxStr: 5, stringsLabel: "D · G · B · e", dots: [
       { str: 2, fret: 2, type: "tone", midi: 52 },  // E
       { str: 3, fret: 4, type: "tone", midi: 59 },  // B
       { str: 4, fret: 1, type: "root", midi: 60 },  // C
@@ -277,19 +281,19 @@ const DATASETS = {
   ],
 
   [
-    { startFret: 5, numBoxes: 4, minStr: 0, maxStr: 3, dots: [
+    { startFret: 5, numBoxes: 4, minStr: 0, maxStr: 3, stringsLabel: "E · A · D · G", dots: [
       { str: 0, fret: 3, type: "tone", midi: 47 },  // B
       { str: 1, fret: 3, type: "tone", midi: 52 },  // E
       { str: 2, fret: 1, type: "tone", midi: 55 },  // G
       { str: 3, fret: 1, type: "root", midi: 60 },  // C
     ]},
-    { startFret: 3, numBoxes: 4, minStr: 1, maxStr: 4, dots: [
+    { startFret: 3, numBoxes: 4, minStr: 1, maxStr: 4, stringsLabel: "A · D · G · B", dots: [
       { str: 1, fret: 1, type: "root", midi: 48 },  // C
       { str: 2, fret: 3, type: "tone", midi: 55 },  // G
       { str: 3, fret: 2, type: "tone", midi: 59 },  // B
       { str: 4, fret: 3, type: "tone", midi: 64 },  // E
     ]},
-    { startFret: 5, numBoxes: 4, minStr: 2, maxStr: 5, dots: [
+    { startFret: 5, numBoxes: 4, minStr: 2, maxStr: 5, stringsLabel: "D · G · B · e", dots: [
       { str: 2, fret: 1, type: "tone", midi: 55 },  // G
       { str: 3, fret: 1, type: "root", midi: 60 },  // C
       { str: 4, fret: 1, type: "tone", midi: 64 },  // E
@@ -298,19 +302,19 @@ const DATASETS = {
   ],
 
   [
-    { startFret: 8, numBoxes: 4, minStr: 0, maxStr: 3, dots: [
+    { startFret: 8, numBoxes: 4, minStr: 0, maxStr: 3, stringsLabel: "E · A · D · G", dots: [
       { str: 0, fret: 1, type: "root", midi: 48 },  // C
       { str: 1, fret: 3, type: "tone", midi: 55 },  // G
       { str: 2, fret: 2, type: "tone", midi: 59 },  // B
       { str: 3, fret: 2, type: "tone", midi: 64 },  // E
     ]},
-    { startFret: 5, numBoxes: 5, minStr: 1, maxStr: 4, dots: [
+    { startFret: 5, numBoxes: 5, minStr: 1, maxStr: 4, stringsLabel: "A · D · G · B", dots: [
       { str: 1, fret: 3, type: "tone", midi: 52 },  // E
       { str: 2, fret: 5, type: "tone", midi: 59 },  // B
       { str: 3, fret: 1, type: "root", midi: 60 },  // C
       { str: 4, fret: 4, type: "tone", midi: 67 },  // G
     ]},
-    { startFret: 8, numBoxes: 4, minStr: 2, maxStr: 5, dots: [
+    { startFret: 8, numBoxes: 4, minStr: 2, maxStr: 5, stringsLabel: "D · G · B · e", dots: [
       { str: 2, fret: 2, type: "tone", midi: 59 },  // B
       { str: 3, fret: 2, type: "tone", midi: 64 },  // E
       { str: 4, fret: 1, type: "tone", midi: 67 },  // G
@@ -319,19 +323,19 @@ const DATASETS = {
   ],
 
   [
-    { startFret: 10, numBoxes: 5, minStr: 0, maxStr: 3, dots: [
+    { startFret: 10, numBoxes: 5, minStr: 0, maxStr: 3, stringsLabel: "E · A · D · G", dots: [
       { str: 0, fret: 3, type: "tone", midi: 52 },  // E
       { str: 1, fret: 5, type: "tone", midi: 59 },  // B
       { str: 2, fret: 1, type: "root", midi: 60 },  // C
       { str: 3, fret: 3, type: "tone", midi: 67 },  // G
     ]},
-    { startFret: 9, numBoxes: 4, minStr: 1, maxStr: 4, dots: [
+    { startFret: 9, numBoxes: 4, minStr: 1, maxStr: 4, stringsLabel: "A · D · G · B", dots: [
       { str: 1, fret: 2, type: "tone", midi: 55 },  // G
       { str: 2, fret: 2, type: "root", midi: 60 },  // C
       { str: 3, fret: 1, type: "tone", midi: 64 },  // E
       { str: 4, fret: 4, type: "tone", midi: 71 },  // B
     ]},
-    { startFret: 10, numBoxes: 4, minStr: 2, maxStr: 5, dots: [
+    { startFret: 10, numBoxes: 4, minStr: 2, maxStr: 5, stringsLabel: "D · G · B · e", dots: [
       { str: 2, fret: 1, type: "root", midi: 60 },  // C
       { str: 3, fret: 3, type: "tone", midi: 67 },  // G
       { str: 4, fret: 3, type: "tone", midi: 71 },  // B
@@ -339,15 +343,15 @@ const DATASETS = {
     ]},
   ]
   ] },
-  3: { numCols: 2, colHeads: ["E \u00b7 D \u00b7 G \u00b7 B", "A \u00b7 G \u00b7 B \u00b7 e"], rows: [
+  3: { numCols: 2, colHeads: ["Bass on Low E", "Bass on A"], rows: [
   [
-    { startFret: 1, numBoxes: 4, minStr: 0, maxStr: 4, dots: [
+    { startFret: 1, numBoxes: 4, minStr: 0, maxStr: 4, stringsLabel: "E · D · G · B", dots: [
       { str: 0, fret: 3, type: "tone", midi: 43 },  // G
       { str: 2, fret: 2, type: "tone", midi: 52 },  // E
       { str: 3, fret: 4, type: "tone", midi: 59 },  // B
       { str: 4, fret: 1, type: "root", midi: 60 },  // C
     ]},
-    { startFret: 1, numBoxes: 4, minStr: 1, maxStr: 5, dots: [
+    { startFret: 1, numBoxes: 4, minStr: 1, maxStr: 5, stringsLabel: "A · G · B · e", dots: [
       { str: 1, fret: 2, type: "tone", midi: 47 },  // B
       { str: 3, fret: 0, type: "tone", midi: 55 },  // G
       { str: 4, fret: 1, type: "root", midi: 60 },  // C
@@ -356,13 +360,13 @@ const DATASETS = {
   ],
 
   [
-    { startFret: 5, numBoxes: 4, minStr: 0, maxStr: 4, dots: [
+    { startFret: 5, numBoxes: 4, minStr: 0, maxStr: 4, stringsLabel: "E · D · G · B", dots: [
       { str: 0, fret: 3, type: "tone", midi: 47 },  // B
       { str: 2, fret: 1, type: "tone", midi: 55 },  // G
       { str: 3, fret: 1, type: "root", midi: 60 },  // C
       { str: 4, fret: 1, type: "tone", midi: 64 },  // E
     ]},
-    { startFret: 3, numBoxes: 4, minStr: 1, maxStr: 5, dots: [
+    { startFret: 3, numBoxes: 4, minStr: 1, maxStr: 5, stringsLabel: "A · G · B · e", dots: [
       { str: 1, fret: 1, type: "root", midi: 48 },  // C
       { str: 3, fret: 2, type: "tone", midi: 59 },  // B
       { str: 4, fret: 3, type: "tone", midi: 64 },  // E
@@ -371,13 +375,13 @@ const DATASETS = {
   ],
 
   [
-    { startFret: 8, numBoxes: 4, minStr: 0, maxStr: 4, dots: [
+    { startFret: 8, numBoxes: 4, minStr: 0, maxStr: 4, stringsLabel: "E · D · G · B", dots: [
       { str: 0, fret: 1, type: "root", midi: 48 },  // C
       { str: 2, fret: 2, type: "tone", midi: 59 },  // B
       { str: 3, fret: 2, type: "tone", midi: 64 },  // E
       { str: 4, fret: 1, type: "tone", midi: 67 },  // G
     ]},
-    { startFret: 5, numBoxes: 4, minStr: 1, maxStr: 5, dots: [
+    { startFret: 5, numBoxes: 4, minStr: 1, maxStr: 5, stringsLabel: "A · G · B · e", dots: [
       { str: 1, fret: 3, type: "tone", midi: 52 },  // E
       { str: 3, fret: 1, type: "root", midi: 60 },  // C
       { str: 4, fret: 4, type: "tone", midi: 67 },  // G
@@ -386,13 +390,13 @@ const DATASETS = {
   ],
 
   [
-    { startFret: 10, numBoxes: 4, minStr: 0, maxStr: 4, dots: [
+    { startFret: 10, numBoxes: 4, minStr: 0, maxStr: 4, stringsLabel: "E · D · G · B", dots: [
       { str: 0, fret: 3, type: "tone", midi: 52 },  // E
       { str: 2, fret: 1, type: "root", midi: 60 },  // C
       { str: 3, fret: 3, type: "tone", midi: 67 },  // G
       { str: 4, fret: 3, type: "tone", midi: 71 },  // B
     ]},
-    { startFret: 8, numBoxes: 5, minStr: 1, maxStr: 5, dots: [
+    { startFret: 8, numBoxes: 5, minStr: 1, maxStr: 5, stringsLabel: "A · G · B · e", dots: [
       { str: 1, fret: 3, type: "tone", midi: 55 },  // G
       { str: 3, fret: 2, type: "tone", midi: 64 },  // E
       { str: 4, fret: 5, type: "tone", midi: 71 },  // B
@@ -614,6 +618,12 @@ function renderDrop(d) {
       const cell = document.createElement("div");
       cell.className = "cell";
       cell.appendChild(drawDiagram(diagram));
+      if (diagram.stringsLabel) {
+        const label = document.createElement("div");
+        label.className = "strings-label";
+        label.textContent = diagram.stringsLabel;
+        cell.appendChild(label);
+      }
       cell.title = "Click to hear this voicing";
       cell.addEventListener("click", () => playChord(diagram.dots.map(dot => dot.midi)));
       rowDiv.appendChild(cell);
