@@ -476,9 +476,71 @@ const DATASETS = {
       { str: 5, fret: 2, type: "tone", midi: 74 },  // D
     ]},
   ]
+  ] },
+  24: { numCols: 2, colHeads: ["Bass on Low E", "Bass on A"], rows: [
+  [
+    { startFret: 3, numBoxes: 4, minStr: 0, maxStr: 4, stringsLabel: "E · A · G · B", dots: [
+      { str: 0, fret: 1, type: "tone", midi: 43 },  // G
+      { str: 1, fret: 3, type: "tone", midi: 50 },  // D
+      { str: 3, fret: 3, type: "root", midi: 60 },  // C
+      { str: 4, fret: 3, type: "tone", midi: 64 },  // E
+    ]},
+    { startFret: 2, numBoxes: 4, minStr: 1, maxStr: 5, stringsLabel: "A · D · B · e", dots: [
+      { str: 1, fret: 2, type: "root", midi: 48 },  // C
+      { str: 2, fret: 1, type: "tone", midi: 52 },  // E
+      { str: 4, fret: 2, type: "tone", midi: 62 },  // D
+      { str: 5, fret: 2, type: "tone", midi: 67 },  // G
+    ]},
+  ],
+
+  [
+    { startFret: 7, numBoxes: 4, minStr: 0, maxStr: 4, stringsLabel: "E · A · G · B", dots: [
+      { str: 0, fret: 2, type: "root", midi: 48 },  // C
+      { str: 1, fret: 1, type: "tone", midi: 52 },  // E
+      { str: 3, fret: 1, type: "tone", midi: 62 },  // D
+      { str: 4, fret: 2, type: "tone", midi: 67 },  // G
+    ]},
+    { startFret: 5, numBoxes: 4, minStr: 1, maxStr: 5, stringsLabel: "A · D · B · e", dots: [
+      { str: 1, fret: 1, type: "tone", midi: 50 },  // D
+      { str: 2, fret: 1, type: "tone", midi: 55 },  // G
+      { str: 4, fret: 1, type: "tone", midi: 64 },  // E
+      { str: 5, fret: 4, type: "root", midi: 72 },  // C
+    ]},
+  ],
+
+  [
+    { startFret: 8, numBoxes: 4, minStr: 0, maxStr: 5, stringsLabel: "E · A · G · e", dots: [
+      { str: 0, fret: 3, type: "tone", midi: 50 },  // D
+      { str: 1, fret: 3, type: "tone", midi: 55 },  // G
+      { str: 3, fret: 2, type: "tone", midi: 64 },  // E
+      { str: 5, fret: 1, type: "root", midi: 72 },  // C
+    ]},
+    { startFret: 7, numBoxes: 4, minStr: 1, maxStr: 5, stringsLabel: "A · D · B · e", dots: [
+      { str: 1, fret: 1, type: "tone", midi: 52 },  // E
+      { str: 2, fret: 4, type: "root", midi: 60 },  // C
+      { str: 4, fret: 2, type: "tone", midi: 67 },  // G
+      { str: 5, fret: 4, type: "tone", midi: 74 },  // D
+    ]},
+  ],
+
+  [
+    { startFret: 10, numBoxes: 4, minStr: 0, maxStr: 5, stringsLabel: "E · D · G · e", dots: [
+      { str: 0, fret: 3, type: "tone", midi: 52 },  // E
+      { str: 2, fret: 1, type: "root", midi: 60 },  // C
+      { str: 3, fret: 3, type: "tone", midi: 67 },  // G
+      { str: 5, fret: 1, type: "tone", midi: 74 },  // D
+    ]},
+    { startFret: 10, numBoxes: 4, minStr: 1, maxStr: 5, stringsLabel: "A · D · B · e", dots: [
+      { str: 1, fret: 1, type: "tone", midi: 55 },  // G
+      { str: 2, fret: 3, type: "tone", midi: 62 },  // D
+      { str: 4, fret: 4, type: "root", midi: 72 },  // C
+      { str: 5, fret: 3, type: "tone", midi: 76 },  // E
+    ]},
+  ]
   ] }
 };
-const DROPS = [2, 3];
+const DROPS = [2, 3, 24];
+const DROP_LABELS = {"2": "Drop 2", "3": "Drop 3", "24": "Drop 2 & 4"};
 
 // ═══════════════════════════════════════════════════════════════════
 //  RENDERING  (edit below to change layout / sizing / colors)
@@ -663,7 +725,7 @@ DROPS.forEach(d => {
   btn.type = "button";
   btn.className = "drop-tab";
   btn.dataset.drop = d;
-  btn.textContent = "Drop " + d;
+  btn.textContent = DROP_LABELS[d];
   btn.addEventListener("click", () => renderDrop(d));
   dropTabsEl.appendChild(btn);
 });
@@ -671,9 +733,9 @@ DROPS.forEach(d => {
 function renderDrop(d) {
   const data = DATASETS[d];
 
-  document.querySelector(".eyebrow").textContent = "Drop " + d + " Voicing Reference";
-  document.querySelector(".sheet-head h1").textContent = "Cadd9 — Drop " + d + " Voicings";
-  document.title = "Cadd9 — Drop " + d + " Voicings";
+  document.querySelector(".eyebrow").textContent = DROP_LABELS[d] + " Voicing Reference";
+  document.querySelector(".sheet-head h1").textContent = "Cadd9 — " + DROP_LABELS[d] + " Voicings";
+  document.title = "Cadd9 — " + DROP_LABELS[d] + " Voicings";
   document.documentElement.style.setProperty("--num-cols", data.numCols);
 
   colHeadsEl.innerHTML = "";
