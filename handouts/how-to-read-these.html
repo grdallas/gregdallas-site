@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Read These</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+  :root {
+    --bg:          #F6F2EA;
+    --panel:       #EFEADF;
+    --ink:         #241F1A;
+    --dim:         #6B6157;
+    --faint:       #948A7C;
+    --rule:        #DCD4C6;
+    --accent:      #8A4B2A;
+    --accent-soft: #B98A64;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  }
+
+  .sheet { width: 100%; max-width: 780px; margin: 0 auto; }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .sheet-head { margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  .sheet-head h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+  }
+
+  .intro { margin-top: 1rem; margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .intro p { font-size: 1.05rem; color: var(--dim); max-width: 62ch; }
+
+  /* ── Section heads ───────────────────────────────────────────────── */
+  .section-head {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    letter-spacing: -0.015em;
+    margin-top: clamp(2.25rem, 5vw, 3rem);
+    padding-top: clamp(1.5rem, 3.5vw, 2.25rem);
+    border-top: 1px solid var(--rule);
+  }
+  .section-body { margin-top: 0.6rem; }
+  .section-body p { font-size: 1.02rem; color: var(--dim); max-width: 64ch; }
+
+  /* ── Diagram layout ──────────────────────────────────────────────── */
+  .diagram-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.25rem;
+    align-items: flex-start;
+    margin-top: 1.4rem;
+  }
+  .diagram-row svg { display: block; flex-shrink: 0; }
+
+  /* ── One small diagram per explanation ───────────────────────────── */
+  .mini-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 1.25rem;
+    margin-top: 1.3rem;
+  }
+  .mini-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    width: 150px;
+  }
+  .mini-card svg { display: block; }
+  .mini-card .cap {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--dim);
+    text-align: center;
+  }
+  .mini-card .cap strong { color: var(--ink); font-weight: 600; }
+
+  .diagram-note {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--faint);
+  }
+
+  /* ── Footer ──────────────────────────────────────────────────────── */
+  .foot {
+    margin-top: clamp(2rem, 4.5vw, 2.75rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--faint);
+    max-width: 64ch;
+  }
+
+  /* ── Print ───────────────────────────────────────────────────────── */
+  @page { size: letter portrait; margin: 0.55in; }
+  @media print {
+    body { padding: 0; }
+    .sheet { max-width: none; }
+    .diagram-row { break-inside: avoid; }
+  }
+
+      /* Added for the website — hidden when printed, so the sheet stays a sheet. */
+      .site-return { display:inline-block; font-family:var(--sans); font-size:.72rem;
+        letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+        text-decoration:none; margin-bottom:1.4rem; }
+      .site-return:hover { color:var(--accent); }
+      @media print { .site-return { display:none; } }
+</style>
+</head>
+<body>
+<a class="site-return" href="../teaching.html">&larr; Teaching</a>
+<div class="sheet">
+
+  <header class="sheet-head">
+    <p class="eyebrow">Reference</p>
+    <h1>How to Read These</h1>
+  </header>
+
+  <div class="intro">
+    <p>Two diagram styles show up across these handouts &mdash; a short chord diagram for a single voicing, and a tall full-neck diagram for a pattern that runs up the fretboard. Both are always six strings, low E on the left to high e on the right. Here's what every mark on each one means.</p>
+  </div>
+
+  <h2 class="section-head">Chord Diagrams</h2>
+  <div class="mini-row" id="open-cards"></div>
+
+  <div class="section-body">
+    <p>Not every chord diagram starts at the nut, though. Here's that same G major triad again, played higher up the neck instead: 5th fret on the D string, 4th on the G string, 3rd on the B string.</p>
+    <p>Diagrams up the neck like this don't use X's &mdash; a string with no dot on it simply isn't part of the shape. An O still shows up occasionally, on the rare shape that includes an open string.</p>
+  </div>
+  <div class="mini-row" id="movable-cards"></div>
+
+  <h2 class="section-head">Full Neck Diagrams</h2>
+  <div class="section-body">
+    <p>This one needs less explaining &mdash; it's really just a picture of the guitar neck, so the same rules already apply: horizontal lines are still frets, vertical lines are still strings, low E still on the left. The numbers along the side mark which real fret each row is. Sometimes you'll see this diagram turned on its side, running left to right instead of top to bottom &mdash; same diagram, same rules, just rotated.</p>
+  </div>
+  <div class="diagram-row">
+    <svg id="neck-diagram"></svg>
+  </div>
+  <p class="diagram-note">Every G, B and D on the neck through the 12th fret &mdash; the G major triad, everywhere it occurs. Not a shape to play as one; just here to show the notation.</p>
+
+  <p class="foot">This page doesn't teach a concept on its own &mdash; it's the key for everything else here. Keep it in front the first few times through a new sheet.</p>
+
+</div>
+
+<script>
+(function () {
+function el(tag, attrs, ...kids) {
+  const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  kids.forEach(k => e.appendChild(k));
+  return e;
+}
+function txt(x, y, str, opts) {
+  opts = opts || {};
+  const t = el("text", {
+    x, y, "font-family": opts.serif ? "Newsreader, Georgia, serif" : "Inter, sans-serif",
+    "font-size": opts.size || 11, "font-weight": opts.weight || 500,
+    fill: opts.color || FAINT, "text-anchor": opts.anchor || "middle",
+    "letter-spacing": opts.tracking || "0",
+  });
+  t.textContent = str;
+  return t;
+}
+const INK = "#241F1A", ACCENT = "#8A4B2A", FAINT = "#948A7C", BG = "#F6F2EA";
+const STRING_NAMES = ["E", "A", "D", "G", "B", "e"];
+
+function arrowhead(x1, y1, x2, y2) {
+  return el("line", { x1, y1, x2, y2, stroke: ACCENT, "stroke-width": "1.4", "marker-end": "url(#mini-arrow)" });
+}
+const arrowDefs = el("defs", {});
+const arrowMarker = el("marker", {
+  id: "mini-arrow", viewBox: "0 0 8 8", refX: "6.5", refY: "4",
+  markerWidth: "6", markerHeight: "6", orient: "auto-start-reverse",
+});
+arrowMarker.appendChild(el("path", { d: "M0,0 L8,4 L0,8 z", fill: ACCENT }));
+arrowDefs.appendChild(arrowMarker);
+
+// ═══════════════════════════════════════════════════════════════════
+//  One small chord diagram per explanation. Every card shows the full
+//  shape; only the arrow changes. `draw` gets (svg, sx, fy, gx0, gy0)
+//  and is responsible for adding that card's one arrow.
+// ═══════════════════════════════════════════════════════════════════
+function miniCard(containerId, captionHTML, opts, draw) {
+  const { hasNut, marks, dots, marker, frets } = opts;
+  const SGAP = 18, FGAP = 22, NFRETS = frets || 4, NSTR = 6;
+  const GX0 = 46, GY0 = marks ? 40 : 26;
+  const sx = i => GX0 + i * SGAP;
+  const fy = f => GY0 + f * FGAP;
+  const W = GX0 + (NSTR - 1) * SGAP + 34;
+  const H = GY0 + NFRETS * FGAP + 20;
+
+  const svg = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}` });
+  svg.appendChild(arrowDefs.cloneNode(true));
+
+  // Top line: thick nut, or a regular fret if this shape is movable.
+  svg.appendChild(el("line", { x1: sx(0), y1: fy(0), x2: sx(5), y2: fy(0), stroke: INK, "stroke-width": hasNut ? "3.5" : "1.2" }));
+  for (let f = 1; f <= NFRETS; f++) {
+    svg.appendChild(el("line", { x1: sx(0), y1: fy(f), x2: sx(5), y2: fy(f), stroke: INK, "stroke-width": "1.2" }));
+  }
+  for (let i = 0; i < NSTR; i++) {
+    svg.appendChild(el("line", { x1: sx(i), y1: fy(0), x2: sx(i), y2: fy(NFRETS), stroke: INK, "stroke-width": "1.2" }));
+  }
+
+  if (marks) {
+    const cy = GY0 - 16;
+    marks.forEach((m, i) => {
+      if (!m) return;
+      if (m === "x") {
+        const r = 4.6;
+        svg.appendChild(el("line", { x1: sx(i) - r, y1: cy - r, x2: sx(i) + r, y2: cy + r, stroke: INK, "stroke-width": "1.5" }));
+        svg.appendChild(el("line", { x1: sx(i) - r, y1: cy + r, x2: sx(i) + r, y2: cy - r, stroke: INK, "stroke-width": "1.5" }));
+      } else {
+        svg.appendChild(el("circle", { cx: sx(i), cy, r: 4.6, stroke: INK, "stroke-width": "1.5", fill: "none" }));
+      }
+    });
+  }
+
+  if (marker) {
+    svg.appendChild(txt(sx(0) - 15, fy(marker.line) + 4, marker.text, { size: 11, weight: 600, color: INK, serif: true }));
+  }
+
+  dots.forEach(d => {
+    const cx = sx(d.str), cy = fy(d.fret - 0.5);
+    if (d.root) {
+      svg.appendChild(el("circle", { cx, cy, r: 6.2, stroke: ACCENT, "stroke-width": "1.8", fill: "none" }));
+      svg.appendChild(el("circle", { cx, cy, r: 3, fill: ACCENT }));
+    } else {
+      svg.appendChild(el("circle", { cx, cy, r: 3.8, fill: ACCENT }));
+    }
+  });
+
+  draw(svg, sx, fy, GX0, GY0);
+
+  const card = document.createElement("div");
+  card.className = "mini-card";
+  card.appendChild(svg);
+  const cap = document.createElement("p");
+  cap.className = "cap";
+  cap.innerHTML = captionHTML;
+  card.appendChild(cap);
+  document.getElementById(containerId).appendChild(card);
+}
+
+// ── Open position: G major triad, X X 0 0 0 3 ──────────────────────
+const openMarks = ["x", "x", "o", "o", "o", null];
+const openDots = [{ str: 5, fret: 3, root: false }];
+
+miniCard("open-cards", "<strong>Nut &amp; frets</strong> &mdash; the thick line is the nut, where the strings begin. Thinner lines below are frets.",
+  { hasNut: true, marks: openMarks, dots: openDots },
+  (svg, sx, fy, gx0, gy0) => svg.appendChild(arrowhead(gx0 - 24, gy0, gx0 - 7, gy0)));
+
+miniCard("open-cards", "<strong>Strings</strong> &mdash; six vertical lines, low E on the left, high e on the right.",
+  { hasNut: true, marks: openMarks, dots: openDots },
+  (svg, sx, fy, gx0, gy0) => svg.appendChild(arrowhead(sx(2), fy(4) + 22, sx(2), fy(4) + 8)));
+
+miniCard("open-cards", "<strong>&#10005;</strong> above a string &mdash; don't play it.",
+  { hasNut: true, marks: openMarks, dots: openDots },
+  (svg, sx, fy, gx0, gy0) => svg.appendChild(arrowhead(sx(0) - 24, gy0 - 40, sx(0) - 8, gy0 - 24)));
+
+miniCard("open-cards", "<strong>&#9675;</strong> above a string &mdash; play it open, no finger.",
+  { hasNut: true, marks: openMarks, dots: openDots },
+  (svg, sx, fy, gx0, gy0) => svg.appendChild(arrowhead(sx(3) + 24, gy0 - 40, sx(3) + 8, gy0 - 24)));
+
+miniCard("open-cards", "<strong>&#9679;</strong> on the grid &mdash; press that string down at that fret.",
+  { hasNut: true, marks: openMarks, dots: openDots },
+  (svg, sx, fy, gx0, gy0) => svg.appendChild(arrowhead(sx(5) + 28, fy(2.5), sx(5) + 11, fy(2.5))));
+
+// ── Movable: G major triad higher up the neck — D5, G4, B3 ─────────
+// Box frets 1-3 stand for the guitar's real frets 3-5, so D(fret5) is
+// box-fret 3, G(fret4) is box-fret 2, B(fret3) is box-fret 1 — the box
+// is exactly as tall as the shape, no empty fret left over.
+const movDots = [
+  { str: 2, fret: 3, root: true  },  // D string, real fret 5 — the root, G
+  { str: 3, fret: 2, root: false },  // G string, real fret 4 — the 3rd, B
+  { str: 4, fret: 1, root: false },  // B string, real fret 3 — the 5th, D
+];
+const movMarker = { line: 1, text: "3" }; // line 2 = the guitar's real fret 3
+
+miniCard("movable-cards", "Same weight as the frets below it &mdash; <strong>no nut</strong>, so this shape sits higher up the neck.",
+  { hasNut: false, dots: movDots, marker: movMarker, frets: 3 },
+  (svg, sx, fy, gx0, gy0) => svg.appendChild(arrowhead(gx0 - 24, gy0, gx0 - 7, gy0)));
+
+miniCard("movable-cards", "<strong>A number beside a fret line</strong> marks which real fret it is &mdash; here, the guitar's actual 3rd fret.",
+  { hasNut: false, dots: movDots, marker: movMarker, frets: 3 },
+  (svg, sx, fy, gx0, gy0) => svg.appendChild(arrowhead(gx0 - 37, fy(movMarker.line) - 22, gx0 - 24, fy(movMarker.line) - 9)));
+
+// ═══════════════════════════════════════════════════════════════════
+//  FULL NECK DIAGRAM — illustrative notes only
+// ═══════════════════════════════════════════════════════════════════
+(function () {
+  const SGAP = 22, FGAP = 26, NFRETS = 12, NSTR = 6;
+  const PAD_X = 26, TOP = 22, BOTTOM = 46, RIGHT_PAD = 26;
+  const W = PAD_X * 2 + (NSTR - 1) * SGAP + RIGHT_PAD;
+  const H = TOP + NFRETS * FGAP + BOTTOM;
+
+  const svg = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}` });
+  document.getElementById("neck-diagram").replaceWith(svg);
+  svg.id = "neck-diagram";
+
+  const sx = i => PAD_X + i * SGAP;
+  const fy = f => TOP + f * FGAP;
+
+  // Nut at the top (thick), same as a chord diagram — this one starts
+  // from the very beginning of the neck.
+  svg.appendChild(el("line", { x1: sx(0), y1: fy(0), x2: sx(5), y2: fy(0), stroke: INK, "stroke-width": "3.5" }));
+  for (let f = 1; f <= NFRETS; f++) {
+    svg.appendChild(el("line", { x1: sx(0), y1: fy(f), x2: sx(5), y2: fy(f), stroke: INK, "stroke-width": "1.1" }));
+  }
+  for (let i = 0; i < NSTR; i++) {
+    svg.appendChild(el("line", { x1: sx(i), y1: fy(0), x2: sx(i), y2: fy(NFRETS), stroke: INK, "stroke-width": "1.1" }));
+  }
+
+  // Real-fret markers, same rows a guitar's inlay dots use
+  [3, 5, 7, 9, 12].forEach(f => {
+    svg.appendChild(txt(sx(5) + 16, fy(f - 0.5) + 3.5, String(f), { size: 9.5, color: FAINT }));
+  });
+
+  // Every G, B and D (the G major triad) at every fretted position on
+  // every string, frets 1-12 — verified against standard tuning. Open
+  // strings that happen to land on a triad tone (D-string, G-string,
+  // B-string, all open) aren't shown; there's no fret cell to put a dot
+  // in for an open note on this kind of diagram.
+  const dots = [
+    { str: 0, fret: 3,  root: true  },  // low E — G
+    { str: 0, fret: 7,  root: false },  // low E — B
+    { str: 0, fret: 10, root: false },  // low E — D
+    { str: 1, fret: 2,  root: false },  // A — B
+    { str: 1, fret: 5,  root: false },  // A — D
+    { str: 1, fret: 10, root: true  },  // A — G
+    { str: 2, fret: 5,  root: true  },  // D — G
+    { str: 2, fret: 9,  root: false },  // D — B
+    { str: 2, fret: 12, root: false },  // D — D (octave)
+    { str: 3, fret: 4,  root: false },  // G — B
+    { str: 3, fret: 7,  root: false },  // G — D
+    { str: 3, fret: 12, root: true  },  // G — G (octave)
+    { str: 4, fret: 3,  root: false },  // B — D
+    { str: 4, fret: 8,  root: true  },  // B — G
+    { str: 4, fret: 12, root: false },  // B — B (octave)
+    { str: 5, fret: 3,  root: true  },  // high e — G
+    { str: 5, fret: 7,  root: false },  // high e — B
+    { str: 5, fret: 10, root: false },  // high e — D
+  ];
+  dots.forEach(d => {
+    const cx = sx(d.str), cy = fy(d.fret - 0.5);
+    if (d.root) {
+      svg.appendChild(el("circle", { cx, cy, r: 7.4, stroke: ACCENT, "stroke-width": "2", fill: "none" }));
+      svg.appendChild(el("circle", { cx, cy, r: 3.6, fill: ACCENT }));
+    } else {
+      svg.appendChild(el("circle", { cx, cy, r: 4.6, fill: INK }));
+    }
+  });
+
+  STRING_NAMES.forEach((n, i) => {
+    svg.appendChild(txt(sx(i), fy(NFRETS) + 22, n, { serif: true, size: 13, color: FAINT }));
+  });
+  svg.appendChild(txt(sx(0), fy(NFRETS) + 38, "LOW E", { size: 8.5, weight: 600, color: ACCENT, tracking: "0.08em" }));
+  svg.appendChild(txt(sx(5), fy(NFRETS) + 38, "HIGH e", { size: 8.5, weight: 600, color: ACCENT, tracking: "0.08em" }));
+})();
+})();
+</script>
+</body>
+</html>
