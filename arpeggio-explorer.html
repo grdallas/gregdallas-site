@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Arpeggio Explorer">
+<title>Arpeggio Explorer</title>
+<meta name="description" content="Free guitar arpeggio reference — pick or type any chord and see its arpeggio laid out across the whole neck, in any key.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+    /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+    :root {
+        --bg:          #F6F2EA;
+        --panel:       #EFEADF;
+        --ink:         #241F1A;
+        --dim:         #6B6157;
+        --faint:       #948A7C;
+        --rule:        #DCD4C6;
+        --accent:      #8A4B2A;
+        --accent-soft: #B98A64;
+        --serif: "Newsreader", Georgia, "Times New Roman", serif;
+        --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+        /* aliases so the SVG-drawing JS (unchanged) resolves to this palette */
+        --paper: var(--bg);
+        --paper-dark: var(--panel);
+        --ink-light: var(--dim);
+        --ink-muted: var(--faint);
+        --border: var(--rule);
+        --amber: var(--accent);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+        font-family: var(--serif);
+        background: var(--bg);
+        color: var(--ink);
+        min-height: 100vh;
+        font-size: 18px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    #app {
+        padding: clamp(2rem, 6vw, 4rem) 1.25rem 3rem;
+        max-width: 1180px;
+        margin: 0 auto;
+        min-height: 100vh;
+    }
+    html.is-embed #app { padding: 1rem; max-width: none; }
+    html.is-embed .tool-header { margin-bottom: 1rem; }
+    html.is-embed .tool-header p { display: none; }
+
+    /* Controls, the chord name, and the legend read better at a normal
+       reading width — only the fretboard itself benefits from the extra
+       room a wide desktop window has to offer. */
+    .narrow { max-width: 780px; margin-left: auto; margin-right: auto; }
+
+    .site-return {
+        display: inline-block; font-family: var(--sans); font-size: .72rem;
+        letter-spacing: .1em; text-transform: uppercase; color: var(--dim);
+        text-decoration: none; margin-bottom: 1.4rem;
+    }
+    .site-return:hover { color: var(--accent); }
+    html.is-embed .site-return { display: none; }
+
+    .tool-header { margin-bottom: clamp(1.75rem, 4vw, 2.5rem); }
+    .eyebrow {
+        font-family: var(--sans); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem;
+    }
+    .tool-header h1 {
+        font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em;
+        line-height: 1.12; font-size: clamp(2rem, 5.5vw, 2.9rem); margin-bottom: 0.6rem;
+    }
+    .tool-header p {
+        font-family: var(--sans); font-size: 0.92rem; color: var(--dim); max-width: 48ch;
+    }
+
+    .card {
+        border: 1px solid var(--rule);
+        background: var(--panel);
+        border-radius: 6px;
+        padding: 1.4rem 1.3rem;
+        margin-bottom: 1.4rem;
+    }
+    .control-group { margin-bottom: 1.3rem; }
+    .control-group:last-child { margin-bottom: 0; }
+
+    label.section-label {
+        display: block;
+        font-family: var(--sans);
+        font-size: 0.66rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--faint);
+        margin-bottom: 0.6rem;
+    }
+
+    /* ── Root note grid ─────────────────────────────────────────────── */
+    .note-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0.5rem;
+    }
+    .note-btn {
+        padding: 0.55rem 0.2rem;
+        background: var(--bg);
+        border: 1px solid var(--rule);
+        border-radius: 999px;
+        font-family: var(--sans);
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--dim);
+        cursor: pointer;
+        transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .note-btn:hover { border-color: var(--accent-soft); color: var(--ink); }
+    .note-btn.active {
+        background: var(--accent);
+        color: var(--bg);
+        border-color: var(--accent);
+        font-weight: 600;
+    }
+
+    /* ── Select / text input ────────────────────────────────────────── */
+    select, input[type="text"] {
+        width: 100%;
+        padding: 0.6rem 0.7rem;
+        background: var(--bg);
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        font-family: var(--sans);
+        font-size: 0.88rem;
+        color: var(--ink);
+    }
+    select:focus, input[type="text"]:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+    .hint {
+        font-family: var(--sans);
+        font-size: 0.72rem;
+        color: var(--faint);
+        margin-top: 0.5rem;
+        line-height: 1.5;
+    }
+
+    /* ── Range slider ───────────────────────────────────────────────── */
+    .range-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    .range-val { font-family: var(--sans); font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+    input[type="range"] {
+        width: 100%;
+        height: 3px;
+        -webkit-appearance: none;
+        background: var(--rule);
+        border-radius: 2px;
+        outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent);
+        cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent);
+        cursor: pointer;
+        border: none;
+    }
+
+    /* ── Toggles ────────────────────────────────────────────────────── */
+    .toggle-row { display: flex; flex-direction: column; gap: 0.6rem; }
+    .toggle-row label {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-family: var(--sans);
+        font-size: 0.85rem;
+        color: var(--dim);
+        cursor: pointer;
+    }
+    .toggle-row input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--accent);
+        cursor: pointer;
+    }
+
+    /* ── Arpeggio title display ───────────────────────────────────────── */
+    .scale-display {
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        padding: 1.5rem 1.2rem;
+        text-align: center;
+        margin-bottom: 1.4rem;
+    }
+    .scale-title {
+        font-family: var(--serif);
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        font-size: 2.1rem;
+        color: var(--ink);
+        margin-bottom: 0.6rem;
+    }
+    .scale-notes {
+        font-family: var(--sans);
+        font-size: 0.82rem;
+        color: var(--faint);
+        letter-spacing: 0.03em;
+    }
+    .scale-notes .root-note { color: var(--accent); font-weight: 600; }
+
+    .drone-btn {
+        margin-top: 1.1rem;
+        font-family: var(--sans); font-size: 0.76rem; font-weight: 600;
+        letter-spacing: 0.06em; text-transform: uppercase;
+        padding: 0.55rem 1.2rem; border-radius: 999px;
+        border: 1px solid var(--accent-soft); background: transparent; color: var(--accent);
+        cursor: pointer; transition: background 0.15s, color 0.15s;
+    }
+    .drone-btn:hover { background: var(--accent-soft); color: #fff; }
+    .drone-btn.playing { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    /* ── Fretboard ──────────────────────────────────────────────────── */
+    .fretboard-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.2rem;
+    }
+    #fretboard { display: block; }
+    #fretboard text { font-family: var(--sans); }
+    /* On a wide screen, let the fretboard grow to fill the card instead of
+       sitting at its native pixel size with empty space on either side —
+       gated to a min-width so mobile never shrinks it below native size
+       (which is what keeps the note labels legible and lets narrow phones
+       scroll the board horizontally instead). */
+    @media (min-width: 900px) {
+        #fretboard { width: 100%; height: auto; }
+    }
+
+    /* ── Legend ─────────────────────────────────────────────────────── */
+    .legend {
+        display: flex;
+        gap: 1.6rem;
+        justify-content: center;
+        font-family: var(--sans);
+        font-size: 0.76rem;
+        color: var(--faint);
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; }
+    .legend-dot {
+        width: 14px; height: 14px;
+        border-radius: 50%;
+        border: 1.4px solid var(--ink);
+        display: inline-block;
+    }
+    .legend-dot.root { background: var(--accent); border-color: var(--accent); }
+    .legend-dot.tone { background: var(--bg); }
+</style>
+</head>
+<body>
+<div id="app">
+    <a class="site-return" href="teaching.html">&larr; Teaching</a>
+
+    <div class="tool-header narrow">
+        <p class="eyebrow">Fretboard Reference</p>
+        <h1>Arpeggio Explorer</h1>
+        <p>Choose or type a chord — see its arpeggio laid out across the whole neck, in any key.</p>
+    </div>
+
+    <div class="card narrow">
+        <div class="control-group">
+            <label class="section-label">Root</label>
+            <div class="note-grid" id="noteGrid"></div>
+        </div>
+        <div class="control-group">
+            <label class="section-label">Arpeggio</label>
+            <select id="arpSelect">
+                <optgroup label="Triads">
+                    <option value="maj">Major</option>
+                    <option value="min">Minor</option>
+                    <option value="dim">Diminished</option>
+                    <option value="aug">Augmented</option>
+                    <option value="sus2">Sus2</option>
+                    <option value="sus4">Sus4</option>
+                </optgroup>
+                <optgroup label="Sixth Chords">
+                    <option value="six">6</option>
+                    <option value="minSix">Minor 6</option>
+                </optgroup>
+                <optgroup label="Seventh Chords">
+                    <option value="maj7">Major 7</option>
+                    <option value="dom7">Dominant 7</option>
+                    <option value="min7">Minor 7</option>
+                    <option value="min7b5">Minor 7♭5 (Half-Diminished)</option>
+                    <option value="dim7">Diminished 7</option>
+                    <option value="minMaj7">Minor(Major 7)</option>
+                    <option value="maj7sharp5">Major 7♯5</option>
+                    <option value="dom7sharp5">Dominant 7♯5</option>
+                    <option value="dom7flat5">Dominant 7♭5</option>
+                    <option value="dom7sus4">Dominant 7sus4</option>
+                </optgroup>
+                <optgroup label="Extended Chords">
+                    <option value="add9">Add9</option>
+                    <option value="minAdd9">Minor Add9</option>
+                    <option value="maj9">Major 9</option>
+                    <option value="dom9">Dominant 9</option>
+                    <option value="min9">Minor 9</option>
+                    <option value="dom11">Dominant 11</option>
+                    <option value="min11">Minor 11</option>
+                    <option value="maj13">Major 13</option>
+                    <option value="dom13">Dominant 13</option>
+                    <option value="min13">Minor 13</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="control-group">
+            <label class="section-label">Or type it</label>
+            <input type="text" id="arpInput" placeholder="e.g. C major7, A minor, Bb7, D diminished7">
+            <p class="hint">Try: C major7 &middot; A minor &middot; Bb7 &middot; D diminished7 &middot; F# minor7b5 &middot; Eb augmented</p>
+        </div>
+        <div class="control-group">
+            <div class="range-row">
+                <label class="section-label" style="margin-bottom:0">Frets shown</label>
+                <span class="range-val" id="fretCountVal">15</span>
+            </div>
+            <input type="range" id="fretCount" min="9" max="22" value="15">
+        </div>
+        <div class="control-group toggle-row">
+            <label><input type="checkbox" id="showDegrees"> Show chord degrees instead of note names</label>
+            <label><input type="checkbox" id="useFlats"> Use flats (&#9837;) instead of sharps (&#9839;)</label>
+        </div>
+    </div>
+
+    <div class="scale-display narrow">
+        <div class="scale-title" id="scaleTitle">C Major</div>
+        <div class="scale-notes" id="scaleNotesList"></div>
+        <button type="button" class="drone-btn" id="droneBtn">&#9654; Play Drone</button>
+    </div>
+
+    <div class="card fretboard-card">
+        <div class="fretboard-wrap">
+            <svg id="fretboard" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+    </div>
+
+    <div class="legend narrow">
+        <div class="legend-item"><span class="legend-dot root"></span> Root</div>
+        <div class="legend-item"><span class="legend-dot tone"></span> Chord tone</div>
+    </div>
+</div>
+
+<script>
+    // ── Note data ──────────────────────────────────────────────────────────
+    const NOTE_SHARP = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+    const NOTE_FLAT  = ['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
+    const LETTER_PC  = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+
+    // ── Arpeggio definitions ─────────────────────────────────────────────
+    // Extended chords use raw interval numbers past an octave (14 = 9th,
+    // 17 = 11th, 21 = 13th) rather than reducing them to a pitch class up
+    // front — the fretboard render and degree lookup both work fine off
+    // the raw number (they reduce mod 12 only where it matters), and
+    // keeping the real interval means a 9th reads as a 9th, not a 2nd.
+    const ARPEGGIOS = {
+        // Triads
+        maj:  { label: 'Major',      intervals: [0,4,7],   degrees: ['R','3','5'] },
+        min:  { label: 'Minor',      intervals: [0,3,7],   degrees: ['R','b3','5'] },
+        dim:  { label: 'Diminished', intervals: [0,3,6],   degrees: ['R','b3','b5'] },
+        aug:  { label: 'Augmented',  intervals: [0,4,8],   degrees: ['R','3','#5'] },
+        sus2: { label: 'Sus2',       intervals: [0,2,7],   degrees: ['R','2','5'] },
+        sus4: { label: 'Sus4',       intervals: [0,5,7],   degrees: ['R','4','5'] },
+
+        // Sixth chords
+        six:    { label: '6',       intervals: [0,4,7,9], degrees: ['R','3','5','6'] },
+        minSix: { label: 'Minor 6', intervals: [0,3,7,9], degrees: ['R','b3','5','6'] },
+
+        // Seventh chords
+        maj7:       { label: 'Major 7',                       intervals: [0,4,7,11], degrees: ['R','3','5','7'] },
+        dom7:       { label: 'Dominant 7',                    intervals: [0,4,7,10], degrees: ['R','3','5','b7'] },
+        min7:       { label: 'Minor 7',                       intervals: [0,3,7,10], degrees: ['R','b3','5','b7'] },
+        min7b5:     { label: 'Minor 7♭5 (Half-Diminished)',   intervals: [0,3,6,10], degrees: ['R','b3','b5','b7'] },
+        dim7:       { label: 'Diminished 7',                  intervals: [0,3,6,9],  degrees: ['R','b3','b5','bb7'] },
+        minMaj7:    { label: 'Minor(Major 7)',                intervals: [0,3,7,11], degrees: ['R','b3','5','7'] },
+        maj7sharp5: { label: 'Major 7♯5',                     intervals: [0,4,8,11], degrees: ['R','3','#5','7'] },
+        dom7sharp5: { label: 'Dominant 7♯5',                  intervals: [0,4,8,10], degrees: ['R','3','#5','b7'] },
+        dom7flat5:  { label: 'Dominant 7♭5',                  intervals: [0,4,6,10], degrees: ['R','3','b5','b7'] },
+        dom7sus4:   { label: 'Dominant 7sus4',                intervals: [0,5,7,10], degrees: ['R','4','5','b7'] },
+
+        // Extended chords
+        add9:    { label: 'Add9',       intervals: [0,4,7,14],       degrees: ['R','3','5','9'] },
+        minAdd9: { label: 'Minor Add9', intervals: [0,3,7,14],       degrees: ['R','b3','5','9'] },
+        maj9:    { label: 'Major 9',    intervals: [0,4,7,11,14],    degrees: ['R','3','5','7','9'] },
+        dom9:    { label: 'Dominant 9', intervals: [0,4,7,10,14],    degrees: ['R','3','5','b7','9'] },
+        min9:    { label: 'Minor 9',    intervals: [0,3,7,10,14],    degrees: ['R','b3','5','b7','9'] },
+        dom11:   { label: 'Dominant 11',intervals: [0,4,7,10,14,17], degrees: ['R','3','5','b7','9','11'] },
+        min11:   { label: 'Minor 11',   intervals: [0,3,7,10,14,17], degrees: ['R','b3','5','b7','9','11'] },
+        maj13:   { label: 'Major 13',   intervals: [0,4,7,11,14,21], degrees: ['R','3','5','7','9','13'] },
+        dom13:   { label: 'Dominant 13',intervals: [0,4,7,10,14,21], degrees: ['R','3','5','b7','9','13'] },
+        min13:   { label: 'Minor 13',   intervals: [0,3,7,10,14,21], degrees: ['R','b3','5','b7','9','13'] },
+    };
+
+    const ARP_ALIASES = {
+        'major':'maj', 'maj':'maj', 'M':'maj', '':'maj',
+        'minor':'min', 'min':'min', 'm':'min', '-':'min',
+        'diminished':'dim', 'dim':'dim', 'o':'dim',
+        'augmented':'aug', 'aug':'aug', '+':'aug',
+        'sus2':'sus2', 'suspended2':'sus2',
+        'sus4':'sus4', 'sus':'sus4', 'suspended4':'sus4', 'suspended':'sus4',
+
+        '6':'six', 'maj6':'six', 'major6':'six', 'add6':'six',
+        'm6':'minSix', 'min6':'minSix', 'minor6':'minSix',
+
+        'maj7':'maj7', 'major7':'maj7', 'ma7':'maj7', 'M7':'maj7',
+        '7':'dom7', 'dom7':'dom7', 'dominant7':'dom7',
+        'm7':'min7', 'min7':'min7', 'minor7':'min7', '-7':'min7',
+        'm7b5':'min7b5', 'min7b5':'min7b5', 'minor7b5':'min7b5', 'halfdiminished':'min7b5', 'half diminished':'min7b5', 'm7flat5':'min7b5',
+        'dim7':'dim7', 'diminished7':'dim7', 'o7':'dim7',
+        'mmaj7':'minMaj7', 'minmaj7':'minMaj7', 'minormajor7':'minMaj7', 'm(maj7)':'minMaj7', 'minor(major7)':'minMaj7',
+        'maj7#5':'maj7sharp5', 'maj7sharp5':'maj7sharp5', 'major7sharp5':'maj7sharp5', 'major7#5':'maj7sharp5',
+        '7#5':'dom7sharp5', 'dom7sharp5':'dom7sharp5', 'aug7':'dom7sharp5', 'dominant7sharp5':'dom7sharp5',
+        '7b5':'dom7flat5', 'dom7flat5':'dom7flat5', 'dominant7flat5':'dom7flat5',
+        '7sus4':'dom7sus4', 'dom7sus4':'dom7sus4', '7sus':'dom7sus4', 'dominant7sus4':'dom7sus4',
+
+        'add9':'add9', 'madd9':'minAdd9', 'minadd9':'minAdd9', 'minoradd9':'minAdd9', 'm(add9)':'minAdd9',
+        'maj9':'maj9', 'major9':'maj9',
+        '9':'dom9', 'dom9':'dom9', 'dominant9':'dom9',
+        'm9':'min9', 'min9':'min9', 'minor9':'min9',
+        '11':'dom11', 'dom11':'dom11', 'dominant11':'dom11',
+        'm11':'min11', 'min11':'min11', 'minor11':'min11',
+        'maj13':'maj13', 'major13':'maj13',
+        '13':'dom13', 'dom13':'dom13', 'dominant13':'dom13',
+        'm13':'min13', 'min13':'min13', 'minor13':'min13',
+    };
+
+    // ── Standard tuning, top-to-bottom as on a tab chart ────────────────────
+    const STRING_LABELS = ['e','B','G','D','A','E'];
+    const STRING_OPEN   = [4, 11, 7, 2, 9, 4];
+    const STRING_W       = [1, 1.2, 1.6, 2, 2.6, 3.2];
+
+    const MARKER_FRETS = [3,5,7,9,12,15,17,19,21,24];
+
+    // ── Layout constants ─────────────────────────────────────────────────
+    const LEFT_W = 22, OPEN_W = 34, FRET_W = 44, TOP_PAD = 16, GAP = 28, BOT_PAD = 36, R = 10;
+
+    const state = {
+        root: 0, arpKey: 'maj', frets: 15, showDegrees: false, useFlats: false,
+        // Set only when arriving from a tetrad sheet link with an exact
+        // list of MIDI notes to drone instead of the arpeggio's own tones.
+        // Cleared the moment the user picks a different root or chord.
+        droneChordOverride: null,
+    };
+
+    // ── DOM refs ─────────────────────────────────────────────────────────
+    const noteGridEl = document.getElementById('noteGrid');
+    const arpSelectEl = document.getElementById('arpSelect');
+    const arpInputEl = document.getElementById('arpInput');
+    const fretCountEl = document.getElementById('fretCount');
+    const fretCountValEl = document.getElementById('fretCountVal');
+    const showDegreesEl = document.getElementById('showDegrees');
+    const useFlatsEl = document.getElementById('useFlats');
+    const svgEl = document.getElementById('fretboard');
+    const scaleTitleEl = document.getElementById('scaleTitle');
+    const scaleNotesListEl = document.getElementById('scaleNotesList');
+    const droneBtnEl = document.getElementById('droneBtn');
+
+    // ── Build root-note buttons ─────────────────────────────────────────
+    function buildNoteGrid() {
+        noteGridEl.innerHTML = '';
+        const names = state.useFlats ? NOTE_FLAT : NOTE_SHARP;
+        names.forEach((name, pc) => {
+            const btn = document.createElement('button');
+            btn.className = 'note-btn' + (pc === state.root ? ' active' : '');
+            btn.textContent = name;
+            btn.dataset.pc = pc;
+            btn.addEventListener('click', () => {
+                state.root = pc;
+                state.droneChordOverride = null;
+                syncNoteGridActive();
+                render();
+            });
+            noteGridEl.appendChild(btn);
+        });
+    }
+    function syncNoteGridActive() {
+        [...noteGridEl.children].forEach(btn => {
+            btn.classList.toggle('active', Number(btn.dataset.pc) === state.root);
+        });
+    }
+
+    // ── Text parsing ("C major7", "A minor", "Bb7", "F# minor7b5") ──────
+    function parseArpText(text) {
+        const m = text.trim().match(/^([A-Ga-g])\s*(#|s|sharp|b|flat)?\s*(.*)$/);
+        if (!m) return null;
+        const letter = m[1].toUpperCase();
+        let pc = LETTER_PC[letter];
+        if (pc === undefined) return null;
+        const acc = (m[2] || '').toLowerCase();
+        if (acc === '#' || acc === 's' || acc === 'sharp') pc += 1;
+        if (acc === 'b' || acc === 'flat') pc -= 1;
+        pc = ((pc % 12) + 12) % 12;
+        const rest = m[3].trim().toLowerCase().replace(/\s+/g, '');
+        if (!rest) return null;
+        const arpKey = ARP_ALIASES[rest];
+        if (!arpKey) return null;
+        return { root: pc, arpKey, usedFlat: acc === 'b' || acc === 'flat' };
+    }
+
+    arpInputEl.addEventListener('input', () => {
+        const parsed = parseArpText(arpInputEl.value);
+        if (!parsed) return;
+        state.root = parsed.root;
+        state.arpKey = parsed.arpKey;
+        state.droneChordOverride = null;
+        if (parsed.usedFlat) state.useFlats = true;
+        useFlatsEl.checked = state.useFlats;
+        buildNoteGrid();
+        arpSelectEl.value = state.arpKey;
+        render();
+    });
+
+    arpSelectEl.addEventListener('change', () => {
+        state.arpKey = arpSelectEl.value;
+        state.droneChordOverride = null;
+        render();
+    });
+
+    fretCountEl.addEventListener('input', () => {
+        state.frets = Number(fretCountEl.value);
+        fretCountValEl.textContent = state.frets;
+        render();
+    });
+
+    showDegreesEl.addEventListener('change', () => {
+        state.showDegrees = showDegreesEl.checked;
+        render();
+    });
+
+    useFlatsEl.addEventListener('change', () => {
+        state.useFlats = useFlatsEl.checked;
+        buildNoteGrid();
+        render();
+    });
+
+    // ── Layout helpers ───────────────────────────────────────────────────
+    function dims(N) {
+        const xNut = LEFT_W + OPEN_W;
+        const width = xNut + N * FRET_W + 12;
+        const height = TOP_PAD + GAP * 5 + BOT_PAD;
+        return { xNut, width, height };
+    }
+    function stringY(i) { return TOP_PAD + i * GAP; }
+    function cellCenter(f, xNut) { return xNut + (f - 0.5) * FRET_W; }
+    function openCenter() { return LEFT_W + OPEN_W / 2; }
+
+    function noteLabel(pitch, arp) {
+        if (state.showDegrees) {
+            const idx = arp.intervals.findIndex(iv => (state.root + iv) % 12 === pitch);
+            return arp.degrees[idx];
+        }
+        return (state.useFlats ? NOTE_FLAT : NOTE_SHARP)[pitch];
+    }
+
+    // ── Render ───────────────────────────────────────────────────────────
+    function render() {
+        const N = state.frets;
+        const arp = ARPEGGIOS[state.arpKey];
+        const arpSet = new Set(arp.intervals.map(iv => (state.root + iv) % 12));
+        const { xNut, width, height } = dims(N);
+
+        let s = '';
+
+        STRING_OPEN.forEach((pc, i) => {
+            const y = stringY(i);
+            s += `<line x1="${LEFT_W}" y1="${y}" x2="${xNut + N * FRET_W}" y2="${y}" stroke="var(--ink-light)" stroke-width="${STRING_W[i]}" stroke-linecap="round"/>`;
+        });
+
+        for (let f = 1; f <= N; f++) {
+            const x = xNut + f * FRET_W;
+            s += `<line x1="${x}" y1="${TOP_PAD - 6}" x2="${x}" y2="${TOP_PAD + 5 * GAP + 6}" stroke="var(--border)" stroke-width="1.5"/>`;
+        }
+
+        s += `<line x1="${xNut}" y1="${TOP_PAD - 10}" x2="${xNut}" y2="${TOP_PAD + 5 * GAP + 10}" stroke="var(--ink)" stroke-width="5"/>`;
+
+        const markY = TOP_PAD + 5 * GAP + 14;
+        MARKER_FRETS.filter(f => f <= N).forEach(f => {
+            const cx = cellCenter(f, xNut);
+            if (f % 12 === 0) {
+                s += `<circle cx="${cx}" cy="${markY - 7}" r="2.5" fill="var(--border)"/><circle cx="${cx}" cy="${markY + 7}" r="2.5" fill="var(--border)"/>`;
+            } else {
+                s += `<circle cx="${cx}" cy="${markY}" r="2.5" fill="var(--border)"/>`;
+            }
+        });
+
+        for (let f = 1; f <= N; f++) {
+            const cx = cellCenter(f, xNut);
+            const isMarker = MARKER_FRETS.includes(f);
+            s += `<text x="${cx}" y="${height - 8}" text-anchor="middle" font-size="8.5" fill="${isMarker ? 'var(--amber)' : 'var(--ink-muted)'}" font-weight="${isMarker ? 700 : 400}">${f}</text>`;
+        }
+
+        STRING_LABELS.forEach((lab, i) => {
+            s += `<text x="${LEFT_W - 6}" y="${stringY(i) + 4}" text-anchor="end" font-size="11" font-style="italic" fill="var(--ink-muted)">${lab}</text>`;
+        });
+
+        STRING_OPEN.forEach((openPc, i) => {
+            const y = stringY(i);
+            for (let f = 0; f <= N; f++) {
+                const pitch = (openPc + f) % 12;
+                if (!arpSet.has(pitch)) continue;
+                const isRoot = pitch === state.root;
+                const cx = f === 0 ? openCenter() : cellCenter(f, xNut);
+                const label = noteLabel(pitch, arp);
+                s += `<circle cx="${cx}" cy="${y}" r="${R}" fill="${isRoot ? 'var(--amber)' : 'var(--paper)'}" stroke="var(--ink)" stroke-width="${isRoot ? 1.6 : 1.1}"/>`;
+                s += `<text x="${cx}" y="${y + 3.2}" text-anchor="middle" font-size="8.5" font-weight="${isRoot ? 700 : 400}" fill="var(--ink)">${label}</text>`;
+            }
+        });
+
+        svgEl.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svgEl.setAttribute('width', width);
+        svgEl.setAttribute('height', height);
+        svgEl.innerHTML = s;
+
+        updateArpDisplay(arp);
+    }
+
+    function updateArpDisplay(arp) {
+        const names = state.useFlats ? NOTE_FLAT : NOTE_SHARP;
+        scaleTitleEl.textContent = `${names[state.root]} ${arp.label}`;
+        scaleNotesListEl.innerHTML = arp.intervals
+            .map(iv => {
+                const pc = (state.root + iv) % 12;
+                const n = names[pc];
+                return iv === 0 ? `<span class="root-note">${n}</span>` : n;
+            })
+            .join(' &middot; ');
+        updateDroneIfPlaying();
+    }
+
+    // ── Drone: a sustained pad chord to practice over ───────────────────
+    // An arpeggio already IS a chord, so the drone just holds every one of
+    // its own tones — no derivation needed the way a scale's "chord that
+    // goes with it" has to be inferred. When state.droneChordOverride is
+    // set (arrived here via a link with exact notes) that's used instead.
+    let droneCtx = null, droneNodes = null, droneChordKey = null;
+
+    function droneChordPitches() {
+        if (state.droneChordOverride) return state.droneChordOverride.slice();
+        const arp = ARPEGGIOS[state.arpKey];
+        return arp.intervals.map(iv => {
+            const pc = ((state.root + iv) % 12 + 12) % 12;
+            return 48 + pc; // low-mid register
+        });
+    }
+    function ensureDroneAudio() {
+        if (!droneCtx) droneCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (droneCtx.state === 'suspended') droneCtx.resume();
+        return droneCtx;
+    }
+    function stopDroneNodes(fast) {
+        if (!droneNodes) return;
+        const ctx = droneCtx;
+        const now = ctx.currentTime;
+        const rel = fast ? 0.06 : 0.5;
+        droneNodes.master.gain.cancelScheduledValues(now);
+        droneNodes.master.gain.setValueAtTime(droneNodes.master.gain.value, now);
+        droneNodes.master.gain.linearRampToValueAtTime(0, now + rel);
+        droneNodes.oscillators.forEach(o => o.stop(now + rel + 0.05));
+        droneNodes = null;
+    }
+    function startDrone() {
+        const ctx = ensureDroneAudio();
+        stopDroneNodes(true);
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(0, ctx.currentTime);
+        master.gain.linearRampToValueAtTime(0.13, ctx.currentTime + 0.7);
+        master.connect(ctx.destination);
+
+        const oscillators = [];
+        droneChordPitches().forEach(midi => {
+            const freq = 440 * Math.pow(2, (midi - 69) / 12);
+            [-4, 4].forEach(detune => {
+                const osc = ctx.createOscillator();
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                osc.detune.value = detune;
+                const g = ctx.createGain();
+                g.gain.value = 0.5;
+                osc.connect(g);
+                g.connect(master);
+                osc.start();
+                oscillators.push(osc);
+            });
+        });
+        droneNodes = { oscillators, master };
+        droneChordKey = state.root + ':' + state.arpKey;
+    }
+    function stopDrone() {
+        stopDroneNodes(false);
+        droneChordKey = null;
+        droneBtnEl.classList.remove('playing');
+        droneBtnEl.innerHTML = '&#9654; Play Drone';
+    }
+    function updateDroneIfPlaying() {
+        if (!droneNodes) return;
+        const key = state.root + ':' + state.arpKey;
+        if (key === droneChordKey) return;
+        startDrone();
+    }
+    droneBtnEl.addEventListener('click', () => {
+        if (droneNodes) {
+            stopDrone();
+        } else {
+            startDrone();
+            droneBtnEl.classList.add('playing');
+            droneBtnEl.innerHTML = '&#9632; Stop Drone';
+        }
+    });
+
+    // ── URL param configuration (for linking from a generated session step) ─
+    (function applyUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const rootParam = params.get('root');
+        const arpParam = params.get('arpeggio');
+        const fretsParam = params.get('frets');
+        if (rootParam) {
+            const pc = LETTER_PC[rootParam[0]?.toUpperCase()];
+            if (pc !== undefined) {
+                let adj = pc;
+                if (rootParam.includes('#')) adj += 1;
+                if (rootParam.toLowerCase().includes('b') && rootParam.length > 1) adj -= 1;
+                state.root = ((adj % 12) + 12) % 12;
+            }
+        }
+        if (arpParam && ARPEGGIOS[arpParam]) state.arpKey = arpParam;
+        if (fretsParam && Number(fretsParam) >= 9 && Number(fretsParam) <= 22) state.frets = Number(fretsParam);
+        const chordParam = params.get('chord');
+        if (chordParam) {
+            const midis = chordParam.split(',').map(Number).filter(n => Number.isInteger(n));
+            if (midis.length) state.droneChordOverride = midis;
+        }
+        if (params.get('embed')) {
+            document.documentElement.classList.add('is-embed');
+        }
+    })();
+
+    // ── Init ─────────────────────────────────────────────────────────────
+    buildNoteGrid();
+    arpSelectEl.value = state.arpKey;
+    fretCountEl.value = state.frets;
+    fretCountValEl.textContent = state.frets;
+    render();
+</script>
+</body>
+</html>
