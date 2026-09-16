@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minor Pentatonic Across the Neck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+  :root {
+    --bg:          #F6F2EA;
+    --panel:       #EFEADF;
+    --ink:         #241F1A;
+    --dim:         #6B6157;
+    --faint:       #948A7C;
+    --rule:        #DCD4C6;
+    --accent:      #8A4B2A;
+    --accent-soft: #B98A64;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  }
+
+  .sheet { width: 100%; max-width: 780px; margin: 0 auto; }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .sheet-head { margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  .sheet-head h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+  }
+
+  .intro { margin-top: 1rem; margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .intro p { font-size: 1.05rem; color: var(--dim); max-width: 62ch; }
+
+  /* ── Boxes ───────────────────────────────────────────────────────── */
+  .boxes { margin-top: clamp(1.5rem, 4vw, 2rem); overflow-x: auto; }
+  .boxes svg { display: block; }
+
+  /* ── Whole-neck map ──────────────────────────────────────────────── */
+  .map-head {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    letter-spacing: -0.015em;
+    margin-top: clamp(2.5rem, 6vw, 3.5rem);
+    padding-top: clamp(1.75rem, 4vw, 2.5rem);
+    border-top: 1px solid var(--rule);
+  }
+  .map-wrap { margin-top: clamp(1.5rem, 4vw, 2rem); overflow-x: auto; }
+  .map-wrap svg { display: block; }
+
+  /* ── Legend + footer ─────────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: var(--dim);
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.55rem; }
+  .legend-item svg { display: block; }
+
+  .foot {
+    margin-top: 0.9rem;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--faint);
+  }
+
+  /* ── Print ───────────────────────────────────────────────────────── */
+  @page { size: letter portrait; margin: 0.55in; }
+  @media print {
+    body { padding: 0; }
+    .sheet { max-width: none; }
+    .box, .legend, .map-wrap { break-inside: avoid; }
+  }
+
+      /* Added for the website — hidden when printed, so the sheet stays a sheet. */
+      .site-return { display:inline-block; font-family:var(--sans); font-size:.72rem;
+        letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+        text-decoration:none; margin-bottom:1.4rem; }
+      .site-return:hover { color:var(--accent); }
+      @media print { .site-return { display:none; } }
+</style>
+</head>
+<body>
+<a class="site-return" href="../teaching.html">&larr; Teaching</a>
+<div class="sheet">
+
+  <header class="sheet-head">
+    <p class="eyebrow">Fretboard Reference</p>
+    <h1>Minor Pentatonic Across the Neck</h1>
+  </header>
+
+  <div class="intro">
+    <p>Five overlapping shapes cover the whole neck. Learn them in order, left to right below, and there's nowhere on the fretboard this scale doesn't reach.</p>
+  </div>
+
+  <div class="boxes" id="boxes"></div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8" stroke="#8A4B2A" stroke-width="2" fill="none"/>
+        <circle cx="12" cy="12" r="4" fill="#8A4B2A"/>
+      </svg>
+      Root
+    </div>
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4.4" fill="#241F1A"/>
+      </svg>
+      Scale tone
+    </div>
+  </div>
+
+  <p class="foot">Each box's last note on a string is the next box's first &mdash; that's how all five chain into one continuous climb up the neck.</p>
+
+  <h2 class="map-head">How the Boxes Connect</h2>
+  <div class="intro">
+    <p>On every string, the second note of a box is the first note of the next one. Follow one string through all five boxes and it never repeats a fret &mdash; it just keeps climbing. That shared note is where one shape hands off to the next.</p>
+  </div>
+
+  <div id="map" class="map-wrap"></div>
+
+</div>
+
+<script>
+(function () {
+// ═══════════════════════════════════════════════════════════════════
+//  DIAGRAM DATA
+//
+//  Each dot: { str, fret, type }
+//    str  — string number: 0 = low E, 1 = A, 2 = D, 3 = G, 4 = B, 5 = high e
+//    fret — fret box within THIS shape: 1 = first fret box, 2 = second, etc.
+//           (each box is its own movable shape — fret 1 isn't the guitar's
+//           actual first fret, it's just where this particular shape starts)
+//    type — 'root' | 'note'
+//
+//  To move a dot, change its str and/or fret.
+// ═══════════════════════════════════════════════════════════════════
+
+const boxes = [
+  { label: "Box 1", dots: [
+    { str: 0, fret: 1, type: "root" }, { str: 0, fret: 4, type: "note" },
+    { str: 1, fret: 1, type: "note" }, { str: 1, fret: 3, type: "note" },
+    { str: 2, fret: 1, type: "note" }, { str: 2, fret: 3, type: "root" },
+    { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "note" },
+    { str: 4, fret: 1, type: "note" }, { str: 4, fret: 4, type: "note" },
+    { str: 5, fret: 1, type: "root" }, { str: 5, fret: 4, type: "note" },
+  ]},
+  { label: "Box 2", dots: [
+    { str: 0, fret: 2, type: "note" }, { str: 0, fret: 4, type: "note" },
+    { str: 1, fret: 1, type: "note" }, { str: 1, fret: 4, type: "note" },
+    { str: 2, fret: 1, type: "root" }, { str: 2, fret: 4, type: "note" },
+    { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "note" },
+    { str: 4, fret: 2, type: "note" }, { str: 4, fret: 4, type: "root" },
+    { str: 5, fret: 2, type: "note" }, { str: 5, fret: 4, type: "note" },
+  ]},
+  { label: "Box 3", dots: [
+    { str: 0, fret: 2, type: "note" }, { str: 0, fret: 4, type: "note" },
+    { str: 1, fret: 2, type: "note" }, { str: 1, fret: 4, type: "root" },
+    { str: 2, fret: 2, type: "note" }, { str: 2, fret: 4, type: "note" },
+    { str: 3, fret: 1, type: "note" }, { str: 3, fret: 4, type: "note" },
+    { str: 4, fret: 2, type: "root" }, { str: 4, fret: 5, type: "note" },
+    { str: 5, fret: 2, type: "note" }, { str: 5, fret: 4, type: "note" },
+  ]},
+  { label: "Box 4", dots: [
+    { str: 0, fret: 1, type: "note" }, { str: 0, fret: 4, type: "note" },
+    { str: 1, fret: 1, type: "root" }, { str: 1, fret: 4, type: "note" },
+    { str: 2, fret: 1, type: "note" }, { str: 2, fret: 3, type: "note" },
+    { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "root" },
+    { str: 4, fret: 2, type: "note" }, { str: 4, fret: 4, type: "note" },
+    { str: 5, fret: 1, type: "note" }, { str: 5, fret: 4, type: "note" },
+  ]},
+  { label: "Box 5", dots: [
+    { str: 0, fret: 2, type: "note" }, { str: 0, fret: 4, type: "root" },
+    { str: 1, fret: 2, type: "note" }, { str: 1, fret: 4, type: "note" },
+    { str: 2, fret: 1, type: "note" }, { str: 2, fret: 4, type: "note" },
+    { str: 3, fret: 1, type: "root" }, { str: 3, fret: 4, type: "note" },
+    { str: 4, fret: 2, type: "note" }, { str: 4, fret: 4, type: "note" },
+    { str: 5, fret: 2, type: "note" }, { str: 5, fret: 4, type: "root" },
+  ]},
+];
+
+// ═══════════════════════════════════════════════════════════════════
+//  RENDERING  (edit below to change layout / sizing / colors)
+// ═══════════════════════════════════════════════════════════════════
+
+const STRING_GAP = 16;
+const FRET_GAP   = 23;
+const NUM_FRETS  = 5;
+const NUM_STR    = 6;
+const PAD_X      = 14;
+const PAD_Y      = 13;
+const SVG_W      = PAD_X * 2 + (NUM_STR - 1) * STRING_GAP;
+const SVG_H      = PAD_Y * 2 + NUM_FRETS * FRET_GAP;
+
+const R_INNER = 4.6;
+const R_OUTER = 8.6;
+const INK    = "#241F1A";
+const ACCENT = "#8A4B2A";
+const FAINT  = "#948A7C";
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  kids.forEach(k => e.appendChild(k));
+  return e;
+}
+
+function drawFretboard(g, box) {
+  const gridW = (NUM_STR - 1) * STRING_GAP;
+  const gridH = NUM_FRETS * FRET_GAP;
+
+  for (let f = 0; f <= NUM_FRETS; f++) {
+    const y = PAD_Y + f * FRET_GAP;
+    g.appendChild(el("line", {
+      x1: PAD_X, y1: y, x2: PAD_X + gridW, y2: y,
+      stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square",
+    }));
+  }
+  for (let s = 0; s < NUM_STR; s++) {
+    const x = PAD_X + s * STRING_GAP;
+    g.appendChild(el("line", {
+      x1: x, y1: PAD_Y, x2: x, y2: PAD_Y + gridH,
+      stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square",
+    }));
+  }
+
+  for (const dot of box.dots) {
+    const cx = PAD_X + dot.str * STRING_GAP;
+    const cy = PAD_Y + (dot.fret - 0.5) * FRET_GAP;
+
+    if (dot.type === "root") {
+      g.appendChild(el("circle", { cx, cy, r: R_OUTER, stroke: ACCENT, "stroke-width": "2", fill: "none" }));
+      g.appendChild(el("circle", { cx, cy, r: R_INNER, fill: ACCENT }));
+    } else {
+      g.appendChild(el("circle", { cx, cy, r: R_INNER, fill: INK }));
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  TOP SECTION — five boxes in one row. An arrow runs from each box's
+//  last note on the low E string to the next box's first note on that
+//  same string (they're the same fret, per the hand-off rule), then
+//  loops from Box 5's last note back around to Box 1's first — the
+//  same note, one octave up, closing the cycle.
+//
+//  Arrows are routed in right-angle paths through the clear margins
+//  above/below/beside the grids so they never cross a diagram's own
+//  lines or dots.
+// ═══════════════════════════════════════════════════════════════════
+
+function str0Range(box) {
+  const frets = box.dots.filter(d => d.str === 0).map(d => d.fret);
+  return { min: Math.min(...frets), max: Math.max(...frets) };
+}
+
+const ROW_GAP   = 46;  // gap between adjacent boxes
+const LOOP_L    = 28;  // left margin reserved for the wrap-around loop
+const LABEL_H   = 40;  // space above each grid for its label + arrow clearance
+const BELOW_PAD = 66;  // space below each grid for the arrows to swoop through
+
+const boxX = boxes.map((_, i) => LOOP_L + i * (SVG_W + ROW_GAP));
+const rowW = LOOP_L + boxes.length * SVG_W + (boxes.length - 1) * ROW_GAP;
+const rowH = LABEL_H + SVG_H + BELOW_PAD;
+const dotY = fret => LABEL_H + PAD_Y + (fret - 0.5) * FRET_GAP;
+
+const rowSvg = el("svg", { viewBox: `0 0 ${rowW} ${rowH}`, width: rowW, height: rowH });
+
+const defs = el("defs", {});
+const arrowMarker = el("marker", {
+  id: "row-arrow", viewBox: "0 0 8 8", refX: "6.5", refY: "4",
+  markerWidth: "6.5", markerHeight: "6.5", orient: "auto-start-reverse",
+});
+arrowMarker.appendChild(el("path", { d: "M0,0 L8,4 L0,8 z", fill: FAINT }));
+defs.appendChild(arrowMarker);
+rowSvg.appendChild(defs);
+
+boxes.forEach((box, i) => {
+  const x = boxX[i];
+  rowSvg.appendChild(text(box.label.toUpperCase(), x, 11, "9", FAINT));
+  const g = el("g", { transform: `translate(${x},${LABEL_H})` });
+  drawFretboard(g, box);
+  rowSvg.appendChild(g);
+});
+
+// Hand-off arrows: box i's last note -> box i+1's first note. Each one
+// rounds out well clear below its box, crosses the gap, then rounds into
+// the next box from well clear above it — circling around the diagrams
+// with real margin, instead of skimming their edges.
+const gridTop    = LABEL_H + PAD_Y;
+const gridBottom = LABEL_H + PAD_Y + NUM_FRETS * FRET_GAP;
+const belowY     = gridBottom + 30; // sequential arrows' lane
+const loopBelowY = gridBottom + 55; // wrap-around's own, deeper lane — so its
+                                     // long trip under the whole row never
+                                     // crosses a sequential arrow's dip
+const aboveY = gridTop - 26;
+
+function swoopAround(sx, sy, tx, ty, viaX, dipY) {
+  const dir = viaX >= sx ? 1 : -1; // the wrap-around travels leftward, so its
+                                    // first curve has to bulge the other way
+  return `M${sx},${sy} `
+    + `Q${sx + 18 * dir},${dipY} ${viaX},${dipY} `
+    + `L${viaX},${aboveY} `
+    + `Q${tx - 18},${aboveY} ${tx},${ty}`;
+}
+
+for (let i = 0; i < boxes.length - 1; i++) {
+  const from = str0Range(boxes[i]), to = str0Range(boxes[i + 1]);
+  const sx = boxX[i] + PAD_X, sy = dotY(from.max);
+  const tx = boxX[i + 1] + PAD_X, ty = dotY(to.min);
+  const viaX = boxX[i] + SVG_W + ROW_GAP / 2;
+  const d = swoopAround(sx, sy, tx, ty, viaX, belowY);
+  rowSvg.appendChild(el("path", { d, stroke: FAINT, "stroke-width": "1.3", fill: "none", "marker-end": "url(#row-arrow)" }));
+}
+
+// Wrap-around arrow: Box 5's last note back to Box 1's first — routed out
+// through the reserved left margin and a deeper lane below. It drops into
+// that lane sharply (right at the start, near Box 5) instead of gradually,
+// so it's already clear of the sequential arrows' shallower lane by the
+// time it passes under them, rather than crossing one on the way down.
+{
+  const from = str0Range(boxes[boxes.length - 1]), to = str0Range(boxes[0]);
+  const sx = boxX[boxX.length - 1] + PAD_X, sy = dotY(from.max);
+  const tx = boxX[0] + PAD_X, ty = dotY(to.min);
+  const loopX = LOOP_L / 2;
+  // Drops to its deep lane sharply, within a few px of Box 5 — so it's
+  // already well clear before it even reaches the box4-box5 arrow's own
+  // dip, instead of still descending through that shared stretch.
+  const d = `M${sx},${sy} `
+    + `Q${sx - 6},${loopBelowY} ${sx - 20},${loopBelowY} `
+    + `L${loopX},${loopBelowY} `
+    + `L${loopX},${aboveY} `
+    + `Q${tx - 18},${aboveY} ${tx},${ty}`;
+  rowSvg.appendChild(el("path", { d, stroke: FAINT, "stroke-width": "1.3", fill: "none", "marker-end": "url(#row-arrow)" }));
+}
+
+document.getElementById("boxes").appendChild(rowSvg);
+
+// ═══════════════════════════════════════════════════════════════════
+//  "HOW THE BOXES CONNECT" — one composite map: 5 small thumbnails on
+//  the left, each with an arrow pointing at where that shape sits on
+//  one tall diagram of the whole neck on the right. Every fret number
+//  here is relative to Box 1's fret 1, same as everywhere else on this
+//  sheet — the whole map is one movable unit, just like each box is.
+// ═══════════════════════════════════════════════════════════════════
+
+// How far each box's own fret-1 sits from Box 1's fret-1, once they're
+// lined up so a box's LAST note lands on the next box's FIRST note
+// (verified per string: it's always true, on every string, for every
+// adjacent pair — that's the whole point of this diagram).
+const OFFSETS = [0, 2, 4, 7, 9];
+
+// Merge all five boxes into one deduplicated set of neck positions —
+// a note shared by two boxes (the hand-off note) appears once.
+const mapDotsByKey = new Map();
+boxes.forEach((box, i) => {
+  box.dots.forEach(d => {
+    const mf = d.fret + OFFSETS[i];
+    const key = d.str + ":" + mf;
+    if (!mapDotsByKey.has(key)) mapDotsByKey.set(key, { str: d.str, fret: mf, type: d.type });
+  });
+});
+const mapDots = [...mapDotsByKey.values()];
+
+// Each box's fret span on the shared map, for the bracket + label.
+const spans = boxes.map((box, i) => {
+  const frets = box.dots.map(d => d.fret + OFFSETS[i]);
+  return { label: box.label, min: Math.min(...frets), max: Math.max(...frets) };
+});
+
+function drawGrid(svg, x0, y0, sgap, fgap, nfrets, sw) {
+  for (let f = 0; f <= nfrets; f++) {
+    const y = y0 + f * fgap;
+    svg.appendChild(el("line", { x1: x0, y1: y, x2: x0 + (NUM_STR - 1) * sgap, y2: y, stroke: INK, "stroke-width": sw, "stroke-linecap": "square" }));
+  }
+  for (let s = 0; s < NUM_STR; s++) {
+    const x = x0 + s * sgap;
+    svg.appendChild(el("line", { x1: x, y1: y0, x2: x, y2: y0 + nfrets * fgap, stroke: INK, "stroke-width": sw, "stroke-linecap": "square" }));
+  }
+}
+function drawDot(svg, x0, y0, sgap, fgap, str, fret, type, rInner, rOuter, sw) {
+  const cx = x0 + str * sgap, cy = y0 + (fret - 0.5) * fgap;
+  if (type === "root") {
+    svg.appendChild(el("circle", { cx, cy, r: rOuter, stroke: ACCENT, "stroke-width": sw, fill: "none" }));
+    svg.appendChild(el("circle", { cx, cy, r: rInner, fill: ACCENT }));
+  } else {
+    svg.appendChild(el("circle", { cx, cy, r: rInner, fill: INK }));
+  }
+}
+function text(str, x, y, size, color, weight, tracking) {
+  const t = el("text", {
+    x, y, "font-family": "Inter, sans-serif", "font-size": size,
+    "font-weight": weight || 600, fill: color, "letter-spacing": tracking || "0.07em",
+  });
+  t.textContent = str;
+  return t;
+}
+
+// ---- thumbnail geometry ----
+const T_SGAP = 11, T_FGAP = 15, T_FRETS = 5;
+const T_W = (NUM_STR - 1) * T_SGAP;
+const T_H = T_FRETS * T_FGAP;
+
+// ---- master (whole-neck) geometry ----
+const M_SGAP = 20, M_FGAP = 30, M_FRETS = 13;
+const M_W = (NUM_STR - 1) * M_SGAP;
+const M_H = M_FRETS * M_FGAP;
+
+// Thumbnails flank the master neck — odd boxes (1, 3, 5) on the left, even
+// boxes (2, 4) on the right — so every box's diagram sits right beside the
+// stretch of neck it represents. Odd boxes never overlap each other in
+// range, and neither do even boxes, so each side only needs one lane.
+const SIDE_GAP = 22;
+const LEFT_X   = 4;
+const MASTER_X = LEFT_X + T_W + SIDE_GAP;
+const HEAD_Y   = 14;
+const TOP_PAD  = 34;
+const MASTER_Y = TOP_PAD;
+const RIGHT_X  = MASTER_X + M_W + SIDE_GAP;
+const MAP_W    = RIGHT_X + T_W + 4;
+
+// Each thumbnail is vertically centered on its span's middle fret, so it
+// sits right next to the stretch of neck it represents.
+const boxLayout = boxes.map((box, i) => {
+  const span = spans[i];
+  const midFret = (span.min + span.max) / 2;
+  const centerY = MASTER_Y + (midFret - 0.5) * M_FGAP;
+  const x = i % 2 === 0 ? LEFT_X : RIGHT_X;
+  const gridY = centerY - T_H / 2;
+  return { box, x, gridY };
+});
+
+const MAP_H = Math.max(
+  ...boxLayout.map(l => l.gridY + T_H),
+  MASTER_Y + M_H
+) + 10;
+
+const mapSvg = el("svg", { viewBox: `0 0 ${MAP_W} ${MAP_H}`, width: MAP_W, height: MAP_H });
+
+// "Five shapes become one neck" — the point of this whole diagram, stated
+// up front so it reads as a before/after, not just three charts. One run
+// of text, since the columns are now too close for two separately-aligned
+// labels to fit without colliding.
+mapSvg.appendChild(text("FIVE SHAPES → ONE NECK", LEFT_X, HEAD_Y, "10", ACCENT, 600, "0.14em"));
+
+boxLayout.forEach(({ box, x, gridY }) => {
+  mapSvg.appendChild(text(box.label.toUpperCase(), x, gridY - 10, "9", FAINT));
+  drawGrid(mapSvg, x, gridY, T_SGAP, T_FGAP, T_FRETS, "0.9");
+  box.dots.forEach(d => drawDot(mapSvg, x, gridY, T_SGAP, T_FGAP, d.str, d.fret, d.type, 2.6, 4.7, "1.3"));
+});
+
+drawGrid(mapSvg, MASTER_X, MASTER_Y, M_SGAP, M_FGAP, M_FRETS, "1.1");
+mapDots.forEach(d => drawDot(mapSvg, MASTER_X, MASTER_Y, M_SGAP, M_FGAP, d.str, d.fret, d.type, 3.6, 6.4, "1.6"));
+
+document.getElementById("map").appendChild(mapSvg);
+})();
+</script>
+</body>
+</html>
