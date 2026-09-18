@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minor Pentatonic Across the Neck</title>
+<title>Pentatonic Across the Neck</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
@@ -123,11 +123,11 @@
 
   <header class="sheet-head">
     <p class="eyebrow">Fretboard Reference</p>
-    <h1>Minor Pentatonic Across the Neck</h1>
+    <h1>Pentatonic Across the Neck</h1>
   </header>
 
   <div class="intro">
-    <p>Five overlapping shapes cover the whole neck. Learn them in order, left to right below, and there's nowhere on the fretboard this scale doesn't reach.</p>
+    <p>Five overlapping shapes cover the whole neck &mdash; and every one of them is two scales at once. A minor pentatonic and the major pentatonic a minor 3rd above it share the exact same five notes, so each shape below has both a minor root and a major root marked on it. Learn them in order, left to right below, and there's nowhere on the fretboard this scale doesn't reach.</p>
   </div>
 
   <div class="boxes" id="boxes"></div>
@@ -138,7 +138,14 @@
         <circle cx="12" cy="12" r="8" stroke="#8A4B2A" stroke-width="2" fill="none"/>
         <circle cx="12" cy="12" r="4" fill="#8A4B2A"/>
       </svg>
-      Root
+      Minor root
+    </div>
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <polygon points="12,3.5 20.5,12 12,20.5 3.5,12" stroke="#8A4B2A" stroke-width="2" fill="none"/>
+        <polygon points="12,7.7 16.3,12 12,16.3 7.7,12" fill="#8A4B2A"/>
+      </svg>
+      Major root
     </div>
     <div class="legend-item">
       <svg width="24" height="24" viewBox="0 0 24 24">
@@ -169,49 +176,52 @@
 //    fret — fret box within THIS shape: 1 = first fret box, 2 = second, etc.
 //           (each box is its own movable shape — fret 1 isn't the guitar's
 //           actual first fret, it's just where this particular shape starts)
-//    type — 'root' | 'note'
+//    type — 'root' (this scale's root) | 'majorRoot' (the relative major's
+//           root — every minor pentatonic shares its five notes with a
+//           major pentatonic a minor 3rd up, so each shape is both scales
+//           at once) | 'note'
 //
 //  To move a dot, change its str and/or fret.
 // ═══════════════════════════════════════════════════════════════════
 
 const boxes = [
   { label: "Box 1", dots: [
-    { str: 0, fret: 1, type: "root" }, { str: 0, fret: 4, type: "note" },
+    { str: 0, fret: 1, type: "root" }, { str: 0, fret: 4, type: "majorRoot" },
     { str: 1, fret: 1, type: "note" }, { str: 1, fret: 3, type: "note" },
     { str: 2, fret: 1, type: "note" }, { str: 2, fret: 3, type: "root" },
-    { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "note" },
+    { str: 3, fret: 1, type: "majorRoot" }, { str: 3, fret: 3, type: "note" },
     { str: 4, fret: 1, type: "note" }, { str: 4, fret: 4, type: "note" },
-    { str: 5, fret: 1, type: "root" }, { str: 5, fret: 4, type: "note" },
+    { str: 5, fret: 1, type: "root" }, { str: 5, fret: 4, type: "majorRoot" },
   ]},
   { label: "Box 2", dots: [
-    { str: 0, fret: 2, type: "note" }, { str: 0, fret: 4, type: "note" },
+    { str: 0, fret: 2, type: "majorRoot" }, { str: 0, fret: 4, type: "note" },
     { str: 1, fret: 1, type: "note" }, { str: 1, fret: 4, type: "note" },
-    { str: 2, fret: 1, type: "root" }, { str: 2, fret: 4, type: "note" },
+    { str: 2, fret: 1, type: "root" }, { str: 2, fret: 4, type: "majorRoot" },
     { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "note" },
     { str: 4, fret: 2, type: "note" }, { str: 4, fret: 4, type: "root" },
-    { str: 5, fret: 2, type: "note" }, { str: 5, fret: 4, type: "note" },
+    { str: 5, fret: 2, type: "majorRoot" }, { str: 5, fret: 4, type: "note" },
   ]},
   { label: "Box 3", dots: [
     { str: 0, fret: 2, type: "note" }, { str: 0, fret: 4, type: "note" },
     { str: 1, fret: 2, type: "note" }, { str: 1, fret: 4, type: "root" },
-    { str: 2, fret: 2, type: "note" }, { str: 2, fret: 4, type: "note" },
+    { str: 2, fret: 2, type: "majorRoot" }, { str: 2, fret: 4, type: "note" },
     { str: 3, fret: 1, type: "note" }, { str: 3, fret: 4, type: "note" },
-    { str: 4, fret: 2, type: "root" }, { str: 4, fret: 5, type: "note" },
+    { str: 4, fret: 2, type: "root" }, { str: 4, fret: 5, type: "majorRoot" },
     { str: 5, fret: 2, type: "note" }, { str: 5, fret: 4, type: "note" },
   ]},
   { label: "Box 4", dots: [
     { str: 0, fret: 1, type: "note" }, { str: 0, fret: 4, type: "note" },
-    { str: 1, fret: 1, type: "root" }, { str: 1, fret: 4, type: "note" },
+    { str: 1, fret: 1, type: "root" }, { str: 1, fret: 4, type: "majorRoot" },
     { str: 2, fret: 1, type: "note" }, { str: 2, fret: 3, type: "note" },
     { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "root" },
-    { str: 4, fret: 2, type: "note" }, { str: 4, fret: 4, type: "note" },
+    { str: 4, fret: 2, type: "majorRoot" }, { str: 4, fret: 4, type: "note" },
     { str: 5, fret: 1, type: "note" }, { str: 5, fret: 4, type: "note" },
   ]},
   { label: "Box 5", dots: [
     { str: 0, fret: 2, type: "note" }, { str: 0, fret: 4, type: "root" },
-    { str: 1, fret: 2, type: "note" }, { str: 1, fret: 4, type: "note" },
+    { str: 1, fret: 2, type: "majorRoot" }, { str: 1, fret: 4, type: "note" },
     { str: 2, fret: 1, type: "note" }, { str: 2, fret: 4, type: "note" },
-    { str: 3, fret: 1, type: "root" }, { str: 3, fret: 4, type: "note" },
+    { str: 3, fret: 1, type: "root" }, { str: 3, fret: 4, type: "majorRoot" },
     { str: 4, fret: 2, type: "note" }, { str: 4, fret: 4, type: "note" },
     { str: 5, fret: 2, type: "note" }, { str: 5, fret: 4, type: "root" },
   ]},
@@ -243,6 +253,13 @@ function el(tag, attrs, ...kids) {
   return e;
 }
 
+// The major-root marker: same ring-plus-center construction as the root
+// dot, but a diamond instead of a circle, so it's clearly a different
+// kind of "root" rather than a different color of the same mark.
+function diamondPoints(cx, cy, r) {
+  return `${cx},${cy - r} ${cx + r},${cy} ${cx},${cy + r} ${cx - r},${cy}`;
+}
+
 function drawFretboard(g, box) {
   const gridW = (NUM_STR - 1) * STRING_GAP;
   const gridH = NUM_FRETS * FRET_GAP;
@@ -269,6 +286,9 @@ function drawFretboard(g, box) {
     if (dot.type === "root") {
       g.appendChild(el("circle", { cx, cy, r: R_OUTER, stroke: ACCENT, "stroke-width": "2", fill: "none" }));
       g.appendChild(el("circle", { cx, cy, r: R_INNER, fill: ACCENT }));
+    } else if (dot.type === "majorRoot") {
+      g.appendChild(el("polygon", { points: diamondPoints(cx, cy, R_OUTER), stroke: ACCENT, "stroke-width": "2", fill: "none" }));
+      g.appendChild(el("polygon", { points: diamondPoints(cx, cy, R_INNER), fill: ACCENT }));
     } else {
       g.appendChild(el("circle", { cx, cy, r: R_INNER, fill: INK }));
     }
@@ -333,13 +353,27 @@ const loopBelowY = gridBottom + 55; // wrap-around's own, deeper lane — so its
                                      // crosses a sequential arrow's dip
 const aboveY = gridTop - 26;
 
+// Pull a point back off a dot's center, toward wherever the curve is
+// headed, so the line (and its arrowhead) stop short with a visible gap
+// instead of running straight into the dot.
+function pullback(x, y, towardX, towardY, dist) {
+  const dx = towardX - x, dy = towardY - y;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  return { x: x + dx / len * dist, y: y + dy / len * dist };
+}
+const DOT_GAP = 14;
+
 function swoopAround(sx, sy, tx, ty, viaX, dipY) {
   const dir = viaX >= sx ? 1 : -1; // the wrap-around travels leftward, so its
                                     // first curve has to bulge the other way
-  return `M${sx},${sy} `
-    + `Q${sx + 18 * dir},${dipY} ${viaX},${dipY} `
+  const c1x = sx + 18 * dir, c1y = dipY;
+  const c2x = tx - 18, c2y = aboveY;
+  const start = pullback(sx, sy, c1x, c1y, DOT_GAP);
+  const end = pullback(tx, ty, c2x, c2y, DOT_GAP);
+  return `M${start.x},${start.y} `
+    + `Q${c1x},${c1y} ${viaX},${dipY} `
     + `L${viaX},${aboveY} `
-    + `Q${tx - 18},${aboveY} ${tx},${ty}`;
+    + `Q${c2x},${c2y} ${end.x},${end.y}`;
 }
 
 for (let i = 0; i < boxes.length - 1; i++) {
@@ -364,11 +398,15 @@ for (let i = 0; i < boxes.length - 1; i++) {
   // Drops to its deep lane sharply, within a few px of Box 5 — so it's
   // already well clear before it even reaches the box4-box5 arrow's own
   // dip, instead of still descending through that shared stretch.
-  const d = `M${sx},${sy} `
-    + `Q${sx - 6},${loopBelowY} ${sx - 20},${loopBelowY} `
+  const wc1x = sx - 6, wc1y = loopBelowY;
+  const wc2x = tx - 18, wc2y = aboveY;
+  const wStart = pullback(sx, sy, wc1x, wc1y, DOT_GAP);
+  const wEnd = pullback(tx, ty, wc2x, wc2y, DOT_GAP);
+  const d = `M${wStart.x},${wStart.y} `
+    + `Q${wc1x},${wc1y} ${sx - 20},${loopBelowY} `
     + `L${loopX},${loopBelowY} `
     + `L${loopX},${aboveY} `
-    + `Q${tx - 18},${aboveY} ${tx},${ty}`;
+    + `Q${wc2x},${wc2y} ${wEnd.x},${wEnd.y}`;
   rowSvg.appendChild(el("path", { d, stroke: FAINT, "stroke-width": "1.3", fill: "none", "marker-end": "url(#row-arrow)" }));
 }
 
@@ -421,6 +459,9 @@ function drawDot(svg, x0, y0, sgap, fgap, str, fret, type, rInner, rOuter, sw) {
   if (type === "root") {
     svg.appendChild(el("circle", { cx, cy, r: rOuter, stroke: ACCENT, "stroke-width": sw, fill: "none" }));
     svg.appendChild(el("circle", { cx, cy, r: rInner, fill: ACCENT }));
+  } else if (type === "majorRoot") {
+    svg.appendChild(el("polygon", { points: diamondPoints(cx, cy, rOuter), stroke: ACCENT, "stroke-width": sw, fill: "none" }));
+    svg.appendChild(el("polygon", { points: diamondPoints(cx, cy, rInner), fill: ACCENT }));
   } else {
     svg.appendChild(el("circle", { cx, cy, r: rInner, fill: INK }));
   }

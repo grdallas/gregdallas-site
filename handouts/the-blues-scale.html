@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Blues Scale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* ── "Archive" design system — matches gregdallas.com ─────────────── */
+  :root {
+    --bg:          #F6F2EA;
+    --panel:       #EFEADF;
+    --ink:         #241F1A;
+    --dim:         #6B6157;
+    --faint:       #948A7C;
+    --rule:        #DCD4C6;
+    --accent:      #8A4B2A;
+    --accent-soft: #B98A64;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--serif);
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 18px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  }
+
+  .sheet { width: 100%; max-width: 780px; margin: 0 auto; }
+
+  /* ── Header ──────────────────────────────────────────────────────── */
+  .sheet-head { margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.9rem;
+  }
+  .sheet-head h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+  }
+
+  .intro { margin-top: 1rem; margin-bottom: clamp(1.5rem, 4vw, 2.25rem); }
+  .intro p { font-size: 1.05rem; color: var(--dim); max-width: 62ch; }
+
+  /* ── Section heads ───────────────────────────────────────────────── */
+  .section-head {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    letter-spacing: -0.015em;
+    margin-top: clamp(2.25rem, 5vw, 3rem);
+    padding-top: clamp(1.5rem, 3.5vw, 2.25rem);
+    border-top: 1px solid var(--rule);
+  }
+  .section-body { margin-top: 0.6rem; }
+  .section-body p { font-size: 1.02rem; color: var(--dim); max-width: 64ch; }
+
+  /* ── Box row ─────────────────────────────────────────────────────── */
+  .box-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem 1.75rem;
+    margin-top: 1.4rem;
+  }
+  .box-col { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; }
+  .box-label {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .box-col svg { display: block; }
+
+  /* ── Aside ───────────────────────────────────────────────────────── */
+  .aside {
+    margin: 1.3rem 0 0;
+    padding: 1rem 1.2rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent-soft);
+    border-radius: 4px;
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    color: var(--dim);
+  }
+  .aside strong { color: var(--ink); }
+
+  /* ── Horizontal diagrams ─────────────────────────────────────────── */
+  .diagram-wrap { margin-top: 1.5rem; overflow-x: auto; }
+  .diagram-wrap svg { display: block; }
+
+  /* ── Legend + footer ─────────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    color: var(--dim);
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.55rem; }
+  .legend-item svg { display: block; }
+
+  .foot {
+    margin-top: 0.9rem;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--faint);
+  }
+
+  /* ── Print ───────────────────────────────────────────────────────── */
+  @page { size: letter portrait; margin: 0.55in; }
+  @media print {
+    body { padding: 0; }
+    .sheet { max-width: none; }
+    .box-row, .diagram-wrap, .legend, .aside { break-inside: avoid; }
+  }
+
+      /* Added for the website — hidden when printed, so the sheet stays a sheet. */
+      .site-return { display:inline-block; font-family:var(--sans); font-size:.72rem;
+        letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+        text-decoration:none; margin-bottom:1.4rem; }
+      .site-return:hover { color:var(--accent); }
+      @media print { .site-return { display:none; } }
+</style>
+</head>
+<body>
+<a class="site-return" href="../teaching.html">&larr; Teaching</a>
+<div class="sheet">
+
+  <header class="sheet-head">
+    <p class="eyebrow">Fretboard Reference</p>
+    <h1>The Blues Scale</h1>
+  </header>
+
+  <div class="intro">
+    <p>The blues scale is minor pentatonic plus one note: the &#9837;5, sometimes called the &ldquo;blue note.&rdquo; It sits between the 4th and the 5th, and it's a passing tone &mdash; something you slide or bend through on the way somewhere else, not a note you land on and hold. Shown here in A minor, added onto the same boxes and horizontal shapes from the other sheets.</p>
+  </div>
+
+  <h2 class="section-head">The Two You'll Actually Use</h2>
+  <div class="section-body">
+    <p>The &#9837;5 fits naturally into Boxes 1 and 4 &mdash; these are the shapes you'll reach for when you actually want that blues sound.</p>
+  </div>
+  <div class="box-row" id="boxes"></div>
+
+  <div class="aside">
+    <strong>What about Box 2, Box 3, and Box 5?</strong> The &#9837;5 can technically be added to all three &mdash; Box 2 on the low E string (fret 5), the G string (fret 2), and the high e string (fret 5); Box 3 on the low E string (fret 3), the D string (fret 5), and the high e string (fret 3); Box 5 on the A string (fret 5) and the B string (fret 3). But in practice, you'll rarely reach for any of them when you're actually playing blues. Boxes 1 and 4 are where the sound lives.
+  </div>
+
+  <h2 class="section-head">The Horizontal Shapes</h2>
+  <div class="section-body">
+    <p>Same addition works on the two-string shapes. The &#9837;5 lands on whichever string in each pair already carries three notes &mdash; it just becomes a fourth.</p>
+  </div>
+  <div class="diagram-wrap" id="shape1"></div>
+  <div class="diagram-wrap" id="shape2"></div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8" stroke="#8A4B2A" stroke-width="2" fill="none"/>
+        <circle cx="12" cy="12" r="4" fill="#8A4B2A"/>
+      </svg>
+      Root
+    </div>
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4.4" fill="#241F1A"/>
+      </svg>
+      Scale tone
+    </div>
+    <div class="legend-item">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5.6" stroke="#B98A64" stroke-width="1.8" fill="none"/>
+      </svg>
+      &#9837;5 &mdash; the blue note
+    </div>
+  </div>
+
+  <p class="foot">It's called a blue note because of how it's used, not where it sits &mdash; bend into it, slide through it, lean on it for a beat. Try holding it and it just sounds like a wrong note.</p>
+
+</div>
+
+<script>
+(function () {
+// ═══════════════════════════════════════════════════════════════════
+//  DIAGRAM DATA — A minor pentatonic + the b5 blue note (D#/Eb),
+//  verified against standard tuning. type: 'root' | 'note' | 'blue'.
+// ═══════════════════════════════════════════════════════════════════
+
+const INK = "#241F1A";
+const ACCENT = "#8A4B2A";
+const ACCENT_SOFT = "#B98A64";
+const FAINT = "#948A7C";
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  kids.forEach(k => e.appendChild(k));
+  return e;
+}
+function text(x, y, str, opts) {
+  opts = opts || {};
+  const t = el("text", {
+    x, y, "font-family": opts.serif ? "Newsreader, Georgia, serif" : "Inter, sans-serif",
+    "font-size": opts.size || 11, "font-weight": opts.weight || 500,
+    fill: opts.color || FAINT, "text-anchor": opts.anchor || "middle",
+    "letter-spacing": opts.tracking || "0",
+  });
+  t.textContent = str;
+  return t;
+}
+function drawDotShape(g, cx, cy, type, rInner, rOuter) {
+  if (type === "root") {
+    g.appendChild(el("circle", { cx, cy, r: rOuter, stroke: ACCENT, "stroke-width": "2", fill: "none" }));
+    g.appendChild(el("circle", { cx, cy, r: rInner, fill: ACCENT }));
+  } else if (type === "blue") {
+    g.appendChild(el("circle", { cx, cy, r: rInner + 1, stroke: ACCENT_SOFT, "stroke-width": "1.8", fill: "none" }));
+  } else {
+    g.appendChild(el("circle", { cx, cy, r: rInner, fill: INK }));
+  }
+}
+
+// ── Boxes 1, 3, 4 — movable shapes, own local fret numbers 1-5 ─────
+const STRING_GAP = 16, FRET_GAP = 23, NUM_FRETS = 5, NUM_STR = 6, PAD_X = 14, PAD_Y = 13;
+const SVG_W = PAD_X * 2 + (NUM_STR - 1) * STRING_GAP;
+const SVG_H = PAD_Y * 2 + NUM_FRETS * FRET_GAP;
+const R_INNER = 4.6, R_OUTER = 8.6;
+
+const boxData = [
+  { label: "Box 1", dots: [
+    { str: 0, fret: 1, type: "root" }, { str: 0, fret: 4, type: "note" },
+    { str: 1, fret: 1, type: "note" }, { str: 1, fret: 2, type: "blue" }, { str: 1, fret: 3, type: "note" },
+    { str: 2, fret: 1, type: "note" }, { str: 2, fret: 3, type: "root" },
+    { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "note" }, { str: 3, fret: 4, type: "blue" },
+    { str: 4, fret: 1, type: "note" }, { str: 4, fret: 4, type: "note" },
+    { str: 5, fret: 1, type: "root" }, { str: 5, fret: 4, type: "note" },
+  ]},
+  { label: "Box 4", dots: [
+    { str: 0, fret: 1, type: "note" }, { str: 0, fret: 4, type: "note" },
+    { str: 1, fret: 1, type: "root" }, { str: 1, fret: 4, type: "note" },
+    { str: 2, fret: 1, type: "note" }, { str: 2, fret: 2, type: "blue" }, { str: 2, fret: 3, type: "note" },
+    { str: 3, fret: 1, type: "note" }, { str: 3, fret: 3, type: "root" },
+    { str: 4, fret: 2, type: "note" }, { str: 4, fret: 4, type: "note" }, { str: 4, fret: 5, type: "blue" },
+    { str: 5, fret: 1, type: "note" }, { str: 5, fret: 4, type: "note" },
+  ]},
+];
+
+const boxesContainer = document.getElementById("boxes");
+boxData.forEach(box => {
+  const col = document.createElement("div");
+  col.className = "box-col";
+  const lbl = document.createElement("div");
+  lbl.className = "box-label";
+  lbl.textContent = box.label;
+  col.appendChild(lbl);
+
+  const svg = el("svg", { width: SVG_W, height: SVG_H, viewBox: `0 0 ${SVG_W} ${SVG_H}` });
+  const gridW = (NUM_STR - 1) * STRING_GAP, gridH = NUM_FRETS * FRET_GAP;
+  for (let f = 0; f <= NUM_FRETS; f++) {
+    const y = PAD_Y + f * FRET_GAP;
+    svg.appendChild(el("line", { x1: PAD_X, y1: y, x2: PAD_X + gridW, y2: y, stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square" }));
+  }
+  for (let s = 0; s < NUM_STR; s++) {
+    const x = PAD_X + s * STRING_GAP;
+    svg.appendChild(el("line", { x1: x, y1: PAD_Y, x2: x, y2: PAD_Y + gridH, stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square" }));
+  }
+  box.dots.forEach(d => {
+    const cx = PAD_X + d.str * STRING_GAP, cy = PAD_Y + (d.fret - 0.5) * FRET_GAP;
+    drawDotShape(svg, cx, cy, d.type, R_INNER, R_OUTER);
+  });
+  col.appendChild(svg);
+  boxesContainer.appendChild(col);
+});
+
+// ── Horizontal shapes — real frets, not movable ─────────────────────
+const H_STRING_GAP = 26, H_FRET_GAP = 26, H_PAD_X = 16, H_PAD_Y = 14, H_RIGHT_PAD = 30;
+const H_R_INNER = 5.2, H_R_OUTER = 9.4;
+const STRING_NAMES = ["E", "A", "D", "G", "B", "e"];
+
+const shape1Dots = [
+  { str: 0, fret: 3,  type: "note" }, { str: 0, fret: 5,  type: "root" },
+  { str: 1, fret: 3,  type: "note" }, { str: 1, fret: 5,  type: "note" }, { str: 1, fret: 6, type: "blue" }, { str: 1, fret: 7,  type: "note" },
+  { str: 2, fret: 5,  type: "note" }, { str: 2, fret: 7,  type: "root" },
+  { str: 3, fret: 5,  type: "note" }, { str: 3, fret: 7,  type: "note" }, { str: 3, fret: 8, type: "blue" }, { str: 3, fret: 9,  type: "note" },
+  { str: 4, fret: 8,  type: "note" }, { str: 4, fret: 10, type: "root" },
+  { str: 5, fret: 8,  type: "note" }, { str: 5, fret: 10, type: "note" }, { str: 5, fret: 11, type: "blue" }, { str: 5, fret: 12, type: "note" },
+];
+const shape2Dots = [
+  { str: 0, fret: 8,  type: "note" }, { str: 0, fret: 10, type: "note" }, { str: 0, fret: 11, type: "blue" }, { str: 0, fret: 12, type: "note" },
+  { str: 1, fret: 10, type: "note" }, { str: 1, fret: 12, type: "root" },
+  { str: 2, fret: 10, type: "note" }, { str: 2, fret: 12, type: "note" }, { str: 2, fret: 13, type: "blue" }, { str: 2, fret: 14, type: "note" },
+  { str: 3, fret: 12, type: "note" }, { str: 3, fret: 14, type: "root" },
+  { str: 4, fret: 13, type: "note" }, { str: 4, fret: 15, type: "note" }, { str: 4, fret: 16, type: "blue" }, { str: 4, fret: 17, type: "note" },
+  { str: 5, fret: 15, type: "note" }, { str: 5, fret: 17, type: "root" },
+];
+
+function drawRangeDiagram(containerId, startFret, endFret, dots) {
+  const numFrets = endFret - startFret;
+  const gridW = (NUM_STR - 1) * H_STRING_GAP;
+  const gridH = numFrets * H_FRET_GAP;
+  const TOP = H_PAD_Y;
+  const W = H_PAD_X * 2 + gridW + H_RIGHT_PAD;
+  const H = TOP + gridH + H_PAD_Y + 24;
+
+  const svg = el("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}` });
+  const sx = i => H_PAD_X + i * H_STRING_GAP;
+  const fy = f => TOP + (f - startFret) * H_FRET_GAP;
+
+  for (let f = startFret; f <= endFret; f++) {
+    svg.appendChild(el("line", { x1: sx(0), y1: fy(f), x2: sx(5), y2: fy(f), stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square" }));
+    svg.appendChild(text(sx(5) + 16, fy(f) + 3.5, String(f), { size: 9.5, color: FAINT }));
+  }
+  for (let i = 0; i < NUM_STR; i++) {
+    svg.appendChild(el("line", { x1: sx(i), y1: fy(startFret), x2: sx(i), y2: fy(endFret), stroke: INK, "stroke-width": "1.1", "stroke-linecap": "square" }));
+  }
+
+  const ORDINALS = ["1st", "2nd", "3rd"];
+  const groups = [[], [], []];
+  dots.forEach(d => groups[Math.floor(d.str / 2)].push(d));
+  groups.forEach((g, gi) => {
+    if (!g.length) return;
+    const strMin = gi * 2, strMax = gi * 2 + 1;
+    const fretMin = Math.min(...g.map(d => d.fret));
+    const fretMax = Math.max(...g.map(d => d.fret));
+    const bx0 = sx(strMin) - 10, bx1 = sx(strMax) + 10;
+    const by0 = fy(fretMin - 0.5) - 10, by1 = fy(fretMax - 0.5) + 10;
+    svg.appendChild(el("rect", { x: bx0, y: by0, width: bx1 - bx0, height: by1 - by0, rx: 7, fill: "none", stroke: FAINT, "stroke-width": "1.1" }));
+    svg.appendChild(text((bx0 + bx1) / 2, by0 - 7, ORDINALS[gi], { size: 9, weight: 600, color: FAINT, tracking: "0.08em" }));
+  });
+
+  dots.forEach(d => {
+    const cx = sx(d.str), cy = fy(d.fret - 0.5);
+    drawDotShape(svg, cx, cy, d.type, H_R_INNER, H_R_OUTER);
+  });
+
+  STRING_NAMES.forEach((n, i) => {
+    svg.appendChild(text(sx(i), fy(endFret) + 22, n, { serif: true, size: 14, color: FAINT }));
+  });
+  svg.appendChild(text(sx(0), fy(endFret) + 38, "LOW E", { size: 8.5, weight: 600, color: ACCENT, tracking: "0.08em" }));
+  svg.appendChild(text(sx(5), fy(endFret) + 38, "HIGH e", { size: 8.5, weight: 600, color: ACCENT, tracking: "0.08em" }));
+
+  document.getElementById(containerId).appendChild(svg);
+}
+
+drawRangeDiagram("shape1", 2, 13, shape1Dots);
+drawRangeDiagram("shape2", 7, 18, shape2Dots);
+})();
+</script>
+</body>
+</html>
