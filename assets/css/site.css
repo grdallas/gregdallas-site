@@ -403,3 +403,12 @@ button[type="submit"]:disabled { opacity: .5; cursor: progress; }
 .testimonial { border-left: 2px solid var(--rule); padding-left: 1.5rem; }
 .testimonial p { font-family: var(--serif); font-size: 1.08rem; font-style: italic; line-height: 1.6; color: var(--ink); margin: 0 0 .7rem; }
 .testimonial cite { font-family: var(--sans); font-size: .8rem; font-style: normal; color: var(--dim); }
+
+/* ---------- rate table ---------- */
+
+.rate-table { width: 100%; border-collapse: collapse; margin-top: 1.25rem; font-family: var(--sans); }
+.rate-table caption { text-align: left; font-family: var(--serif); font-size: 1.1rem; color: var(--ink); margin-bottom: .6rem; caption-side: top; }
+.rate-table th, .rate-table td { text-align: left; padding: .65rem .8rem .65rem 0; border-bottom: 1px solid var(--rule); }
+.rate-table th { font-weight: 500; color: var(--dim); font-size: .74rem; text-transform: uppercase; letter-spacing: .09em; }
+.rate-table td { color: var(--ink); font-size: .95rem; }
+.rate-table tr:last-child td { border-bottom: 0; }
