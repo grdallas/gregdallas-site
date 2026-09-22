@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=39a81f41">
+<link rel="stylesheet" href="assets/css/site.css?v=e774828f">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -67,30 +67,27 @@
         </li>
       </ul>
 
-      <table class="rate-table">
-        <caption>Single Lesson</caption>
-        <thead>
-          <tr><th>Length</th><th>Online</th><th>In-home</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>30 min</td><td>$45</td><td>$65</td></tr>
-          <tr><td>45 min</td><td>$60</td><td>$80</td></tr>
-          <tr><td>60 min</td><td>$75</td><td>$95</td></tr>
-        </tbody>
-      </table>
-      <p class="prose" style="color:var(--faint);font-size:.82rem;margin-top:.6rem">In-home includes a $20 travel fee, anywhere in the St. Louis metro.</p>
+      <div class="rate-card">
+        <h3 class="rate-card-title">Single Lesson</h3>
+        <div class="rate-grid">
+          <span class="rg-head">Length</span><span class="rg-head rg-num">Online</span><span class="rg-head rg-num">In-home</span>
+          <span class="rg-cell">30 min</span><span class="rg-cell rg-num">$45</span><span class="rg-cell rg-num">$65</span>
+          <span class="rg-cell">45 min</span><span class="rg-cell rg-num">$60</span><span class="rg-cell rg-num">$80</span>
+          <span class="rg-cell">60 min</span><span class="rg-cell rg-num">$75</span><span class="rg-cell rg-num">$95</span>
+        </div>
+        <p class="rate-note">In-home includes a $20 travel fee, anywhere in the St. Louis metro.</p>
+      </div>
 
-      <table class="rate-table" style="margin-top:2.5rem">
-        <caption>4-Lesson Package (save on every length)</caption>
-        <thead>
-          <tr><th>Length</th><th>Online</th><th>In-home</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>30 min</td><td>$160</td><td>$240</td></tr>
-          <tr><td>45 min</td><td>$215</td><td>$295</td></tr>
-          <tr><td>60 min</td><td>$270</td><td>$350</td></tr>
-        </tbody>
-      </table>
+      <div class="rate-card">
+        <h3 class="rate-card-title">4-Lesson Package</h3>
+        <p class="rate-card-sub">Save on every length.</p>
+        <div class="rate-grid">
+          <span class="rg-head">Length</span><span class="rg-head rg-num">Online</span><span class="rg-head rg-num">In-home</span>
+          <span class="rg-cell">30 min</span><span class="rg-cell rg-num">$160</span><span class="rg-cell rg-num">$240</span>
+          <span class="rg-cell">45 min</span><span class="rg-cell rg-num">$215</span><span class="rg-cell rg-num">$295</span>
+          <span class="rg-cell">60 min</span><span class="rg-cell rg-num">$270</span><span class="rg-cell rg-num">$350</span>
+        </div>
+      </div>
 
       <h2 class="section-rule">What students say</h2>
       <div class="testimonial-list">
